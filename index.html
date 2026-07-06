@@ -1,532 +1,682 @@
 <!doctype html>
 <html lang="hr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b1220">
-  <meta name="application-name" content="CroTeak Planner">
-  <meta name="description" content="CroTeak Planner mobile PWA - poslovi, brodovi, cloud sync i teren.">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="CroTeak Mobile">
-  <title>CroTeak Planner MOBILE BUILD031 PWA</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f9187" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>CroTeak Planner MOBILE BUILD032 PWA</title>
+  <link rel="manifest" href="manifest.webmanifest" />
   <style>
     :root{
-      --bg:#eef2f7;
-      --card:#ffffff;
-      --ink:#122126;
-      --muted:#64747a;
-      --line:#dce5e8;
-      --brand:#0f766e;
-      --brand2:#0b1220;
-      --warn:#f59e0b;
-      --bad:#dc2626;
-      --ok:#16a34a;
-      --shadow:0 8px 22px rgba(5,35,40,.08);
-      --radius:18px;
-      --safe-bottom:env(safe-area-inset-bottom,0px);
+      --bg:#eef5f6;
+      --panel:#ffffff;
+      --ink:#10212a;
+      --muted:#62737a;
+      --line:#dbe7e9;
+      --line2:#edf3f4;
+      --teal:#0e8a80;
+      --teal2:#16b9a8;
+      --teal3:#dff5f1;
+      --danger:#dc4b43;
+      --warn:#f4a51c;
+      --ok:#21a667;
+      --shadow:0 12px 34px rgba(9,38,49,.12);
+      --radius:22px;
+      --safe-top:env(safe-area-inset-top, 0px);
+      --safe-bottom:env(safe-area-inset-bottom, 0px);
     }
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:var(--bg);
-      color:var(--ink);
-      padding-bottom:calc(82px + var(--safe-bottom));
+    *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+    html,body{margin:0; min-height:100%; width:100%; overflow-x:hidden; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}
+    body{font-size:16px;}
+    button,input,select,textarea{font:inherit;}
+    button{border:0; cursor:pointer;}
+    .app{width:100%; max-width:540px; margin:0 auto; min-height:100vh; background:linear-gradient(180deg,#e9f1f3 0,#f7fbfb 100%); box-shadow:0 0 40px rgba(7,24,28,.08); position:relative; overflow:hidden;}
+    .topbar{position:sticky; top:0; z-index:30; background:linear-gradient(135deg,#0b6971 0%,#0fa58e 58%,#16baa9 100%); color:white; padding:calc(12px + var(--safe-top)) 14px 14px; border-bottom-left-radius:0; border-bottom-right-radius:0; box-shadow:0 10px 24px rgba(2,58,60,.22); width:100%;}
+    .toprow{display:flex; align-items:center; gap:10px; min-width:0; width:100%;}
+    .brand{min-width:0; flex:1; overflow:hidden;}
+    .brand h1{margin:0; font-weight:900; letter-spacing:-.04em; font-size:clamp(22px,7.2vw,34px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .build{margin-top:2px; opacity:.95; font-size:13px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .cloud{flex:0 0 auto; display:flex; align-items:center; gap:7px; border-radius:999px; background:rgba(255,255,255,.20); padding:10px 12px; font-weight:900; white-space:nowrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+    .dot{width:10px; height:10px; border-radius:50%; background:#2ee278; box-shadow:0 0 0 3px rgba(46,226,120,.15);}
+    .searchrow{display:grid; grid-template-columns:minmax(0,1fr) 54px 54px; gap:10px; margin-top:13px; width:100%;}
+    .searchbox{min-width:0; width:100%; border:0; outline:0; padding:15px 16px; border-radius:18px; background:#fff; color:#132933; box-shadow:0 8px 22px rgba(0,0,0,.12); font-size:17px;}
+    .iconbtn{height:54px; border-radius:18px; background:rgba(255,255,255,.17); color:white; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:900; box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);}
+    .iconbtn:active,.pillbtn:active,.primary:active,.ghost:active{transform:translateY(1px);}
+    .content{padding:14px 14px calc(84px + var(--safe-bottom)); width:100%; min-width:0;}
+    .stats{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
+    .stat{background:rgba(255,255,255,.88); border:1px solid var(--line); border-radius:20px; padding:18px 14px; min-height:86px; box-shadow:0 8px 26px rgba(6,39,47,.07); overflow:hidden;}
+    .stat .n{font-size:30px; font-weight:950; letter-spacing:-.03em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    .stat .l{font-size:14px; color:var(--muted); font-weight:850; margin-top:4px;}
+    .primary{width:100%; border-radius:20px; padding:18px 18px; background:linear-gradient(135deg,#0e9184,#18c3ad); color:white; font-weight:950; font-size:18px; box-shadow:0 14px 30px rgba(9,145,132,.23);}
+    .sectionhead{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:22px 0 12px; min-width:0;}
+    .sectionhead h2{font-size:21px; line-height:1.05; margin:0; font-weight:950; letter-spacing:-.03em; text-transform:uppercase; min-width:0; overflow:hidden; text-overflow:ellipsis;}
+    .pillbtn{border:1px solid #c6e1df; background:#f7ffff; color:#14796f; border-radius:18px; padding:12px 16px; font-weight:950; white-space:nowrap;}
+    .list{display:flex; flex-direction:column; gap:14px;}
+    .jobcard{background:#fff; border:1px solid var(--line); border-radius:24px; padding:14px; box-shadow:0 12px 28px rgba(14,44,52,.08); overflow:hidden;}
+    .jobtop{display:grid; grid-template-columns:72px minmax(0,1fr) auto; gap:14px; align-items:start;}
+    .avatar{width:72px; height:72px; border-radius:18px; display:flex; align-items:center; justify-content:center; background:linear-gradient(145deg,#d5eff8,#caf4e9); color:#0d8278; font-size:35px; font-weight:950; box-shadow:inset 0 0 0 1px rgba(0,0,0,.04); flex:0 0 auto;}
+    .jobtitle{font-size:21px; font-weight:950; letter-spacing:-.04em; line-height:1.08; margin:2px 0 6px; overflow:hidden; text-overflow:ellipsis;}
+    .jobmeta{font-size:16px; line-height:1.35; color:#66777d; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+    .badge{display:inline-flex; align-items:center; justify-content:center; padding:10px 13px; border-radius:999px; font-weight:950; color:#11786e; background:#e7f7f4; max-width:104px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .badge.upit{background:#ecf2ff;color:#3467a8}.badge.ponuda{background:#eef1ff;color:#5a54c9}.badge.avans{background:#fff4d7;color:#9a6800}.badge.izmjera{background:#e2f5f0;color:#0f776b}.badge.dizajn{background:#f2e8ff;color:#7e42a2}.badge.cnc{background:#e7f0ff;color:#2b5c9b}.badge.spremno{background:#e6f8df;color:#31820d}.badge.montaza{background:#fff0e2;color:#a65d00}.badge.naplaceno{background:#dcf8e9;color:#06743b}.badge.arhiva{background:#edf0f1;color:#53666d}.badge.kasni{background:#ffe5e1;color:#b92b24}
+    .moneygrid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:14px;}
+    .money{background:#fbfcfd; border:1px solid var(--line2); border-radius:16px; padding:12px 12px; min-width:0;}
+    .money strong{display:block; font-size:20px; font-weight:950; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .money span{display:block; color:#65767c; font-size:13px; font-weight:850; margin-top:4px;}
+    .hidden{display:none !important;}
+    .bottomnav{position:fixed; left:50%; transform:translateX(-50%); bottom:0; z-index:40; width:100%; max-width:540px; padding:8px 8px calc(8px + var(--safe-bottom)); background:rgba(255,255,255,.92); border-top:1px solid var(--line); backdrop-filter:blur(14px); display:grid; grid-template-columns:repeat(5,1fr); gap:4px;}
+    .navitem{height:54px; border-radius:18px; background:transparent; color:#6b7e84; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:11px; font-weight:900; min-width:0;}
+    .navitem .ico{font-size:22px; line-height:1;}
+    .navitem.active{color:#0d8b80; background:#e8f8f5;}
+    .drawer{position:fixed; inset:0; z-index:80; background:rgba(6,19,25,.42); opacity:0; pointer-events:none; transition:.18s ease;}
+    .drawer.open{opacity:1; pointer-events:auto;}
+    .drawerpanel{position:absolute; top:0; right:0; width:min(86vw,380px); height:100%; background:#fff; padding:calc(18px + var(--safe-top)) 16px 18px; box-shadow:-20px 0 50px rgba(0,0,0,.22); transform:translateX(105%); transition:.2s ease; overflow:auto;}
+    .drawer.open .drawerpanel{transform:translateX(0);}
+    .drawerhead{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;}
+    .drawerhead h3{margin:0; font-size:24px; font-weight:950; letter-spacing:-.04em;}
+    .closebtn{width:44px; height:44px; border-radius:16px; background:#eef5f6; color:#27434a; font-size:24px; font-weight:950;}
+    .menubtn{width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:15px 14px; border-radius:17px; background:#f6fbfb; color:#153039; margin:8px 0; font-weight:900; text-align:left;}
+    .menubtn.danger{color:#b72f2a; background:#fff1ef;}
+    .screen{display:none; animation:fade .12s ease;}
+    .screen.active{display:block;}
+    @keyframes fade{from{opacity:.5; transform:translateY(2px)}to{opacity:1; transform:none}}
+    .tabs{display:flex; gap:8px; overflow-x:auto; padding:1px 0 10px; scrollbar-width:none; margin:8px 0 2px;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .chip{flex:0 0 auto; border:1px solid #d6e8ea; background:#fff; color:#486168; padding:10px 13px; border-radius:999px; font-weight:900;}
+    .chip.active{background:#0f9187; color:white; border-color:#0f9187;}
+    .form{display:grid; gap:12px;}
+    .field label{display:block; color:#53666d; font-size:13px; font-weight:900; margin:0 0 6px 4px;}
+    .input,.select,.textarea{width:100%; border:1px solid #d9e7e9; background:#fff; color:#13262d; border-radius:16px; padding:14px 14px; outline:none; min-width:0;}
+    .textarea{min-height:110px; resize:vertical;}
+    .twocol{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    .threecol{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+    .sheet{position:fixed; inset:0; z-index:70; display:none; background:rgba(4,18,24,.45); align-items:flex-end;}
+    .sheet.open{display:flex;}
+    .sheetpanel{width:100%; max-width:540px; margin:0 auto; background:#fff; border-top-left-radius:28px; border-top-right-radius:28px; max-height:92vh; overflow:auto; padding:10px 14px calc(22px + var(--safe-bottom)); box-shadow:0 -20px 50px rgba(0,0,0,.25);}
+    .grab{width:54px; height:5px; border-radius:999px; background:#d4e0e2; margin:8px auto 14px;}
+    .sheettitle{display:flex; align-items:start; justify-content:space-between; gap:12px; margin-bottom:12px;}
+    .sheettitle h2{margin:0; font-size:25px; line-height:1.05; font-weight:950; letter-spacing:-.04em;}
+    .sub{color:var(--muted); font-weight:800; margin-top:5px;}
+    .detailgrid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0;}
+    .detailbox{background:#f8fbfb; border:1px solid var(--line2); border-radius:18px; padding:13px; overflow:hidden;}
+    .detailbox span{display:block; color:#65767c; font-size:13px; font-weight:850;}
+    .detailbox strong{display:block; margin-top:3px; font-size:17px; font-weight:950; overflow-wrap:anywhere;}
+    .toolbar{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0;}
+    .ghost{border:1px solid #cfe3e5; background:#f9ffff; color:#136f67; border-radius:17px; padding:13px 14px; font-weight:950;}
+    .ghost.danger{border-color:#ffd2cc;background:#fff6f5;color:#bd302a;}
+    .kanban{display:flex; gap:12px; overflow-x:auto; padding:4px 0 12px; scroll-snap-type:x proximity;}
+    .lane{flex:0 0 82%; max-width:350px; background:#f5fafb; border:1px solid var(--line); border-radius:22px; padding:12px; scroll-snap-align:start;}
+    .lanetitle{display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:17px; font-weight:950; margin-bottom:10px;}
+    .mini{font-size:13px; color:#607177; background:#fff; padding:4px 9px; border-radius:999px;}
+    .kcard{background:#fff; border:1px solid var(--line2); border-radius:17px; padding:12px; margin-bottom:9px; box-shadow:0 7px 17px rgba(6,39,47,.06);}
+    .kcard strong{display:block; font-size:17px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .kcard span{display:block; color:#65767c; font-size:13px; margin-top:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .msgcard{background:#fff; border:1px solid var(--line); border-radius:22px; padding:14px; box-shadow:0 9px 24px rgba(14,44,52,.07);}
+    .msgcard h3{margin:0 0 5px; font-size:20px; font-weight:950; letter-spacing:-.03em;}
+    .msgtext{white-space:pre-wrap; color:#40535a; background:#f8fbfb; border:1px solid var(--line2); border-radius:16px; padding:12px; margin-top:10px; max-height:142px; overflow:auto;}
+    .smallrow{display:flex; flex-wrap:wrap; align-items:center; gap:8px; color:#65767c; font-size:13px; font-weight:800;}
+    .empty{border:2px dashed #d6e7e9; border-radius:24px; padding:22px; text-align:center; color:#5e7177; font-weight:850; background:rgba(255,255,255,.65);}
+    .toast{position:fixed; left:50%; bottom:calc(78px + var(--safe-bottom)); transform:translateX(-50%) translateY(20px); z-index:100; background:#122a31; color:white; border-radius:999px; padding:12px 16px; font-weight:900; opacity:0; pointer-events:none; transition:.18s ease; box-shadow:0 14px 36px rgba(0,0,0,.24); max-width:calc(100vw - 28px); text-align:center;}
+    .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+    .note{font-size:13px; color:#607177; line-height:1.4; background:#f7fbfb; border:1px solid var(--line); border-radius:16px; padding:12px;}
+    @media (max-width:390px){
+      .topbar{padding-left:10px; padding-right:10px;}
+      .content{padding-left:10px; padding-right:10px;}
+      .searchrow{grid-template-columns:minmax(0,1fr) 50px 50px; gap:8px;}
+      .searchbox{font-size:16px; padding:14px 13px;}
+      .iconbtn{height:50px; border-radius:16px;}
+      .cloud{padding:9px 10px; font-size:14px;}
+      .jobtop{grid-template-columns:62px minmax(0,1fr) auto; gap:10px;}
+      .avatar{width:62px; height:62px; font-size:30px; border-radius:16px;}
+      .jobtitle{font-size:19px;}
+      .jobmeta{font-size:15px;}
+      .badge{padding:9px 10px; max-width:86px; font-size:13px;}
+      .moneygrid{gap:7px;}
+      .money{padding:10px 8px;}
+      .money strong{font-size:17px;}
+      .money span{font-size:12px;}
+      .twocol,.threecol{grid-template-columns:1fr;}
+      .toolbar{grid-template-columns:1fr;}
     }
-    .topbar{
-      position:sticky;top:0;z-index:30;
-      background:linear-gradient(135deg,#0b1220 0%,#0f766e 58%,#14b8a6 100%);
-      color:white;
-      padding:14px 14px 12px;
-      box-shadow:0 14px 34px rgba(2,6,23,.24);
+    @media (min-width:760px){
+      body{background:#dce8ea;}
+      .app{border-left:1px solid #d0dfe2; border-right:1px solid #d0dfe2;}
+      .lane{flex-basis:320px;}
     }
-    .topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .title{font-weight:800;font-size:18px;letter-spacing:.2px;line-height:1.1}
-    .build{font-size:11px;opacity:.85;font-weight:600;margin-top:2px}
-    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:rgba(255,255,255,.15);padding:7px 9px;font-size:12px;font-weight:700;white-space:nowrap}
-    .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);display:inline-block}
-    .searchbox{margin-top:12px;display:flex;gap:8px}
-    .searchbox input{flex:1;border:0;border-radius:14px;padding:13px 14px;font-size:16px;outline:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
-    .iconbtn{border:0;border-radius:14px;background:rgba(255,255,255,.16);color:white;font-weight:800;padding:0 13px;font-size:18px}
-    .installbtn{display:none;border:0;border-radius:14px;background:rgba(255,255,255,.22);color:white;font-weight:900;padding:0 12px;font-size:13px;white-space:nowrap}
-    .installHint{display:none;margin-top:10px;border-radius:14px;background:rgba(255,255,255,.14);padding:10px 12px;font-size:12px;font-weight:700;line-height:1.35}
-    .installHint.show{display:block}.installbtn.show{display:inline-flex;align-items:center;justify-content:center}
-
-    main{padding:14px;max-width:640px;margin:0 auto}
-    .screen{display:none}.screen.active{display:block}
-    .miniSummary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-    .miniStat{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:0 4px 12px rgba(5,35,40,.05)}
-    .miniStat .num{font-size:16px;font-weight:900;line-height:1.05}.miniStat .lbl{font-size:11px;color:var(--muted);font-weight:800;margin-top:4px}
-    .filterCard{padding:10px 12px;margin-top:10px}.filterRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.filterActions{display:flex;gap:8px;margin-top:8px}.filterActions .btn{flex:1}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}.chip{display:inline-flex;align-items:center;gap:6px;background:#e7f5f3;color:#0f766e;border:1px solid #c8e6e2;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800}.chip button{border:0;background:transparent;color:#0f766e;font-size:14px;font-weight:900;padding:0;line-height:1;cursor:pointer}.listHeader{display:flex;align-items:center;justify-content:space-between;gap:10px}.smallFilterBtn{display:inline-flex;align-items:center;justify-content:center;border:1px solid #b7d7d2;background:#f2fbfa;color:#0f766e;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:900;min-width:44px}
-    .section-title{font-size:14px;font-weight:900;color:#20343a;margin:18px 2px 9px;text-transform:uppercase;letter-spacing:.6px}
-    .card{background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin:10px 0}
-    .jobcard{position:relative;overflow:hidden}.jobcard:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--brand)}
-    .jobcard.status-Ponuda:before{background:#2563eb}.jobcard.status-Avans:before{background:#f59e0b}.jobcard.status-Izmjera:before{background:#ea580c}.jobcard.status-Dizajn:before{background:#7c3aed}.jobcard.status-CNC:before{background:#1d4ed8}.jobcard.status-Spremno:before{background:#16a34a}.jobcard.status-Montaža:before{background:#059669}.jobcard.status-Naplaćeno:before{background:#111827}.jobcard.status-Arhiva:before{background:#6b7280}
-    .jobhead{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;padding-left:4px}
-    .jobtitle{font-weight:900;font-size:17px;line-height:1.18}.jobsub{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.35}.status{border-radius:999px;font-size:12px;font-weight:800;background:#e8f5f3;color:#0f766e;padding:6px 8px;white-space:nowrap}
-    .moneyrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;padding-left:4px}.money{background:#f8fafb;border:1px solid #edf2f4;border-radius:12px;padding:8px}.money b{display:block;font-size:15px}.money span{font-size:11px;color:var(--muted);font-weight:700}
-    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{border:0;border-radius:14px;background:linear-gradient(135deg,#0f766e,#14b8a6);color:white;font-size:15px;font-weight:900;padding:12px 14px;min-height:44px;box-shadow:0 8px 18px rgba(15,118,110,.20)}.btn.secondary{background:#e9f0f2;color:#14333a}.btn.warn{background:var(--warn);color:#2b1b00}.btn.bad{background:var(--bad)}.btn.full{width:100%}.btn.ghost{background:transparent;color:var(--brand);border:1px solid #b7d7d2}
-    .form{display:grid;gap:10px}.field label{display:block;font-size:12px;font-weight:900;color:#51646a;margin:0 0 5px 2px;text-transform:uppercase;letter-spacing:.3px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:white;padding:13px;font-size:16px;color:var(--ink);outline:none}.field textarea{min-height:92px;resize:vertical}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-    .small{font-size:12px;color:var(--muted);line-height:1.4}.hint{font-size:11px;color:var(--muted);margin-top:5px}.hr{height:1px;background:var(--line);margin:14px 0}.empty{padding:26px;text-align:center;color:var(--muted);background:white;border-radius:var(--radius);border:1px dashed #cbd5d9}
-    .bottomnav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:7px 7px calc(7px + var(--safe-bottom));display:grid;grid-template-columns:repeat(6,1fr);gap:4px}.navbtn{border:0;background:transparent;color:#63757a;border-radius:14px;padding:7px 2px;font-size:11px;font-weight:800}.navbtn .ico{display:block;font-size:20px;line-height:21px}.navbtn.active{background:#e5f3f1;color:var(--brand2)}
-    .detail-title{font-size:23px;font-weight:950;line-height:1.1;margin:2px 0 4px}.kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #edf2f4}.kv span:first-child{color:var(--muted);font-weight:800}.kv span:last-child{text-align:right;font-weight:800}.badgebar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.badge{border-radius:999px;background:#f0f5f6;padding:8px 10px;font-size:12px;font-weight:800;color:#44575d}
-    .toast{position:fixed;left:14px;right:14px;bottom:92px;background:#102a31;color:white;padding:13px 15px;border-radius:16px;box-shadow:var(--shadow);z-index:80;font-weight:800;display:none}.toast.show{display:block;animation:fade .2s ease}@keyframes fade{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
-    .dangerzone{border:1px solid #fecaca;background:#fff7f7}.syncbox{border-left:6px solid var(--brand);padding-left:12px}.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#f7fafb;border-radius:12px;padding:11px;white-space:pre-wrap;word-break:break-word}.hide{display:none!important}
-    details.advanced{border:1px solid var(--line);border-radius:16px;background:#f8fafb;padding:10px;margin-top:10px}details.advanced summary{font-weight:900;color:#31545b;cursor:pointer}
-    .cover{height:160px;border-radius:18px;background:linear-gradient(135deg,#dbeafe,#ccfbf1);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:12px;position:relative}.cover:after{content:"CroTeak Preview";position:absolute;left:12px;bottom:10px;background:rgba(15,23,42,.70);color:white;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}.cover img{width:100%;height:100%;object-fit:cover}.cover.mini{width:78px;height:58px;margin:0;flex:0 0 78px;border-radius:13px}.cover.mini:after{display:none}.cover .ct{font-size:34px;font-weight:950;color:#0f766e}
-    .filelist{display:grid;gap:8px;margin-top:8px}.fileitem{border:1px solid #dce5e8;border-radius:14px;background:#f8fafc;padding:10px}.fileitem b{display:block;font-size:14px}.fileitem span{display:block;font-size:12px;color:var(--muted);margin-top:3px}.fileitem button{margin-top:8px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;font-weight:800;padding:7px 9px}.fileitem button.main{background:#d1fae5;color:#065f46;margin-right:6px}
-    @media (min-width:700px){body{background:#edf3f4}main{max-width:760px}.bottomnav{left:50%;transform:translateX(-50%);max-width:760px;border-radius:22px 22px 0 0}.topbar{border-radius:0 0 22px 22px;max-width:760px;margin:0 auto}.miniSummary{grid-template-columns:repeat(4,1fr)}}
+    @media print{
+      .topbar,.bottomnav,.drawer,.sheet,.toast{display:none !important;}
+      .app{max-width:none; box-shadow:none; background:white;}
+      .content{padding:0;}
+    }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="topline">
-      <div><div class="title">CroTeak Planner</div><div class="build">MOBILE BUILD031 PWA · schema v3</div></div>
-      <div class="pill" id="syncPill"><span class="dot"></span><span id="syncText">Local</span></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="toprow">
+        <div class="brand">
+          <h1>CroTeak Planner</h1>
+          <div class="build">MOBILE BUILD032 PWA • schema v4</div>
+        </div>
+        <div class="cloud" id="saveStatus"><span class="dot"></span><span>Save OK</span></div>
+      </div>
+      <div class="searchrow">
+        <input id="globalSearch" class="searchbox" placeholder="Traži kupca, brod, lokaciju, chat..." autocomplete="off" />
+        <button class="iconbtn" id="menuBtn" title="Meni">☰</button>
+        <button class="iconbtn" id="quickSyncBtn" title="Backup">↻</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section id="screenHome" class="screen active"></section>
+      <section id="screenJobs" class="screen"></section>
+      <section id="screenMessages" class="screen"></section>
+      <section id="screenCalendar" class="screen"></section>
+      <section id="screenFinance" class="screen"></section>
+    </main>
+
+    <nav class="bottomnav">
+      <button class="navitem active" data-screen="home"><span class="ico">⌂</span><span>Početna</span></button>
+      <button class="navitem" data-screen="jobs"><span class="ico">▤</span><span>Poslovi</span></button>
+      <button class="navitem" data-screen="messages"><span class="ico">✉</span><span>Poruke</span></button>
+      <button class="navitem" data-screen="calendar"><span class="ico">◇</span><span>Plan</span></button>
+      <button class="navitem" data-screen="finance"><span class="ico">€</span><span>Novac</span></button>
+    </nav>
+  </div>
+
+  <div class="drawer" id="drawer">
+    <div class="drawerpanel">
+      <div class="drawerhead"><h3>Meni</h3><button class="closebtn" id="drawerClose">×</button></div>
+      <button class="menubtn" id="drawerNewJob"><span>+ Novi posao</span><span>›</span></button>
+      <button class="menubtn" id="drawerNewMsg"><span>+ Zalijepi chat / poruku</span><span>›</span></button>
+      <button class="menubtn" id="drawerExport"><span>Backup JSON</span><span>↧</span></button>
+      <button class="menubtn" id="drawerImport"><span>Import JSON</span><span>↥</span></button>
+      <button class="menubtn" id="drawerCsv"><span>Export CSV</span><span>↧</span></button>
+      <button class="menubtn" id="drawerPrint"><span>Print / PDF pregled</span><span>⌁</span></button>
+      <button class="menubtn danger" id="drawerReset"><span>Reset demo podataka</span><span>!</span></button>
+      <div class="note" style="margin-top:14px">BUILD032 je mobilni PWA build s popravljanjem širine ekrana i novim tabom Poruke. Podaci se spremaju lokalno u browseru. Backup JSON koristi za prijenos između mobitela/računala.</div>
+      <input type="file" id="importFile" accept="application/json,.json" class="hidden" />
     </div>
-    <div class="searchbox">
-      <input id="globalSearch" type="search" autocomplete="off" placeholder="Traži kupca, brod, lokaciju, chat...">
-      <button class="iconbtn" id="filterBtn" title="Filter">☰</button>
-      <button class="iconbtn" id="cloudRefreshBtn" title="Refresh cloud">↻</button>
-      <button class="installbtn" id="pwaInstallBtn" title="Instaliraj aplikaciju">Instaliraj</button>
-      <button class="iconbtn" id="clearSearch" title="Očisti">×</button>
-    </div>
-    <div class="installHint" id="pwaInstallHint">Za instalaciju na Android otvori ovu stranicu preko HTTPS linka u Chromeu i klikni Instaliraj.</div>
-  </header>
+  </div>
 
-  <main>
-    <section id="screen-home" class="screen active">
-      <div class="miniSummary">
-        <div class="miniStat"><div class="num" id="statActive">0</div><div class="lbl">Aktivni poslovi</div></div>
-        <div class="miniStat"><div class="num" id="statPending">0</div><div class="lbl">Čeka sync</div></div>
-        <div class="miniStat"><div class="num" id="statQuote">0 €</div><div class="lbl">Ukupno ponude</div></div>
-        <div class="miniStat"><div class="num" id="statRemaining">0 €</div><div class="lbl">Za naplatiti</div></div>
-      </div>
-      <div class="actions"><button class="btn full" onclick="newJob()">+ Novi posao na mobitelu</button></div>
-      <div id="filterPanel" class="card filterCard hide">
-        <div class="section-title" style="margin-top:0">Filter</div>
-        <div class="filterRow">
-          <div class="field"><label>Lokacija / regija</label><input id="filterLocation" placeholder="Split, Istra, Zadar..."></div>
-          <div class="field"><label>Status</label><select id="filterStatus"><option value="">Svi</option></select></div>
+  <div class="sheet" id="jobSheet"><div class="sheetpanel"><div class="grab"></div><div id="jobSheetContent"></div></div></div>
+  <div class="sheet" id="formSheet"><div class="sheetpanel"><div class="grab"></div><div id="formSheetContent"></div></div></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const BUILD = 'MOBILE BUILD032 PWA';
+    const SCHEMA = 4;
+    const STORAGE_KEY = 'croteak_planner_mobile_schema_v4';
+    const STATUS = ['Upit','Ponuda','Avans','Izmjera','Dizajn','CNC','Spremno','Montaža','Naplaćeno','Arhiva'];
+    const STATUS_CLASS = { 'Upit':'upit','Ponuda':'ponuda','Avans':'avans','Izmjera':'izmjera','Dizajn':'dizajn','CNC':'cnc','Spremno':'spremno','Montaža':'montaza','Naplaćeno':'naplaceno','Arhiva':'arhiva','Kasni':'kasni' };
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    const eur = n => `${Math.round(Number(n || 0)).toLocaleString('hr-HR')} €`;
+    const todayISO = () => new Date().toISOString().slice(0,10);
+    const uid = prefix => `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2,8)}`;
+    let currentScreen = 'home';
+    let statusFilter = 'Sve';
+    let search = '';
+    let selectedJobId = null;
+
+    function seedData(){
+      const now = new Date().toISOString();
+      return {
+        schema: SCHEMA,
+        build: BUILD,
+        updatedAt: now,
+        jobs: [
+          {id:'job_demo_1', boat:'Merry Fisher 925', customer:'Ivan Logara', phone:'0915758646', location:'Omiš', status:'Izmjera', quote:1100, advance:400, estimate:1100, materialCost:260, travelCost:80, laborCost:160, otherCost:0, deadline:'', measureDate:todayISO(), installDate:'', color:'Sivo / crno', notes:'Primjer posla za testiranje. Klikni karticu za detalje.', createdAt:now, updatedAt:now},
+          {id:'job_demo_2', boat:'Arvor 215 AS', customer:'Zoki Radman', phone:'0994119579', location:'Split, lučica Spinut', status:'Izmjera', quote:1100, advance:300, estimate:1100, materialCost:290, travelCost:120, laborCost:150, otherCost:0, deadline:'', measureDate:todayISO(), installDate:'', color:'Teak / black', notes:'Primjer za plan rute Split.', createdAt:now, updatedAt:now},
+          {id:'job_demo_3', boat:'Merry Fisher 705', customer:'Ivo Burica, žena Meri', phone:'0950154000', location:'Sukošan / Zadar', status:'Upit', quote:900, advance:0, estimate:900, materialCost:210, travelCost:70, laborCost:120, otherCost:0, deadline:'', measureDate:'', installDate:'', color:'', notes:'Upit s Facebooka / WhatsAppa.', createdAt:now, updatedAt:now},
+          {id:'job_demo_4', boat:'Beneteau Antares', customer:'Marko', phone:'', location:'Pirovac', status:'Ponuda', quote:0, advance:0, estimate:0, materialCost:0, travelCost:0, laborCost:0, otherCost:0, deadline:'', measureDate:'', installDate:'', color:'', notes:'Čeka okvirne slike i mjere.', createdAt:now, updatedAt:now},
+          {id:'job_demo_5', boat:'Gumenjak 6m', customer:'Ana', phone:'', location:'Zadar', status:'Spremno', quote:0, advance:0, estimate:0, materialCost:0, travelCost:0, laborCost:0, otherCost:0, deadline:'', measureDate:'', installDate:'', color:'', notes:'Spremno za montažu kad je ruta Zadar.', createdAt:now, updatedAt:now}
+        ],
+        messages: [
+          {id:'msg_demo_1', jobId:'job_demo_3', customer:'Ivo Burica', source:'Facebook', receivedAt:now, text:'Pozdrav, zanima me EVA foam za Merry Fisher 705. Brod je kod Zadra. Možete li dati okvirnu cijenu?', createdAt:now}
+        ],
+        material: [
+          {id:'mat_1', name:'EVA teak/crna 2400x1200 6mm', qty:10, reserved:2, price:65},
+          {id:'mat_2', name:'EVA siva/crna 2400x1200 6mm', qty:5, reserved:1, price:65}
+        ]
+      };
+    }
+
+    let db = loadDB();
+
+    function loadDB(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        try { return normalizeDB(JSON.parse(raw)); } catch(e){}
+      }
+      // pokušaj naći stariji lokalni backup iz eventualnog builda
+      for(let i=0;i<localStorage.length;i++){
+        const k = localStorage.key(i);
+        if(!k || !/croteak|ct_/i.test(k) || k === STORAGE_KEY) continue;
+        try{
+          const obj = JSON.parse(localStorage.getItem(k));
+          if(obj && (Array.isArray(obj.jobs) || Array.isArray(obj.poslovi))) return normalizeDB(obj);
+        }catch(e){}
+      }
+      const fresh = seedData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+      return fresh;
+    }
+
+    function normalizeDB(obj){
+      const now = new Date().toISOString();
+      const out = {
+        schema: SCHEMA,
+        build: BUILD,
+        updatedAt: obj.updatedAt || now,
+        jobs: Array.isArray(obj.jobs) ? obj.jobs : (Array.isArray(obj.poslovi) ? obj.poslovi : []),
+        messages: Array.isArray(obj.messages) ? obj.messages : (Array.isArray(obj.poruke) ? obj.poruke : []),
+        material: Array.isArray(obj.material) ? obj.material : []
+      };
+      out.jobs = out.jobs.map(j => ({
+        id: j.id || uid('job'),
+        boat: j.boat || j.brod || '',
+        customer: j.customer || j.kupac || j.name || '',
+        phone: j.phone || j.telefon || '',
+        location: j.location || j.lokacija || '',
+        status: STATUS.includes(j.status) ? j.status : (j.status || 'Upit'),
+        quote: Number(j.quote ?? j.ponuda ?? 0),
+        advance: Number(j.advance ?? j.avans ?? 0),
+        estimate: Number(j.estimate ?? j.procjena ?? j.quote ?? j.ponuda ?? 0),
+        materialCost: Number(j.materialCost ?? j.trosakMaterijala ?? 0),
+        travelCost: Number(j.travelCost ?? j.trosakPuta ?? 0),
+        laborCost: Number(j.laborCost ?? j.trosakRada ?? 0),
+        otherCost: Number(j.otherCost ?? j.ostaliTrosak ?? 0),
+        deadline: j.deadline || j.rok || '',
+        measureDate: j.measureDate || j.datumIzmjere || '',
+        installDate: j.installDate || j.datumMontaze || '',
+        color: j.color || j.boja || '',
+        notes: j.notes || j.biljeske || '',
+        createdAt: j.createdAt || now,
+        updatedAt: j.updatedAt || now
+      }));
+      out.messages = out.messages.map(m => ({
+        id: m.id || uid('msg'),
+        jobId: m.jobId || m.posaoId || '',
+        customer: m.customer || m.kupac || '',
+        source: m.source || m.izvor || 'Ručno',
+        receivedAt: m.receivedAt || m.datum || now,
+        text: m.text || m.poruka || m.chat || '',
+        createdAt: m.createdAt || now
+      }));
+      return out;
+    }
+
+    function saveDB(){
+      db.schema = SCHEMA;
+      db.build = BUILD;
+      db.updatedAt = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+      flashSave();
+    }
+    let saveTimer;
+    function flashSave(){
+      const el = $('#saveStatus');
+      el.innerHTML = '<span class="dot"></span><span>Save OK</span>';
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(()=>{ el.innerHTML = '<span class="dot"></span><span>Save OK</span>'; }, 900);
+    }
+    function toast(msg){
+      const el = $('#toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(el._timer);
+      el._timer = setTimeout(()=> el.classList.remove('show'), 2200);
+    }
+    function closeSheets(){ $('#jobSheet').classList.remove('open'); $('#formSheet').classList.remove('open'); }
+
+    function filteredJobs(){
+      const q = search.trim().toLowerCase();
+      return db.jobs.filter(j => {
+        const matchesStatus = statusFilter === 'Sve' || j.status === statusFilter;
+        if(!matchesStatus) return false;
+        if(!q) return true;
+        const msg = db.messages.filter(m=>m.jobId===j.id).map(m=>m.text).join(' ');
+        return [j.boat,j.customer,j.phone,j.location,j.status,j.color,j.notes,msg].join(' ').toLowerCase().includes(q);
+      }).sort((a,b)=> new Date(b.updatedAt||b.createdAt) - new Date(a.updatedAt||a.createdAt));
+    }
+    function totals(){
+      const active = db.jobs.filter(j=>!['Naplaćeno','Arhiva'].includes(j.status));
+      const quote = db.jobs.reduce((s,j)=>s+Number(j.quote||0),0);
+      const advance = db.jobs.reduce((s,j)=>s+Number(j.advance||0),0);
+      const due = db.jobs.reduce((s,j)=>s+Math.max(Number(j.quote||0)-Number(j.advance||0),0),0);
+      const cost = db.jobs.reduce((s,j)=>s+Number(j.materialCost||0)+Number(j.travelCost||0)+Number(j.laborCost||0)+Number(j.otherCost||0),0);
+      return {active:active.length, waiting:0, quote, advance, due, cost, profit:quote-cost};
+    }
+    function moneyParts(j){
+      const quote = Number(j.quote||0);
+      const advance = Number(j.advance||0);
+      const due = Math.max(quote-advance,0);
+      const cost = Number(j.materialCost||0)+Number(j.travelCost||0)+Number(j.laborCost||0)+Number(j.otherCost||0);
+      const profit = quote-cost;
+      return {quote, advance, due, cost, profit, estimate:Number(j.estimate||quote||0)};
+    }
+    function badge(status){ return `<span class="badge ${STATUS_CLASS[status]||''}">${escapeHTML(status||'Upit')}</span>`; }
+    function initials(j){
+      const source = (j.customer || j.boat || 'CT').trim();
+      const parts = source.split(/\s+/).filter(Boolean);
+      const chars = parts.length > 1 ? (parts[0][0]+parts[1][0]) : source.slice(0,2);
+      return (chars || 'CT').toUpperCase();
+    }
+    function escapeHTML(s){ return String(s ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+    function fmtDate(s){ if(!s) return ''; try { return new Date(s).toLocaleDateString('hr-HR'); } catch(e){ return s; } }
+    function jobCard(j){
+      const m = moneyParts(j);
+      return `<article class="jobcard" data-job-id="${j.id}">
+        <div class="jobtop">
+          <div class="avatar">${escapeHTML(initials(j))}</div>
+          <div style="min-width:0">
+            <div class="jobtitle">${escapeHTML(j.boat || 'Bez broda')}</div>
+            <div class="jobmeta">${escapeHTML(j.customer || 'Bez kupca')} · ${escapeHTML(j.location || 'Bez lokacije')} · ${escapeHTML(j.phone || '')}</div>
+          </div>
+          ${badge(j.status)}
         </div>
-        <div class="filterActions">
-          <button class="btn secondary" type="button" onclick="applyFiltersFromUi()">Primijeni</button>
-          <button class="btn ghost" type="button" onclick="resetFilters()">Reset</button>
+        <div class="moneygrid">
+          <div class="money"><strong>${eur(m.quote)}</strong><span>Ponuda</span></div>
+          <div class="money"><strong>${eur(m.due)}</strong><span>Ostatak</span></div>
+          <div class="money"><strong>${eur(m.estimate)}</strong><span>Procjena</span></div>
         </div>
-      </div>
-      <div id="activeFilterChips" class="chips hide"></div>
-      <div class="listHeader"><div class="section-title" style="margin-bottom:0">Nedavni / aktivni poslovi</div><button class="smallFilterBtn" type="button" onclick="toggleFilterPanel()">Filter</button></div>
-      <div id="homeList"></div>
-    </section>
+      </article>`;
+    }
 
-    <section id="screen-search" class="screen">
-      <div class="section-title">Search rezultati</div>
-      <div class="small">Traži po klijentu, brodu, telefonu, lokaciji, statusu, chat porukama, bilješkama i financijama.</div>
-      <div id="searchFilterChips" class="chips hide"></div>
-      <div id="searchList"></div>
-    </section>
-
-    <section id="screen-edit" class="screen">
-      <div class="card">
-        <div class="detail-title" id="editTitle">Novi posao</div>
-        <div class="small" id="editSub">Unesi osnovne podatke s terena.</div>
-        <div class="hr"></div>
-        <div class="form">
-          <div class="field"><label>Klijent</label><input id="client_name" placeholder="Ime kupca"></div>
-          <div class="row2"><div class="field"><label>Telefon</label><input id="phone" inputmode="tel" placeholder="+385..."></div><div class="field"><label>WhatsApp</label><input id="whatsapp" inputmode="tel" placeholder="ako je drugi broj"></div></div>
-          <div class="field"><label>Email</label><input id="email" inputmode="email" placeholder="email"></div>
-          <div class="field"><label>Izvor upita</label><input id="source_channel" placeholder="Facebook, WhatsApp, preporuka..."></div>
-          <div class="row2"><div class="field"><label>Model broda</label><input id="boat_model" list="boatModelSuggestions" oninput="updateBoatModelDatalist()" onchange="applyBoatModelAutocomplete()" placeholder="npr. Merry Fisher 695"><datalist id="boatModelSuggestions"></datalist><div class="hint">Počni tipkati, npr. M → nudi modele iz Baze brodova.</div></div><div class="field"><label>Ime broda</label><input id="boat_name" placeholder="opcionalno"></div></div><div class="actions"><button class="btn secondary full" type="button" onclick="pickBoatForJob()">📚 Popuni iz baze brodova</button><button class="btn ghost full" type="button" onclick="saveCurrentBoatToDb()">Spremi ovaj brod u bazu</button></div>
-          <div class="field"><label>Lokacija broda</label><input id="boat_location" placeholder="Pirovac, Zadar, Split..."></div>
-          <div class="field"><label>Pristup brodu</label><input id="boat_access" placeholder="suhi vez, marina, u moru..."></div>
-          <div class="row3"><div class="field"><label>Dužina</label><input id="boat_length" placeholder="npr. 6.95 m"></div><div class="field"><label>m²</label><input id="measured_area_m2" inputmode="decimal" placeholder="izmjera"></div><div class="field"><label>€/m²</label><input id="price_per_m2" inputmode="decimal" placeholder="180"></div></div>
-          <div class="field"><label>Tip posla</label><input id="install_type" placeholder="izmjera, izrada, montaža, komplet..."></div>
-          <div class="row2"><div class="field"><label>Status</label><select id="status"></select></div><div class="field"><label>Prioritet</label><select id="priority"><option>Normalno</option><option>Hitno</option><option>Nisko</option></select></div></div>
-          <div class="row3"><div class="field"><label>Ponuda €</label><input id="quote_amount" inputmode="decimal" value="0"></div><div class="field"><label>Avans €</label><input id="advance_received" inputmode="decimal" value="0"></div><div class="field"><label>Završno €</label><input id="final_received" inputmode="decimal" value="0"></div></div>
-          <div class="actions"><button class="btn secondary full" type="button" onclick="calcQuoteFromArea()">m² × €/m² → ponuda</button></div>
-          <div class="row2"><div class="field"><label>Mat. trošak €</label><input id="material_cost" inputmode="decimal" value="0"></div><div class="field"><label>Put €</label><input id="travel_cost" inputmode="decimal" value="0"></div></div>
-          <div class="row2"><div class="field"><label>Rad €</label><input id="labor_cost" inputmode="decimal" value="0"></div><div class="field"><label>Ostalo €</label><input id="other_cost" inputmode="decimal" value="0"></div></div>
-          <div class="row2"><div class="field"><label>Boja materijala</label><input id="material_color" placeholder="sivo/crno, teak/crno..."></div><div class="field"><label>Debljina</label><input id="material_thickness" value="6 mm"></div></div>
-          <div class="row2"><div class="field"><label>Materijal rezerviran</label><select id="material_reserved"><option>Ne</option><option>Da</option><option>Čeka provjeru</option></select></div><div class="field"><label>Rok kupca</label><input id="deadline_date" type="date"></div></div>
-          <div class="row2"><div class="field"><label>Izmjera</label><input id="measure_date" type="date"></div><div class="field"><label>Montaža</label><input id="install_date" type="date"></div></div>
-          <div class="field"><label>Poruke / chat</label><textarea id="chat_log" placeholder="Zalijepi Facebook/WhatsApp chat ili bitan dio poruke..."></textarea></div>
-          <div class="field"><label>Bilješke</label><textarea id="notes" placeholder="Mjere, dogovori, problemi, detalji broda..."></textarea></div>
-          <div class="field"><label>Napomena plaćanja</label><textarea id="payment_note" placeholder="avans, ostatak, keš/račun, dogovor..."></textarea></div>
-          <div class="field"><label>Slike / dokumenti</label><input id="filePicker" type="file" multiple onchange="addFilesToEdit(event)"><div class="hint">Mobitel za sada sprema popis/nazive datoteka u cloud. Pravi upload datoteka ide kasnije preko Storagea.</div><textarea id="files_manifest" class="hide"></textarea><input id="main_image_path" class="hide"><div id="filesList" class="filelist"></div></div>
-          <div class="field"><label>Dokumenti / slike napomena</label><textarea id="documents_note" placeholder="npr. slike na mobitelu, DXF na PC-u, ponuda PDF..."></textarea></div>
-          <div class="actions"><button class="btn full" onclick="saveEdit()">Spremi posao</button><button class="btn secondary full" onclick="cancelEdit()">Odustani</button></div>
+    function renderHome(){
+      const t = totals();
+      const jobs = filteredJobs().slice(0,6);
+      $('#screenHome').innerHTML = `
+        <div class="stats">
+          <div class="stat"><div class="n">${t.active}</div><div class="l">Aktivni poslovi</div></div>
+          <div class="stat"><div class="n">${t.waiting}</div><div class="l">Čeka sync</div></div>
+          <div class="stat"><div class="n">${eur(t.quote)}</div><div class="l">Ukupno ponude</div></div>
+          <div class="stat"><div class="n">${eur(t.due)}</div><div class="l">Za naplatiti</div></div>
         </div>
-      </div>
-    </section>
+        <div style="margin-top:22px"><button class="primary" id="homeNewJob">+ Novi posao na mobitelu</button></div>
+        <div class="sectionhead"><h2>Nedavni / aktivni poslovi</h2><button class="pillbtn" id="homeFilter">Filter</button></div>
+        <div class="list">${jobs.length ? jobs.map(jobCard).join('') : '<div class="empty">Nema poslova za ovaj search.</div>'}</div>`;
+      bindJobCards();
+      $('#homeNewJob').onclick = () => openJobForm();
+      $('#homeFilter').onclick = () => switchScreen('jobs');
+    }
 
-    <section id="screen-detail" class="screen">
-      <div id="detailContent"></div>
-    </section>
+    function renderJobs(){
+      const jobs = filteredJobs();
+      $('#screenJobs').innerHTML = `
+        <div class="sectionhead"><h2>Poslovi</h2><button class="pillbtn" id="jobsNew">+ Novi</button></div>
+        <div class="tabs">${['Sve',...STATUS].map(s=>`<button class="chip ${statusFilter===s?'active':''}" data-status="${escapeHTML(s)}">${escapeHTML(s)}</button>`).join('')}</div>
+        <div class="sectionhead" style="margin-top:12px"><h2>Kanban</h2><button class="pillbtn" id="viewListBtn">Lista</button></div>
+        <div class="kanban" id="kanban">${renderKanbanLanes()}</div>
+        <div class="sectionhead"><h2>Lista</h2><span class="mini">${jobs.length} poslova</span></div>
+        <div class="list">${jobs.length ? jobs.map(jobCard).join('') : '<div class="empty">Nema poslova za prikaz.</div>'}</div>`;
+      $$('#screenJobs .chip').forEach(ch=>ch.onclick = () => { statusFilter = ch.dataset.status; render(); });
+      $('#jobsNew').onclick = () => openJobForm();
+      $('#viewListBtn').onclick = () => window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+      bindJobCards();
+      $$('#kanban .kcard').forEach(el=>el.onclick=()=>openJobDetail(el.dataset.jobId));
+    }
 
+    function renderKanbanLanes(){
+      const all = filteredJobs();
+      return STATUS.filter(s=>statusFilter==='Sve'||statusFilter===s).map(s=>{
+        const arr = all.filter(j=>j.status===s);
+        return `<div class="lane"><div class="lanetitle"><span>${escapeHTML(s)}</span><span class="mini">${arr.length}</span></div>
+          ${arr.length ? arr.map(j=>`<div class="kcard" data-job-id="${j.id}"><strong>${escapeHTML(j.boat||'Bez broda')}</strong><span>${escapeHTML(j.customer||'')} · ${escapeHTML(j.location||'')}</span><span>${eur(moneyParts(j).due)} za naplatiti</span></div>`).join('') : '<div class="empty" style="padding:14px;font-size:13px">Prazno</div>'}
+        </div>`;
+      }).join('');
+    }
 
-    <section id="screen-boats" class="screen">
-      <div class="card">
-        <div class="detail-title">Baza brodova</div>
-        <div class="small">Spremaj modele brodova, tipične m², dužinu i €/m². Kod novog posla možeš brzo popuniti podatke iz baze.</div>
-        <div class="actions"><button class="btn full" onclick="newBoat()">+ Novi model broda</button><button class="btn secondary full" onclick="syncBoatsNow()">↻ Sync brodova</button></div>
-      </div>
-      <div id="boatsList"></div>
-    </section>
+    function renderMessages(){
+      const q = search.trim().toLowerCase();
+      const msgs = db.messages.filter(m=>{
+        if(!q) return true;
+        const j = db.jobs.find(x=>x.id===m.jobId) || {};
+        return [m.customer,m.source,m.text,j.boat,j.customer,j.location].join(' ').toLowerCase().includes(q);
+      }).sort((a,b)=>new Date(b.receivedAt||b.createdAt)-new Date(a.receivedAt||a.createdAt));
+      $('#screenMessages').innerHTML = `
+        <div class="sectionhead"><h2>Poruke / Chat</h2><button class="pillbtn" id="newMsgBtn">+ Chat</button></div>
+        <div class="note">Za sada sigurna varijanta: kopiraš Facebook / WhatsApp chat i zalijepiš ga ovdje. Kasnije se može spojiti službeni Facebook Page inbox preko Meta API-ja.</div>
+        <div class="list" style="margin-top:14px">${msgs.length ? msgs.map(msgCard).join('') : '<div class="empty">Nema poruka. Zalijepi prvi chat ili promijeni search.</div>'}</div>`;
+      $('#newMsgBtn').onclick = () => openMessageForm();
+      $$('#screenMessages [data-job-id]').forEach(el=>el.onclick=()=>openJobDetail(el.dataset.jobId));
+      $$('#screenMessages [data-msg-edit]').forEach(el=>el.onclick=()=>openMessageForm(el.dataset.msgEdit));
+    }
+    function msgCard(m){
+      const j = db.jobs.find(x=>x.id===m.jobId);
+      return `<article class="msgcard">
+        <h3>${escapeHTML(m.customer || (j && j.customer) || 'Nepoznat kupac')}</h3>
+        <div class="smallrow"><span>${escapeHTML(m.source||'Ručno')}</span><span>·</span><span>${fmtDate(m.receivedAt)}</span>${j?`<span>·</span><button class="chip" style="padding:6px 10px" data-job-id="${j.id}">${escapeHTML(j.boat)}</button>`:''}</div>
+        <div class="msgtext">${escapeHTML(m.text)}</div>
+        <div class="toolbar"><button class="ghost" data-msg-edit="${m.id}">Uredi chat</button>${j?`<button class="ghost" data-job-id="${j.id}">Otvori posao</button>`:'<button class="ghost" onclick="window.__createJobFromLastMsg && window.__createJobFromLastMsg()">+ Novi posao</button>'}</div>
+      </article>`;
+    }
 
-    <section id="screen-boat-edit" class="screen">
-      <div class="card">
-        <div class="detail-title" id="boatEditTitle">Model broda</div>
-        <div class="form">
-          <div class="field"><label>Model broda</label><input id="bm_model" placeholder="npr. Merry Fisher 695"></div>
-          <div class="field"><label>Proizvođač</label><input id="bm_manufacturer" placeholder="Jeanneau, Beneteau, Zar..."></div>
-          <div class="row2"><div class="field"><label>Dužina</label><input id="bm_length" placeholder="6.95 m"></div><div class="field"><label>Tipična m²</label><input id="bm_area" inputmode="decimal" placeholder="4.8"></div></div>
-          <div class="row2"><div class="field"><label>€/m²</label><input id="bm_price" inputmode="decimal" placeholder="180"></div><div class="field"><label>Kategorija</label><input id="bm_category" placeholder="gumenjak, fisher..."></div></div>
-          <div class="field"><label>Materijal napomena</label><input id="bm_material" placeholder="teak/crno 6 mm..."></div>
-          <div class="field"><label>Alias / druga imena</label><input id="bm_aliases" placeholder="Cap Camarat 545, CC 5.45..."></div>
-          <div class="field"><label>Napomene</label><textarea id="bm_notes" placeholder="detalji, gdje je rađeno, tipičan otpad..."></textarea></div>
-          <div class="actions"><button class="btn full" onclick="saveBoatEdit()">Spremi model</button><button class="btn secondary full" onclick="showScreen('boats')">Odustani</button></div>
+    function renderCalendar(){
+      const events = [];
+      db.jobs.forEach(j=>{
+        if(j.measureDate) events.push({date:j.measureDate, type:'Izmjera', job:j});
+        if(j.installDate) events.push({date:j.installDate, type:'Montaža', job:j});
+        if(j.deadline) events.push({date:j.deadline, type:'Rok', job:j});
+      });
+      events.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+      const locations = {};
+      db.jobs.filter(j=>!['Naplaćeno','Arhiva'].includes(j.status)).forEach(j=>{
+        const loc = (j.location||'Bez lokacije').split(',')[0].trim();
+        locations[loc] = locations[loc] || [];
+        locations[loc].push(j);
+      });
+      $('#screenCalendar').innerHTML = `
+        <div class="sectionhead"><h2>Kalendar / Ruta</h2><button class="pillbtn" id="planNew">+ Novi</button></div>
+        <div class="sectionhead"><h2>Datumi</h2><span class="mini">${events.length}</span></div>
+        <div class="list">${events.length ? events.map(e=>`<article class="msgcard" data-job-id="${e.job.id}"><h3>${escapeHTML(e.type)} • ${fmtDate(e.date)}</h3><div class="smallrow">${escapeHTML(e.job.boat)} · ${escapeHTML(e.job.customer)} · ${escapeHTML(e.job.location)}</div></article>`).join('') : '<div class="empty">Nema unesenih datuma izmjere, montaže ili roka.</div>'}</div>
+        <div class="sectionhead"><h2>Ruta po lokaciji</h2></div>
+        <div class="list">${Object.keys(locations).map(loc=>`<article class="msgcard"><h3>${escapeHTML(loc)}</h3>${locations[loc].map(j=>`<div class="smallrow" style="margin-top:7px"><button class="chip" style="padding:7px 10px" data-job-id="${j.id}">${escapeHTML(j.boat)}</button><span>${badge(j.status)}</span><span>${eur(moneyParts(j).due)}</span></div>`).join('')}</article>`).join('')}</div>`;
+      $('#planNew').onclick=()=>openJobForm();
+      $$('#screenCalendar [data-job-id]').forEach(el=>el.onclick=()=>openJobDetail(el.dataset.jobId));
+    }
+
+    function renderFinance(){
+      const t = totals();
+      const jobs = filteredJobs();
+      $('#screenFinance').innerHTML = `
+        <div class="sectionhead"><h2>Financije</h2><button class="pillbtn" id="csvBtn">CSV</button></div>
+        <div class="stats">
+          <div class="stat"><div class="n">${eur(t.quote)}</div><div class="l">Ukupno ponude</div></div>
+          <div class="stat"><div class="n">${eur(t.advance)}</div><div class="l">Primljeni avansi</div></div>
+          <div class="stat"><div class="n">${eur(t.due)}</div><div class="l">Za naplatiti</div></div>
+          <div class="stat"><div class="n">${eur(t.profit)}</div><div class="l">Procjena zarade</div></div>
         </div>
-      </div>
-    </section>
+        <div class="sectionhead"><h2>Po poslu</h2></div>
+        <div class="list">${jobs.map(j=>{
+          const m=moneyParts(j);
+          return `<article class="jobcard" data-job-id="${j.id}"><div class="jobtop"><div class="avatar">€</div><div style="min-width:0"><div class="jobtitle">${escapeHTML(j.boat)}</div><div class="jobmeta">${escapeHTML(j.customer)} · trošak ${eur(m.cost)} · zarada ${eur(m.profit)}</div></div>${badge(j.status)}</div><div class="moneygrid"><div class="money"><strong>${eur(m.quote)}</strong><span>Ponuda</span></div><div class="money"><strong>${eur(m.advance)}</strong><span>Avans</span></div><div class="money"><strong>${eur(m.due)}</strong><span>Ostatak</span></div></div></article>`;
+        }).join('')}</div>`;
+      $('#csvBtn').onclick = exportCSV;
+      bindJobCards();
+    }
 
-    <section id="screen-sync" class="screen">
-      <div class="card syncbox">
-        <div class="detail-title">Sync / Backup</div>
-        <div class="small">MOBILE BUILD031 PWA ima automatski Supabase sync i instalaciju na Android. Radiš normalno: spremiš posao, a mobitel ga sam šalje u cloud. Gumb ispod je samo ručni refresh.</div>
-        <div class="hr"></div>
-        <div class="kv"><span>Lokalnih poslova</span><span id="syncJobs">0</span></div>
-        <div class="kv"><span>Čeka sync</span><span id="syncPending">0</span></div>
-        <div class="kv"><span>Zadnji backup</span><span id="lastBackup">nikad</span></div>
-        <div class="kv"><span>Cloud login</span><span id="cloudLoginState">nije prijavljen</span></div>
-        <div class="actions"><button class="btn full" onclick="exportBackup()">Backup / Export JSON</button><button class="btn secondary full" onclick="document.getElementById('importFile').click()">Import PC/Mobile JSON</button><input id="importFile" class="hide" type="file" accept=".json,application/json" onchange="importBackup(event)"></div>
-        <div class="actions"><button class="btn full" onclick="fullCloudSync()">Sync sada / Refresh</button><button class="btn ghost full" onclick="testCloud()">Test cloud</button></div>
-      </div>
-      <div class="card">
-        <div class="section-title" style="margin-top:0">CroTeak cloud login</div>
-        <div id="loggedBox" class="hide">
-          <div class="kv"><span>Prijavljen</span><span id="loggedEmail">-</span></div>
-          <div class="small">Session je spremljen lokalno. Ne spremamo lozinku kao običan tekst; app koristi Supabase session/refresh token.</div>
-          <div class="actions"><button class="btn full" onclick="fullCloudSync()">↻ Refresh sada</button><button class="btn bad full" onclick="signOutCloud()">Odjava lokalno</button></div>
+    function render(){
+      renderHome(); renderJobs(); renderMessages(); renderCalendar(); renderFinance();
+      $$('.screen').forEach(s=>s.classList.remove('active'));
+      $(`#screen${currentScreen[0].toUpperCase()+currentScreen.slice(1)}`).classList.add('active');
+      $$('.navitem').forEach(n=>n.classList.toggle('active', n.dataset.screen===currentScreen));
+    }
+    function switchScreen(screen){ currentScreen = screen; render(); window.scrollTo({top:0, behavior:'smooth'}); }
+    function bindJobCards(){ $$('.jobcard[data-job-id]').forEach(el=>el.onclick=()=>openJobDetail(el.dataset.jobId)); }
+
+    function openJobDetail(id){
+      selectedJobId = id;
+      const j = db.jobs.find(x=>x.id===id); if(!j) return;
+      const m = moneyParts(j);
+      const msgs = db.messages.filter(x=>x.jobId===j.id);
+      $('#jobSheetContent').innerHTML = `
+        <div class="sheettitle"><div><h2>${escapeHTML(j.boat||'Bez broda')}</h2><div class="sub">${escapeHTML(j.customer||'Bez kupca')} · ${escapeHTML(j.location||'Bez lokacije')}</div></div><button class="closebtn" id="closeJob">×</button></div>
+        <div>${badge(j.status)}</div>
+        <div class="detailgrid">
+          <div class="detailbox"><span>Telefon</span><strong>${escapeHTML(j.phone||'-')}</strong></div>
+          <div class="detailbox"><span>Boja</span><strong>${escapeHTML(j.color||'-')}</strong></div>
+          <div class="detailbox"><span>Ponuda</span><strong>${eur(m.quote)}</strong></div>
+          <div class="detailbox"><span>Avans</span><strong>${eur(m.advance)}</strong></div>
+          <div class="detailbox"><span>Za naplatiti</span><strong>${eur(m.due)}</strong></div>
+          <div class="detailbox"><span>Zarada</span><strong>${eur(m.profit)}</strong></div>
+          <div class="detailbox"><span>Izmjera</span><strong>${fmtDate(j.measureDate)||'-'}</strong></div>
+          <div class="detailbox"><span>Montaža</span><strong>${fmtDate(j.installDate)||'-'}</strong></div>
         </div>
-        <div id="loginBox">
-          <div class="field"><label>Email</label><input id="cloudEmail" inputmode="email" placeholder="tvoj login email"></div>
-          <div class="field"><label>Lozinka</label><input id="cloudPassword" type="password" placeholder="lozinka"></div>
-          <div class="actions"><button class="btn secondary full" onclick="signUpCloud()">Registriraj</button><button class="btn full" onclick="signInCloud()">Login</button></div>
-          <div class="small">Email confirmation ostaje uključen. Nakon potvrde maila vrati se i klikni Login.</div>
+        <div class="note"><strong>Bilješke:</strong><br>${escapeHTML(j.notes || 'Nema bilješki.')}</div>
+        <div class="toolbar">
+          <button class="ghost" id="editJobBtn">Uredi posao</button>
+          <button class="ghost" id="copyWaBtn">WhatsApp tekst</button>
+          <button class="ghost" id="jobReportBtn">Izvještaj</button>
+          <button class="ghost" id="addChatToJobBtn">+ Chat</button>
+          <button class="ghost danger" id="deleteJobBtn">Obriši</button>
         </div>
-        <details class="advanced">
-          <summary>Napredno: Supabase URL / key</summary>
-          <div class="field"><label>Supabase URL</label><input id="cloudUrl" value="https://vowzrtyaihalyjrmmlit.supabase.co"></div>
-          <div class="field"><label>Public / anon key</label><input id="cloudKey" type="password" value="sb_publishable_zl3MOVbcmvSx5yvXLQt9Bw_lrrqc3Zz"></div>
-          <div class="actions"><button class="btn secondary full" onclick="saveCloudSettings()">Spremi cloud postavke</button></div>
-        </details>
-      </div>
-      <div class="card">
-        <div class="section-title" style="margin-top:0">Upute za prvi test</div>
-        <div class="small">
-          1. Ovdje upiši isti email/lozinku kao na PC-u i klikni Login.<br>
-          2. Klikni <b>Sync sada / Refresh</b> za prvo povlačenje podataka.<br>
-          3. Nakon toga samo dodaj ili promijeni posao i klikni Spremi.<br>
-          4. Mobitel automatski šalje promjene u cloud. Gumb ↻ gore desno je brzi refresh.
-        </div>
-      </div>
-      <div id="cloudPreview" class="card hide"><div class="section-title" style="margin-top:0">Cloud Package preview</div><div class="mono" id="cloudText"></div></div>
-    </section>
+        <div class="sectionhead"><h2>Chat / poruke</h2><span class="mini">${msgs.length}</span></div>
+        <div class="list">${msgs.length ? msgs.map(msgCard).join('') : '<div class="empty">Nema spremljenog chata za ovaj posao.</div>'}</div>`;
+      $('#jobSheet').classList.add('open');
+      $('#closeJob').onclick=closeSheets;
+      $('#editJobBtn').onclick=()=>openJobForm(j.id);
+      $('#copyWaBtn').onclick=()=>copyWhatsApp(j.id);
+      $('#jobReportBtn').onclick=()=>openReport(j.id);
+      $('#addChatToJobBtn').onclick=()=>openMessageForm(null, j.id);
+      $('#deleteJobBtn').onclick=()=>deleteJob(j.id);
+      $$('#jobSheetContent [data-msg-edit]').forEach(el=>el.onclick=()=>openMessageForm(el.dataset.msgEdit));
+      $$('#jobSheetContent [data-job-id]').forEach(el=>el.onclick=()=>openJobDetail(el.dataset.jobId));
+    }
 
-    <section id="screen-settings" class="screen">
-      <div class="card">
-        <div class="detail-title">Postavke</div>
-        <div class="small">Mobitel build radi lokalno + Supabase cloud sync. Podaci ostaju i u browseru kao lokalni cache.</div>
-        <div class="hr"></div>
-        <div class="kv"><span>Build</span><span>MOBILE BUILD031 PWA</span></div>
-        <div class="kv"><span>Schema</span><span>3</span></div>
-        <div class="kv"><span>Storage</span><span>Local browser + Supabase</span></div>
-        <div class="actions"><button class="btn secondary full" onclick="exportBackup()">Napravi backup prije brisanja</button></div>
-      </div>
-      <div class="card dangerzone">
-        <div class="section-title" style="margin-top:0;color:#991b1b">Opasna zona</div>
-        <div class="small">Ovo briše samo lokalne podatke iz browsera na ovom mobitelu.</div>
-        <div class="actions"><button class="btn bad full" onclick="wipeLocal()">Obriši lokalne podatke</button></div>
-      </div>
-    </section>
-  </main>
+    function openJobForm(id){
+      const j = id ? db.jobs.find(x=>x.id===id) : null;
+      const title = j ? 'Uredi posao' : 'Novi posao';
+      $('#formSheetContent').innerHTML = `
+        <div class="sheettitle"><div><h2>${title}</h2><div class="sub">Klijent, brod, cijena i rokovi</div></div><button class="closebtn" id="closeForm">×</button></div>
+        <form class="form" id="jobForm">
+          <div class="field"><label>Brod / model</label><input class="input" name="boat" value="${escapeHTML(j?.boat||'')}" placeholder="npr. Merry Fisher 695" required></div>
+          <div class="twocol"><div class="field"><label>Kupac</label><input class="input" name="customer" value="${escapeHTML(j?.customer||'')}" placeholder="Ime kupca"></div><div class="field"><label>Telefon</label><input class="input" name="phone" value="${escapeHTML(j?.phone||'')}" placeholder="09..."></div></div>
+          <div class="field"><label>Lokacija</label><input class="input" name="location" value="${escapeHTML(j?.location||'')}" placeholder="Zadar, Split, Pirovac..."></div>
+          <div class="twocol"><div class="field"><label>Status</label><select class="select" name="status">${STATUS.map(s=>`<option ${j?.status===s?'selected':''}>${s}</option>`).join('')}</select></div><div class="field"><label>Boja / materijal</label><input class="input" name="color" value="${escapeHTML(j?.color||'')}" placeholder="teak/crna, siva/crna..."></div></div>
+          <div class="threecol"><div class="field"><label>Ponuda €</label><input class="input" name="quote" type="number" step="1" value="${j?.quote||0}"></div><div class="field"><label>Avans €</label><input class="input" name="advance" type="number" step="1" value="${j?.advance||0}"></div><div class="field"><label>Procjena €</label><input class="input" name="estimate" type="number" step="1" value="${j?.estimate||0}"></div></div>
+          <div class="twocol"><div class="field"><label>Trošak materijala €</label><input class="input" name="materialCost" type="number" step="1" value="${j?.materialCost||0}"></div><div class="field"><label>Trošak puta €</label><input class="input" name="travelCost" type="number" step="1" value="${j?.travelCost||0}"></div></div>
+          <div class="twocol"><div class="field"><label>Rad €</label><input class="input" name="laborCost" type="number" step="1" value="${j?.laborCost||0}"></div><div class="field"><label>Ostalo €</label><input class="input" name="otherCost" type="number" step="1" value="${j?.otherCost||0}"></div></div>
+          <div class="threecol"><div class="field"><label>Izmjera</label><input class="input" name="measureDate" type="date" value="${escapeHTML(j?.measureDate||'')}"></div><div class="field"><label>Montaža</label><input class="input" name="installDate" type="date" value="${escapeHTML(j?.installDate||'')}"></div><div class="field"><label>Rok</label><input class="input" name="deadline" type="date" value="${escapeHTML(j?.deadline||'')}"></div></div>
+          <div class="field"><label>Bilješke</label><textarea class="textarea" name="notes" placeholder="Slike, mjere, dogovor, napomene...">${escapeHTML(j?.notes||'')}</textarea></div>
+          <button class="primary" type="submit">Spremi posao</button>
+        </form>`;
+      $('#formSheet').classList.add('open');
+      $('#closeForm').onclick=closeSheets;
+      $('#jobForm').onsubmit = ev => {
+        ev.preventDefault();
+        const fd = new FormData(ev.target);
+        const data = Object.fromEntries(fd.entries());
+        ['quote','advance','estimate','materialCost','travelCost','laborCost','otherCost'].forEach(k=>data[k]=Number(data[k]||0));
+        const now = new Date().toISOString();
+        if(j){ Object.assign(j, data, {updatedAt:now}); }
+        else { db.jobs.unshift(Object.assign({id:uid('job'), createdAt:now, updatedAt:now}, data)); }
+        saveDB(); closeSheets(); render(); toast('Posao spremljen');
+      };
+    }
 
-  <nav class="bottomnav">
-    <button class="navbtn active" data-target="home" onclick="showScreen('home')"><span class="ico">🏠</span>Home</button>
-    <button class="navbtn" data-target="search" onclick="showScreen('search')"><span class="ico">🔍</span>Search</button>
-    <button class="navbtn" data-target="edit" onclick="newJob()"><span class="ico">＋</span>Novi</button>
-    <button class="navbtn" data-target="boats" onclick="showScreen('boats')"><span class="ico">📚</span>Brodovi</button>
-    <button class="navbtn" data-target="sync" onclick="showScreen('sync')"><span class="ico">☁️</span>Cloud</button>
-    <button class="navbtn" data-target="settings" onclick="showScreen('settings')"><span class="ico">⚙️</span>Set</button>
-  </nav>
-  <div id="toast" class="toast"></div>
+    function openMessageForm(msgId, forcedJobId){
+      const m = msgId ? db.messages.find(x=>x.id===msgId) : null;
+      $('#formSheetContent').innerHTML = `
+        <div class="sheettitle"><div><h2>${m?'Uredi chat':'Zalijepi chat'}</h2><div class="sub">Facebook, WhatsApp ili ručna bilješka</div></div><button class="closebtn" id="closeForm">×</button></div>
+        <form class="form" id="msgForm">
+          <div class="twocol"><div class="field"><label>Kupac</label><input class="input" name="customer" value="${escapeHTML(m?.customer||'')}" placeholder="Ime ako znaš"></div><div class="field"><label>Izvor</label><select class="select" name="source">${['Facebook','Instagram','WhatsApp','Telefon','Ručno'].map(s=>`<option ${m?.source===s?'selected':''}>${s}</option>`).join('')}</select></div></div>
+          <div class="field"><label>Poveži s poslom</label><select class="select" name="jobId"><option value="">Bez posla / kasnije</option>${db.jobs.map(j=>`<option value="${j.id}" ${(forcedJobId||m?.jobId)===j.id?'selected':''}>${escapeHTML(j.boat)} — ${escapeHTML(j.customer)}</option>`).join('')}</select></div>
+          <div class="field"><label>Datum</label><input class="input" name="receivedAt" type="datetime-local" value="${toDatetimeLocal(m?.receivedAt || new Date().toISOString())}"></div>
+          <div class="field"><label>Chat / poruka</label><textarea class="textarea" name="text" style="min-height:190px" placeholder="Ovdje zalijepi cijeli chat ili bitan dio...">${escapeHTML(m?.text||'')}</textarea></div>
+          <button class="primary" type="submit">Spremi chat</button>
+          ${m?'<button class="ghost danger" type="button" id="deleteMsgBtn">Obriši chat</button>':''}
+        </form>`;
+      $('#formSheet').classList.add('open');
+      $('#closeForm').onclick=closeSheets;
+      $('#msgForm').onsubmit = ev => {
+        ev.preventDefault();
+        const data = Object.fromEntries(new FormData(ev.target).entries());
+        data.receivedAt = data.receivedAt ? new Date(data.receivedAt).toISOString() : new Date().toISOString();
+        const now = new Date().toISOString();
+        if(m){ Object.assign(m, data); }
+        else { db.messages.unshift(Object.assign({id:uid('msg'), createdAt:now}, data)); }
+        const job = data.jobId && db.jobs.find(j=>j.id===data.jobId); if(job) job.updatedAt = now;
+        saveDB(); closeSheets(); render(); if(job) openJobDetail(job.id); toast('Chat spremljen');
+      };
+      const del = $('#deleteMsgBtn');
+      if(del) del.onclick = () => { if(confirm('Obrisati ovaj chat?')){ db.messages = db.messages.filter(x=>x.id!==m.id); saveDB(); closeSheets(); render(); toast('Chat obrisan'); } };
+    }
+    function toDatetimeLocal(iso){
+      try{ const d=new Date(iso); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,16); }catch(e){return '';}
+    }
 
-<script>
-const BUILD = 'MOBILE_BUILD030_PWA';
-const SCHEMA_VERSION = 3;
-const STORAGE_KEY = 'croteak_planner_mobile_build009_jobs_v3';
-const BOATS_KEY = 'croteak_planner_mobile_boats_v1';
-const META_KEY = 'croteak_planner_mobile_build009_meta';
-const STATUSES = ['Upit','Ponuda','Avans','Izmjera','Dizajn','CNC','Spremno','Montaža','Naplaćeno','Arhiva'];
-const FORM_FIELDS = ['client_name','phone','whatsapp','email','source_channel','boat_model','boat_name','boat_location','boat_access','boat_length','measured_area_m2','price_per_m2','install_type','status','priority','material_color','material_thickness','material_reserved','quote_amount','advance_received','final_received','material_cost','travel_cost','labor_cost','other_cost','payment_note','measure_date','install_date','deadline_date','chat_log','notes','files_manifest','main_image_path','documents_note'];
-let jobs = [];
-let boats = [];
-let currentBoatId = null;
-let pickingBoatForJob = false;
-let currentId = null;
-let lastScreen = 'home';
+    function deleteJob(id){
+      const j = db.jobs.find(x=>x.id===id); if(!j) return;
+      if(!confirm(`Obrisati posao: ${j.boat}?`)) return;
+      db.jobs = db.jobs.filter(x=>x.id!==id);
+      db.messages.forEach(m=>{ if(m.jobId===id) m.jobId=''; });
+      saveDB(); closeSheets(); render(); toast('Posao obrisan');
+    }
+    function copyWhatsApp(id){
+      const j = db.jobs.find(x=>x.id===id); if(!j) return;
+      const m = moneyParts(j);
+      const txt = `Pozdrav ${j.customer || ''},\n\nZa brod ${j.boat || ''} ukupna ponuda je ${eur(m.quote)}.\nPrimljeni avans: ${eur(m.advance)}.\nOstatak za naplatiti: ${eur(m.due)}.\n\nStatus: ${j.status}.\nLokacija: ${j.location || '-'}\n\nCroTeak`;
+      navigator.clipboard?.writeText(txt).then(()=>toast('WhatsApp tekst kopiran')).catch(()=>{ prompt('Kopiraj tekst:', txt); });
+    }
+    function openReport(id){
+      const j = db.jobs.find(x=>x.id===id); if(!j) return;
+      const m = moneyParts(j);
+      const msgs = db.messages.filter(x=>x.jobId===id);
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>Izvještaj ${escapeHTML(j.boat)}</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#14272e}h1{margin:0 0 6px}table{border-collapse:collapse;width:100%;margin:18px 0}td,th{border:1px solid #ddd;padding:9px;text-align:left}.muted{color:#667}.box{border:1px solid #ddd;border-radius:12px;padding:14px;margin:12px 0;white-space:pre-wrap}</style></head><body><h1>CroTeak Planner — izvještaj posla</h1><div class="muted">${BUILD}</div><h2>${escapeHTML(j.boat)}</h2><table><tr><th>Kupac</th><td>${escapeHTML(j.customer)}</td></tr><tr><th>Telefon</th><td>${escapeHTML(j.phone)}</td></tr><tr><th>Lokacija</th><td>${escapeHTML(j.location)}</td></tr><tr><th>Status</th><td>${escapeHTML(j.status)}</td></tr><tr><th>Boja</th><td>${escapeHTML(j.color)}</td></tr></table><h3>Financije</h3><table><tr><th>Ponuda</th><td>${eur(m.quote)}</td></tr><tr><th>Avans</th><td>${eur(m.advance)}</td></tr><tr><th>Ostatak</th><td>${eur(m.due)}</td></tr><tr><th>Trošak</th><td>${eur(m.cost)}</td></tr><tr><th>Zarada</th><td>${eur(m.profit)}</td></tr></table><h3>Bilješke</h3><div class="box">${escapeHTML(j.notes)}</div><h3>Chat</h3>${msgs.map(x=>`<div class="box"><strong>${escapeHTML(x.source)} · ${fmtDate(x.receivedAt)}</strong><br>${escapeHTML(x.text)}</div>`).join('') || '<p>Nema chata.</p>'}<script>window.print()<\/script></body></html>`;
+      const w = window.open('', '_blank');
+      if(w){ w.document.write(html); w.document.close(); } else { toast('Browser je blokirao izvještaj'); }
+    }
+    function exportJSON(){
+      const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
+      downloadBlob(blob, `CroTeak_Planner_${BUILD.replace(/\s+/g,'_')}_backup.json`);
+      toast('Backup JSON spremljen');
+    }
+    function exportCSV(){
+      const rows = [['Brod','Kupac','Telefon','Lokacija','Status','Ponuda','Avans','Ostatak','Materijal','Put','Rad','Ostalo','Zarada','Izmjera','Montaža','Rok','Boja','Bilješke']];
+      db.jobs.forEach(j=>{ const m=moneyParts(j); rows.push([j.boat,j.customer,j.phone,j.location,j.status,m.quote,m.advance,m.due,j.materialCost,j.travelCost,j.laborCost,j.otherCost,m.profit,j.measureDate,j.installDate,j.deadline,j.color,j.notes]); });
+      const csv = rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');
+      downloadBlob(new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'}), `CroTeak_Planner_${BUILD.replace(/\s+/g,'_')}.csv`);
+      toast('CSV export spremljen');
+    }
+    function downloadBlob(blob, name){
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},2000);
+    }
+    function importJSON(file){
+      const r = new FileReader();
+      r.onload = () => {
+        try{ db = normalizeDB(JSON.parse(r.result)); saveDB(); render(); toast('Import gotov'); }
+        catch(e){ alert('JSON nije ispravan.'); }
+      };
+      r.readAsText(file);
+    }
 
-function nowIso(){ return new Date().toISOString(); }
-function today(){ return new Date().toISOString().slice(0,10); }
-function uuid(){ if(window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID(); return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&0x3|0x8);return v.toString(16)}); }
-function money(v){ const n = parseFloat(String(v||'0').replace(',','.')) || 0; return n; }
-function euro(v){ return Math.round(money(v)).toLocaleString('hr-HR') + ' €'; }
-function esc(s){ return String(s ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
-function normalizePhone(p){ return String(p||'').replace(/[^0-9+]/g,''); }
-function stableId(prefix, parts){ const txt = parts.map(x=>String(x||'').trim().toLowerCase()).filter(Boolean).join('|') || uuid(); let h=0; for(let i=0;i<txt.length;i++) h=((h<<5)-h+txt.charCodeAt(i))|0; return prefix+'_'+Math.abs(h); }
-function nextJobId(){ const y = new Date().getFullYear(); let max=0; jobs.forEach(j=>{ const id=String(j.id||''); if(id.startsWith('CT-'+y+'-')){ const n=parseInt(id.split('-').pop(),10); if(!isNaN(n)) max=Math.max(max,n); }}); return `CT-${y}-${String(max+1).padStart(4,'0')}`; }
-function defaultJob(){
-  const j = {id:nextJobId(), schema_version:SCHEMA_VERSION, local_uuid:uuid(), remote_id:'', client_id:'', boat_id:'', sync_status:'pending', last_synced_at:'', version:1, deleted:false, source:'MOBILE', source_channel:'', client_name:'', phone:'', whatsapp:'', email:'', boat_model:'', boat_name:'', boat_location:'', boat_access:'', boat_length:'', measured_area_m2:'', price_per_m2:'', install_type:'', status:'Upit', priority:'Normalno', material_color:'', material_thickness:'6 mm', material_reserved:'Ne', quote_amount:'0', advance_received:'0', final_received:'0', material_cost:'0', travel_cost:'0', labor_cost:'0', other_cost:'0', payment_note:'', inquiry_date:today(), measure_date:'', design_date:'', cnc_date:'', install_date:'', deadline_date:'', job_folder:'', last_contact_date:'', chat_log:'', documents_note:'', files_manifest:'[]', main_image_path:'', notes:'', created_at:nowIso(), updated_at:nowIso()};
-  j.client_id = stableId('client',[j.client_name,j.phone,j.email]);
-  j.boat_id = stableId('boat',[j.boat_model,j.boat_name,j.boat_location,j.client_name]);
-  return j;
-}
-function upgradeJob(raw){
-  const j = Object.assign(defaultJob(), raw||{});
-  j.schema_version = Math.max(SCHEMA_VERSION, parseInt(j.schema_version||SCHEMA_VERSION,10)||SCHEMA_VERSION);
-  j.local_uuid = j.local_uuid || uuid();
-  j.id = j.id || nextJobId();
-  j.client_id = j.client_id || stableId('client',[j.client_name,j.phone,j.email]);
-  j.boat_id = j.boat_id || stableId('boat',[j.boat_model,j.boat_name,j.boat_location,j.client_name]);
-  j.sync_status = j.sync_status || 'pending';
-  j.version = parseInt(j.version||1,10)||1;
-  j.created_at = j.created_at || nowIso();
-  j.updated_at = j.updated_at || nowIso();
-  return j;
-}
+    function openDrawer(){ $('#drawer').classList.add('open'); }
+    function closeDrawer(){ $('#drawer').classList.remove('open'); }
+    $('#menuBtn').onclick=openDrawer;
+    $('#drawerClose').onclick=closeDrawer;
+    $('#drawer').onclick=e=>{ if(e.target.id==='drawer') closeDrawer(); };
+    $('#drawerNewJob').onclick=()=>{closeDrawer(); openJobForm();};
+    $('#drawerNewMsg').onclick=()=>{closeDrawer(); openMessageForm();};
+    $('#drawerExport').onclick=()=>{closeDrawer(); exportJSON();};
+    $('#drawerCsv').onclick=()=>{closeDrawer(); exportCSV();};
+    $('#drawerImport').onclick=()=>{$('#importFile').click();};
+    $('#drawerPrint').onclick=()=>{closeDrawer(); window.print();};
+    $('#drawerReset').onclick=()=>{ if(confirm('Vratiti demo podatke? Trenutni lokalni podaci se brišu.')){ db=seedData(); saveDB(); render(); closeDrawer(); toast('Demo reset'); } };
+    $('#importFile').onchange=e=>{ const f=e.target.files[0]; if(f){ closeDrawer(); importJSON(f); e.target.value=''; } };
+    $('#quickSyncBtn').onclick=exportJSON;
+    $('#globalSearch').addEventListener('input', e=>{ search=e.target.value; render(); });
+    $('#globalSearch').addEventListener('focus', ()=>{ if(currentScreen==='home') switchScreen('jobs'); });
+    $$('.navitem').forEach(n=>n.onclick=()=>switchScreen(n.dataset.screen));
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') { closeSheets(); closeDrawer(); } if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='f'){ e.preventDefault(); $('#globalSearch').focus(); } });
 
-function defaultBoat(){ return {boat_uuid:uuid(),model:'',manufacturer:'',category:'',length:'',typical_area_m2:'',default_price_per_m2:'',material_note:'',aliases:'',notes:'',source:'MOBILE',sync_status:'pending',last_synced_at:'',version:1,deleted:false,created_at:nowIso(),updated_at:nowIso()}; }
-function upgradeBoat(raw){ const b=Object.assign(defaultBoat(), raw||{}); b.boat_uuid=b.boat_uuid||uuid(); b.model=b.model||b.boat_model||''; b.length=b.length||b.boat_length||''; b.typical_area_m2=b.typical_area_m2||b.measured_area_m2||''; b.default_price_per_m2=b.default_price_per_m2||b.price_per_m2||''; b.version=parseInt(b.version||1,10)||1; b.sync_status=b.sync_status||'pending'; b.created_at=b.created_at||nowIso(); b.updated_at=b.updated_at||nowIso(); return b; }
-function loadBoats(){ const raw=localStorage.getItem(BOATS_KEY); if(raw){ try{boats=JSON.parse(raw).map(upgradeBoat);}catch(e){boats=[];} } }
-function saveBoats(){ localStorage.setItem(BOATS_KEY, JSON.stringify(boats)); renderAll(); }
-function boatSearchable(b){ return Object.values(b).join(' ').toLowerCase(); }
-function boatAutocompleteMatches(q){
-  q=String(q||'').trim().toLowerCase();
-  if(!q) return boats.filter(b=>!b.deleted && b.model).sort((a,b)=>String(a.manufacturer+' '+a.model).localeCompare(String(b.manufacturer+' '+b.model))).slice(0,12);
-  const tokens=q.replace(/[\/\-]/g,' ').split(/\s+/).filter(Boolean);
-  return boats.filter(b=>!b.deleted && b.model && tokens.every(t=>boatSearchable(b).includes(t))).sort((a,b)=>{
-    const am=String(a.model||'').toLowerCase(), bm=String(b.model||'').toLowerCase();
-    const af=String((a.manufacturer||'')+' '+(a.model||'')).trim().toLowerCase(), bf=String((b.manufacturer||'')+' '+(b.model||'')).trim().toLowerCase();
-    const as=(am.startsWith(q)?0:af.startsWith(q)?1:am.includes(q)?2:3), bs=(bm.startsWith(q)?0:bf.startsWith(q)?1:bm.includes(q)?2:3);
-    return as-bs || am.localeCompare(bm);
-  }).slice(0,12);
-}
-function updateBoatModelDatalist(){
-  const list=document.getElementById('boatModelSuggestions'); if(!list) return;
-  const q=document.getElementById('boat_model')?.value||'';
-  const opts=boatAutocompleteMatches(q).map(b=>{
-    const label=[b.manufacturer,b.length,b.typical_area_m2?b.typical_area_m2+' m²':'',b.default_price_per_m2?b.default_price_per_m2+' €/m²':''].filter(Boolean).join(' · ');
-    return `<option value="${esc(b.model||'')}" label="${esc(label)}"></option>`;
-  }).join('');
-  list.innerHTML=opts;
-}
-function findBoatByTypedModel(v){
-  const q=String(v||'').trim().toLowerCase(); if(!q) return null;
-  return boats.find(b=>!b.deleted && String(b.model||'').trim().toLowerCase()===q) ||
-         boats.find(b=>!b.deleted && String((b.manufacturer||'')+' '+(b.model||'')).trim().toLowerCase()===q) ||
-         boats.find(b=>!b.deleted && String(b.aliases||'').toLowerCase().split(/[;,\n]/).map(x=>x.trim()).includes(q)) || null;
-}
-function applyBoatDataToForm(b, quiet=false){
-  if(!b) return;
-  const set=(id,val,force=false)=>{ const el=document.getElementById(id); if(el && val && (force || !el.value)) el.value=val; };
-  set('boat_model', b.model, true);
-  set('boat_length', b.length, true);
-  set('measured_area_m2', b.typical_area_m2, true);
-  set('price_per_m2', b.default_price_per_m2, true);
-  set('material_color', b.material_note, false);
-  if(!quiet) toast('Popunjeno iz baze: '+(b.model||''));
-}
-function applyBoatModelAutocomplete(){
-  const b=findBoatByTypedModel(document.getElementById('boat_model')?.value||'');
-  if(b) applyBoatDataToForm(b,false);
-}
-function filteredBoats(){ const q=getSearch(); let arr=boats.filter(b=>!b.deleted); if(q) arr=arr.filter(b=>boatSearchable(b).includes(q)); return arr.sort((a,b)=>String(a.manufacturer+' '+a.model).localeCompare(String(b.manufacturer+' '+b.model))); }
-function boatCard(b){ return `<div class="card"><div class="jobhead"><div><div class="jobtitle">${esc(b.model||'Bez modela')}</div><div class="jobsub">${esc([b.manufacturer,b.length,b.typical_area_m2?b.typical_area_m2+' m²':'',b.default_price_per_m2?b.default_price_per_m2+' €/m²':''].filter(Boolean).join(' · '))}</div></div><div class="status">${esc(b.sync_status||'local')}</div></div>${b.material_note?`<div class="small" style="margin-top:8px">${esc(b.material_note)}</div>`:''}<div class="actions"><button class="btn" onclick="applyBoatToJob('${b.boat_uuid}')">Primijeni</button><button class="btn secondary" onclick="editBoat('${b.boat_uuid}')">Uredi</button><button class="btn bad" onclick="deleteBoat('${b.boat_uuid}')">Obriši</button></div></div>`; }
-function renderBoats(){ const el=document.getElementById('boatsList'); if(el) el.innerHTML=filteredBoats().length?filteredBoats().map(boatCard).join(''):'<div class="empty">Još nema brodova u bazi.</div>'; }
-function newBoat(){ currentBoatId=null; const b=defaultBoat(); loadBoatForm(b); showScreen('boat-edit'); }
-function editBoat(uid){ const b=boats.find(x=>x.boat_uuid===uid); if(!b)return; currentBoatId=uid; loadBoatForm(b); showScreen('boat-edit'); }
-function loadBoatForm(b){ document.getElementById('boatEditTitle').textContent=b.model||'Novi model broda'; const map={bm_model:'model',bm_manufacturer:'manufacturer',bm_length:'length',bm_area:'typical_area_m2',bm_price:'default_price_per_m2',bm_category:'category',bm_material:'material_note',bm_aliases:'aliases',bm_notes:'notes'}; Object.keys(map).forEach(id=>{const el=document.getElementById(id); if(el) el.value=b[map[id]]||'';}); }
-function saveBoatEdit(){ let b=currentBoatId?boats.find(x=>x.boat_uuid===currentBoatId):null; if(!b){b=defaultBoat(); boats.push(b); currentBoatId=b.boat_uuid;} const g=id=>document.getElementById(id)?.value||''; Object.assign(b,{model:g('bm_model'),manufacturer:g('bm_manufacturer'),length:g('bm_length'),typical_area_m2:g('bm_area'),default_price_per_m2:g('bm_price'),category:g('bm_category'),material_note:g('bm_material'),aliases:g('bm_aliases'),notes:g('bm_notes'),updated_at:nowIso(),sync_status:'pending',source:'MOBILE'}); b.version=(parseInt(b.version||1,10)||1)+1; saveBoats(); toast('Brod spremljen - auto sync'); showScreen('boats'); queueAutoSync('boat_save'); }
-function deleteBoat(uid){ const b=boats.find(x=>x.boat_uuid===uid); if(!b)return; if(!confirm('Obrisati model iz baze brodova?'))return; b.deleted=true; b.sync_status='pending'; b.updated_at=nowIso(); saveBoats(); queueAutoSync('boat_delete'); }
-function pickBoatForJob(){ pickingBoatForJob=true; showScreen('boats'); toast('Odaberi brod i klikni Primijeni'); }
-function applyBoatToJob(uid){ const b=boats.find(x=>x.boat_uuid===uid); if(!b)return; if(lastScreen==='edit' || pickingBoatForJob || document.getElementById('screen-edit').classList.contains('active')){ applyBoatDataToForm(b,true); pickingBoatForJob=false; showScreen('edit'); toast('Primijenjen brod: '+(b.model||'')); } else { newJob(); applyBoatDataToForm(b,true); } updateBoatModelDatalist(); }
-function saveCurrentBoatToDb(){ const model=document.getElementById('boat_model')?.value||''; if(!model){ toast('Upiši model broda'); return;} let b=boats.find(x=>(x.model||'').trim().toLowerCase()===model.trim().toLowerCase()); if(!b){b=defaultBoat(); boats.push(b);} b.model=model; b.length=document.getElementById('boat_length')?.value||b.length; b.typical_area_m2=document.getElementById('measured_area_m2')?.value||b.typical_area_m2; b.default_price_per_m2=document.getElementById('price_per_m2')?.value||b.default_price_per_m2; b.material_note=document.getElementById('material_color')?.value||b.material_note; b.updated_at=nowIso(); b.sync_status='pending'; b.version=(parseInt(b.version||1,10)||1)+1; saveBoats(); toast('Brod spremljen u bazu'); queueAutoSync('boat_from_job'); }
-function boatToCloudRow(b){ b=upgradeBoat(b); return {boat_uuid:b.boat_uuid,model:b.model||'',manufacturer:b.manufacturer||'',updated_at:b.updated_at||nowIso(),version:parseInt(b.version||1,10)||1,deleted:!!b.deleted,data:b}; }
-function cloudRowToBoat(r){ const d=Object.assign({}, r.data||{}); if(r.boat_uuid)d.boat_uuid=r.boat_uuid; if(r.updated_at)d.updated_at=r.updated_at; if(r.version)d.version=r.version; if('deleted' in r)d.deleted=!!r.deleted; d.sync_status='synced'; d.last_synced_at=nowIso(); return upgradeBoat(d); }
-function mergeBoatRows(rows){ let changed=0; const map=new Map(boats.map((b,i)=>[b.boat_uuid,i])); (rows||[]).forEach(r=>{ const cb=cloudRowToBoat(r); const idx=map.get(cb.boat_uuid); if(idx===undefined){boats.push(cb); changed++; return;} const local=boats[idx]; const lv=parseInt(local.version||1,10)||1, cv=parseInt(cb.version||1,10)||1; if(cv>lv || String(cb.updated_at)>String(local.updated_at||'')){boats[idx]=cb; changed++;} }); if(changed) saveBoats(); return changed; }
-async function sbRequestTable(method, table, query, payload){ const c=await refreshAuth(); const url=c.url+'/rest/v1/'+encodeURIComponent(table)+query; const opt={method,headers:{apikey:c.key,Authorization:'Bearer '+c.access_token,'Content-Type':'application/json','Accept':'application/json'}}; if(String(method).toUpperCase()==='POST') opt.headers['Prefer']='resolution=merge-duplicates,return=representation'; if(payload!==undefined) opt.body=JSON.stringify(payload); const r=await fetch(url,opt); const text=await r.text(); let data=null; try{data=text?JSON.parse(text):null}catch(e){data=text} if(!r.ok) throw new Error('Supabase HTTP '+r.status+': '+(typeof data==='string'?data:JSON.stringify(data))); return data; }
-async function syncBoatsNow(quiet=false){ try{ const pending=boats.filter(b=>['pending','local_only','conflict'].includes(b.sync_status)).map(boatToCloudRow); if(pending.length){ await sbRequestTable('POST','croteak_boats','?on_conflict=boat_uuid',pending); const t=nowIso(), set=new Set(pending.map(r=>r.boat_uuid)); boats.forEach(b=>{if(set.has(b.boat_uuid)){b.sync_status='synced'; b.last_synced_at=t;}}); saveBoats(); } const rows=await sbRequestTable('GET','croteak_boats','?select=boat_uuid,model,manufacturer,updated_at,version,deleted,data&limit=10000'); const ch=mergeBoatRows(Array.isArray(rows)?rows:[]); if(!quiet) toast('Brodovi sync OK: '+ch+' promjena'); return [pending.length,ch]; }catch(e){ if(!quiet) alert('Brodovi sync greška: '+e.message+'\nAko nisi, pokreni SQL iz BUILD029.'); else console.warn('boat sync',e); return [0,0]; } }
-
-function load(){
-  loadBoats();
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if(raw){ try{ jobs = JSON.parse(raw).map(upgradeJob); }catch(e){ jobs=[]; toast('Greška kod učitavanja lokalnih podataka'); }}
-  renderAll();
-}
-function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs)); renderAll(); }
-function meta(){ try{return JSON.parse(localStorage.getItem(META_KEY)||'{}')}catch(e){return {}} }
-function saveMeta(m){ localStorage.setItem(META_KEY, JSON.stringify(m)); }
-function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
-function findJob(uid){ return jobs.find(j=>j.local_uuid===uid || j.id===uid); }
-function getSearch(){ return document.getElementById('globalSearch').value.trim().toLowerCase(); }
-const FILTERS_KEY='croteak_mobile_filters_v1';
-function filters(){ try{return Object.assign({location:'',status:''}, JSON.parse(localStorage.getItem(FILTERS_KEY)||'{}'));}catch(e){return {location:'',status:''};} }
-function saveFilters(f){ localStorage.setItem(FILTERS_KEY, JSON.stringify({location:f.location||'', status:f.status||''})); }
-function fillFilterStatus(){ const s=document.getElementById('filterStatus'); if(!s) return; const cur=(filters().status||''); s.innerHTML='<option value="">Svi</option>'+STATUSES.map(x=>`<option value="${x}">${x}</option>`).join(''); s.value=cur; }
-function fillFilterUi(){ const f=filters(); const loc=document.getElementById('filterLocation'); const st=document.getElementById('filterStatus'); if(loc) loc.value=f.location||''; if(st){ if(!st.options.length) fillFilterStatus(); st.value=f.status||''; } }
-function toggleFilterPanel(force){ const p=document.getElementById('filterPanel'); if(!p) return; if(force===true) p.classList.remove('hide'); else if(force===false) p.classList.add('hide'); else p.classList.toggle('hide'); }
-function applyFiltersFromUi(silent=false, keepOpen=false){ const f={location:(document.getElementById('filterLocation')?.value||'').trim(), status:(document.getElementById('filterStatus')?.value||'').trim()}; saveFilters(f); renderLists(); renderFilterChips(); if(!keepOpen) toggleFilterPanel(false); if(!silent) toast('Filter primijenjen'); }
-function resetFilters(){ saveFilters({location:'',status:''}); fillFilterUi(); renderLists(); renderFilterChips(); toggleFilterPanel(false); toast('Filter resetiran'); }
-function clearSingleFilter(key){ const f=filters(); f[key]=''; saveFilters(f); fillFilterUi(); renderLists(); renderFilterChips(); }
-function renderFilterChips(){ const f=filters(); const chips=[]; if(f.location) chips.push(`<div class="chip">Lokacija: ${esc(f.location)} <button onclick="clearSingleFilter('location')">×</button></div>`); if(f.status) chips.push(`<div class="chip">Status: ${esc(f.status)} <button onclick="clearSingleFilter('status')">×</button></div>`); ['activeFilterChips','searchFilterChips'].forEach(id=>{ const el=document.getElementById(id); if(!el) return; el.innerHTML=chips.join(''); el.classList.toggle('hide', !chips.length); }); }
-function searchable(j){ return Object.values(j).join(' ').toLowerCase(); }
-function filteredJobs(){ const q=getSearch(); const f=filters(); let arr = jobs.filter(j=>!j.deleted); if(f.location){ const loc=f.location.toLowerCase(); arr=arr.filter(j=>String(j.boat_location||'').toLowerCase().includes(loc)); } if(f.status){ arr=arr.filter(j=>String(j.status||'')===f.status); } if(q) arr=arr.filter(j=>searchable(j).includes(q)); return arr.sort((a,b)=>String(b.updated_at).localeCompare(String(a.updated_at))); }
-function calc(j){ const quote=money(j.quote_amount), received=money(j.advance_received)+money(j.final_received), costs=money(j.material_cost)+money(j.travel_cost)+money(j.labor_cost)+money(j.other_cost); return {quote,received,costs,remaining:Math.max(0,quote-received),profit:quote-costs,real:received-costs}; }
-function statusClass(s){ return 'status-'+String(s||'Upit').replace(/[^A-Za-zÀ-ž0-9_-]/g,''); }
-
-function imageEntries(j){ return parseFilesManifest(j.files_manifest).filter(f=>String(f.category||'').toLowerCase().startsWith('slika') || /\.(jpg|jpeg|png|webp|bmp|gif)$/i.test(String(f.name||''))); }
-function mainImageEntry(j){ const imgs=imageEntries(j); if(!imgs.length) return null; const main=String(j.main_image_path||''); return imgs.find(f=>f.is_main || f.file_id===main || f.relative_path===main) || imgs[0]; }
-function coverHtml(j, mini=false){ const f=mainImageEntry(j); const cls=mini?'cover mini':'cover'; const sp=f&&f.storage_path?String(f.storage_path):''; if(sp){ return `<div class="${cls}"><img data-storage-path="${esc(sp)}" alt="preview"><div class="ct">★</div></div>`; } return `<div class="${cls}"><div class="ct">${f?'★':'CT'}</div></div>`; }
-function setEditMainFile(fid){ const list=editFiles(); list.forEach(f=>f.is_main=(f.file_id===fid)); const main=list.find(f=>f.file_id===fid); const m=document.getElementById('main_image_path'); if(m) m.value=fid; setEditFiles(list); toast('Postavljeno kao glavna slika'); }
-function jobCard(j){ const c=calc(j); const title = j.boat_model || j.boat_name || 'Nepoznat brod'; const sub = [j.client_name, j.boat_location, j.phone].filter(Boolean).join(' · '); return `<div class="card jobcard ${statusClass(j.status)}" onclick="openDetail('${j.local_uuid}')"><div class="jobhead">${coverHtml(j,true)}<div style="flex:1"><div class="jobtitle">${esc(title)}</div><div class="jobsub">${esc(sub || 'Bez podataka')}</div></div><div class="status">${esc(j.status)}</div></div><div class="moneyrow"><div class="money"><b>${euro(c.quote)}</b><span>Ponuda</span></div><div class="money"><b>${euro(c.remaining)}</b><span>Ostatak</span></div><div class="money"><b>${euro(c.profit)}</b><span>Procjena</span></div></div></div>`; }
-function renderStats(){ const active = jobs.filter(j=>!j.deleted && !['Naplaćeno','Arhiva'].includes(j.status)); const pending=jobs.filter(j=>!j.deleted && ['pending','local_only','conflict'].includes(j.sync_status)); let quote=0, rem=0; jobs.filter(j=>!j.deleted).forEach(j=>{const c=calc(j); quote+=c.quote; rem+=c.remaining}); document.getElementById('statActive').textContent=active.length; document.getElementById('statPending').textContent=pending.length; document.getElementById('statQuote').textContent=euro(quote); document.getElementById('statRemaining').textContent=euro(rem); document.getElementById('syncJobs').textContent=jobs.filter(j=>!j.deleted).length; document.getElementById('syncPending').textContent=pending.length; document.getElementById('syncText').textContent = isCloudLogged() ? (pending.length ? pending.length+' pending' : 'Cloud OK') : (pending.length ? pending.length+' pending' : 'Local'); const m=meta(); document.getElementById('lastBackup').textContent=m.lastBackup || 'nikad'; document.getElementById('syncPill').style.background = pending.length ? 'rgba(245,158,11,.25)' : 'rgba(255,255,255,.15)'; fillCloudFields(); }
-function renderLists(){ const arr=filteredJobs(); const home = arr.filter(j=>!['Naplaćeno','Arhiva'].includes(j.status)).slice(0,12); document.getElementById('homeList').innerHTML = home.length ? home.map(jobCard).join('') : `<div class="empty">Nema aktivnih poslova za zadani filter.</div>`; document.getElementById('searchList').innerHTML = arr.length ? arr.map(jobCard).join('') : `<div class="empty">Nema rezultata.</div>`; renderFilterChips(); }
-function renderAll(){ renderStats(); fillFilterStatus(); fillFilterUi(); renderLists(); renderBoats(); updateBoatModelDatalist(); if(document.getElementById('screen-detail').classList.contains('active') && currentId) renderDetail(currentId); setTimeout(hydrateStorageImages,50); }
-function showScreen(name){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+name).classList.add('active'); document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active', b.dataset.target===name)); lastScreen=name; if(name==='search') document.getElementById('globalSearch').focus(); renderAll(); if(name==='sync') fillCloudFields(); }
-function fillStatus(){ const s=document.getElementById('status'); s.innerHTML=STATUSES.map(x=>`<option>${x}</option>`).join(''); }
-function calcQuoteFromArea(){ const a=money(document.getElementById('measured_area_m2')?.value), p=money(document.getElementById('price_per_m2')?.value); if(!a||!p){ toast('Upiši m² i €/m²'); return; } document.getElementById('quote_amount').value = Math.round(a*p*100)/100; toast('Ponuda izračunata'); }
-
-function parseFilesManifest(raw){
-  if(Array.isArray(raw)) return raw;
-  try{ const v=JSON.parse(raw||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; }
-}
-function editFiles(){ return parseFilesManifest(document.getElementById('files_manifest')?.value || '[]'); }
-function setEditFiles(files){ const el=document.getElementById('files_manifest'); if(el) el.value=JSON.stringify(files||[]); renderEditFiles(); }
-function fileCategory(name){ const ext=String(name||'').split('.').pop().toLowerCase(); if(['jpg','jpeg','png','webp','bmp','gif','heic'].includes(ext)) return 'Slika'; if(['dxf','dwg','dgl','dgl2','svg'].includes(ext)) return 'CAD / mjere'; if(ext==='pdf') return 'PDF'; if(['xlsx','xls','csv'].includes(ext)) return 'Tablica'; return 'Datoteka'; }
-function humanSize(n){ n=Number(n||0); const u=['B','KB','MB','GB']; let i=0; while(n>=1024&&i<u.length-1){n/=1024;i++;} return (i? n.toFixed(1):Math.round(n))+' '+u[i]; }
-function addFilesToEdit(ev){ const fs=Array.from(ev.target.files||[]); if(!fs.length) return; const list=editFiles(); fs.forEach(f=>{ const cat=fileCategory(f.name); const firstMain=(cat==='Slika' && !list.some(x=>x.is_main)); const fid='file_'+uuid().slice(0,12); list.push({file_id:fid, name:f.name, category:cat, size:f.size||0, added_at:nowIso(), source:'MOBILE', is_main:firstMain, note:firstMain?'Glavna preview slika / DigiLine render':'Odabrano na mobitelu - upload datoteke u cloud Storage radi PC verzija'}); if(firstMain){ const m=document.getElementById('main_image_path'); if(m) m.value=fid; } }); setEditFiles(list); ev.target.value=''; toast('Dodano u popis: '+fs.length); }
-function removeEditFile(fid){ const list=editFiles().filter(f=>f.file_id!==fid); if(document.getElementById('main_image_path')?.value===fid){ const m=document.getElementById('main_image_path'); if(m) m.value=''; } setEditFiles(list); }
-function renderEditFiles(){ const el=document.getElementById('filesList'); if(!el) return; const list=editFiles(); el.innerHTML=list.length?list.map(f=>`<div class="fileitem"><b>${f.is_main?'★ ':''}${esc(f.name||'datoteka')}</b><span>${esc(f.category||'Datoteka')} · ${humanSize(f.size)} · ${esc(String(f.added_at||'').slice(0,16).replace('T',' '))}</span>${String(f.category||'')==='Slika'?`<button class="main" type="button" onclick="setEditMainFile('${esc(f.file_id)}')">Postavi kao glavnu</button>`:''}<button type="button" onclick="removeEditFile('${esc(f.file_id)}')">Makni iz popisa</button></div>`).join(''):'<div class="hint">Još nema slika/dokumenata uz ovaj posao.</div>'; }
-function filesCard(j){ const list=parseFilesManifest(j.files_manifest); if(!list.length && !j.documents_note) return ''; return `<div class="card"><div class="section-title" style="margin-top:0">Slike / dokumenti</div>${list.length?`<div class="filelist">${list.map(f=>`<div class="fileitem"><b>${f.is_main?'★ ':''}${esc(f.name||'datoteka')}</b><span>${esc(f.category||'Datoteka')} · ${humanSize(f.size)} · ${esc(String(f.added_at||'').slice(0,16).replace('T',' '))}</span>${f.note?`<span>${esc(f.note)}</span>`:''}</div>`).join('')}</div>`:'<div class="small">Nema datoteka u popisu.</div>'}${j.documents_note?`<div class="hr"></div><div class="small" style="white-space:pre-wrap">${esc(j.documents_note)}</div>`:''}</div>`; }
-function loadForm(j){ FORM_FIELDS.forEach(f=>{ const el=document.getElementById(f); if(el) el.value = j[f] ?? ''; }); document.getElementById('editTitle').textContent = j.id ? 'Uredi posao' : 'Novi posao'; document.getElementById('editSub').textContent = `${j.id || ''} ${j.local_uuid ? '· '+j.local_uuid.slice(0,8) : ''}`; renderEditFiles(); }
-function formToJob(j){ FORM_FIELDS.forEach(f=>{ const el=document.getElementById(f); if(el) j[f]=el.value; }); j.updated_at=nowIso(); j.version=(parseInt(j.version||1,10)||1)+1; j.sync_status='pending'; j.source='MOBILE'; j.schema_version=SCHEMA_VERSION; j.client_id = j.client_id || stableId('client',[j.client_name,j.phone,j.email]); j.boat_id = j.boat_id || stableId('boat',[j.boat_model,j.boat_name,j.boat_location,j.client_name]); return j; }
-function newJob(){ currentId=null; const j=defaultJob(); loadForm(j); showScreen('edit'); }
-function editJob(uid){ const j=findJob(uid); if(!j) return; currentId=j.local_uuid; loadForm(j); showScreen('edit'); }
-function saveEdit(){ let j = currentId ? findJob(currentId) : null; if(!j){ j=defaultJob(); jobs.push(j); currentId=j.local_uuid; } formToJob(j); save(); toast('Spremljeno - auto sync'); openDetail(j.local_uuid); queueAutoSync('save'); }
-function cancelEdit(){ if(currentId) openDetail(currentId); else showScreen('home'); }
-function openDetail(uid){ currentId=uid; renderDetail(uid); showScreen('detail'); }
-function renderDetail(uid){ const j=findJob(uid); const el=document.getElementById('detailContent'); if(!j){el.innerHTML='<div class="empty">Posao nije pronađen.</div>';return;} const c=calc(j); const phone = normalizePhone(j.whatsapp || j.phone); const waPhone = phone.replace(/^\+/, ''); const title=j.boat_model||j.boat_name||'Nepoznat brod'; el.innerHTML = `<div class="card">${coverHtml(j,false)}<div class="detail-title">${esc(title)}</div><div class="small">${esc(j.id)} · ${esc(j.client_name || 'bez klijenta')}</div><div class="badgebar"><div class="badge">${esc(j.status)}</div><div class="badge">${esc(j.boat_location || 'bez lokacije')}</div><div class="badge">${esc(j.sync_status)}</div></div><div class="actions"><button class="btn" onclick="editJob('${j.local_uuid}')">Uredi</button>${phone?`<button class="btn secondary" onclick="location.href='tel:${phone}'">Nazovi</button><button class="btn secondary" onclick="location.href='https://wa.me/${waPhone}'">WhatsApp</button>`:''}</div></div><div class="card"><div class="section-title" style="margin-top:0">Financije</div><div class="kv"><span>Ponuda</span><span>${euro(c.quote)}</span></div><div class="kv"><span>Primljeno</span><span>${euro(c.received)}</span></div><div class="kv"><span>Za naplatiti</span><span>${euro(c.remaining)}</span></div><div class="kv"><span>Troškovi</span><span>${euro(c.costs)}</span></div><div class="kv"><span>Procjena zarade</span><span>${euro(c.profit)}</span></div><div class="kv"><span>€/m²</span><span>${esc(j.price_per_m2||'-')}</span></div>${j.payment_note?`<div class="kv"><span>Plaćanje</span><span>${esc(j.payment_note)}</span></div>`:''}</div><div class="card"><div class="section-title" style="margin-top:0">Brod / kupac</div><div class="kv"><span>Kupac</span><span>${esc(j.client_name)}</span></div><div class="kv"><span>Telefon</span><span>${esc(j.phone)}</span></div><div class="kv"><span>Email</span><span>${esc(j.email)}</span></div><div class="kv"><span>Lokacija</span><span>${esc(j.boat_location)}</span></div><div class="kv"><span>Pristup</span><span>${esc(j.boat_access)}</span></div><div class="kv"><span>Dužina / m²</span><span>${esc([j.boat_length,j.measured_area_m2?j.measured_area_m2+' m²':''].filter(Boolean).join(' · '))}</span></div><div class="kv"><span>Izvor / tip</span><span>${esc([j.source_channel,j.install_type].filter(Boolean).join(' · '))}</span></div><div class="kv"><span>Materijal</span><span>${esc([j.material_color,j.material_thickness].filter(Boolean).join(' · '))}</span></div><div class="kv"><span>Rezervirano</span><span>${esc(j.material_reserved)}</span></div></div><div class="card"><div class="section-title" style="margin-top:0">Datumi</div><div class="kv"><span>Upit</span><span>${esc(j.inquiry_date)}</span></div><div class="kv"><span>Izmjera</span><span>${esc(j.measure_date)}</span></div><div class="kv"><span>Montaža</span><span>${esc(j.install_date)}</span></div><div class="kv"><span>Rok kupca</span><span>${esc(j.deadline_date)}</span></div></div>${j.chat_log?`<div class="card"><div class="section-title" style="margin-top:0">Poruke / chat</div><div class="small" style="white-space:pre-wrap">${esc(j.chat_log)}</div></div>`:''}${j.notes?`<div class="card"><div class="section-title" style="margin-top:0">Bilješke</div><div class="small" style="white-space:pre-wrap">${esc(j.notes)}</div></div>`:''}${filesCard(j)}<div class="card"><div class="section-title" style="margin-top:0">Sync info</div><div class="mono">local_uuid: ${esc(j.local_uuid)}\nclient_id: ${esc(j.client_id)}\nboat_id: ${esc(j.boat_id)}\nversion: ${esc(j.version)}\nschema_version: ${esc(j.schema_version)}\nupdated_at: ${esc(j.updated_at)}</div><div class="actions"><button class="btn secondary full" onclick="duplicateJob('${j.local_uuid}')">Dupliciraj posao</button><button class="btn bad full" onclick="deleteJob('${j.local_uuid}')">Premjesti u Arhiva/Deleted</button></div></div>`; setTimeout(hydrateStorageImages,50); }
-function duplicateJob(uid){ const old=findJob(uid); if(!old)return; const j=upgradeJob(JSON.parse(JSON.stringify(old))); j.id=nextJobId(); j.local_uuid=uuid(); j.remote_id=''; j.sync_status='pending'; j.created_at=nowIso(); j.updated_at=nowIso(); j.version=1; j.notes=(j.notes?j.notes+'\n\n':'')+'Duplicirano iz '+old.id; jobs.push(j); save(); toast('Duplicirano - auto sync'); openDetail(j.local_uuid); queueAutoSync('duplicate'); }
-function deleteJob(uid){ const j=findJob(uid); if(!j)return; if(!confirm('Obrisati lokalno / označiti deleted?')) return; j.deleted=true; j.sync_status='pending'; j.updated_at=nowIso(); j.version=(parseInt(j.version||1,10)||1)+1; save(); toast('Označeno kao deleted - auto sync'); showScreen('home'); queueAutoSync('delete'); }
-function packageData(){ return {build:BUILD, schema_version:SCHEMA_VERSION, created_at:nowIso(), source:'MOBILE', jobs:jobs.map(upgradeJob), boats:boats.map(upgradeBoat), materials:[]}; }
-function exportBackup(){ const data=packageData(); const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='CroTeak_Planner_MOBILE_BUILD031_PWA_backup_'+today()+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href); const m=meta(); m.lastBackup=new Date().toLocaleString('hr-HR'); saveMeta(m); renderAll(); toast('Backup spremljen/preuzet'); }
-function importBackup(ev){ const file=ev.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{ try{ const data=JSON.parse(reader.result); const incoming = Array.isArray(data) ? data : (data.jobs || []); if(!Array.isArray(incoming)) throw new Error('Nema jobs polja'); const incomingBoats = Array.isArray(data.boats) ? data.boats.map(upgradeBoat) : []; const mode = confirm('OK = MERGE s postojećim\nCancel = REPLACE sve lokalno'); const up = incoming.map(upgradeJob); if(mode){ const map=new Map(jobs.map(j=>[j.local_uuid,j])); up.forEach(j=>{ const old=map.get(j.local_uuid); if(!old || String(j.updated_at||'')>=String(old.updated_at||'')) map.set(j.local_uuid,j); }); jobs=Array.from(map.values()); }else{ jobs=up; } if(incomingBoats.length){ const bm=new Map(boats.map(b=>[b.boat_uuid,b])); incomingBoats.forEach(b=>bm.set(b.boat_uuid,b)); boats=Array.from(bm.values()); saveBoats(); } save(); toast('Import gotovo: '+up.length+' poslova, '+incomingBoats.length+' brodova'); showScreen('home'); }catch(e){ alert('Import greška: '+e.message); } ev.target.value=''; }; reader.readAsText(file); }
-function mockSync(){ jobs.forEach(j=>{ if(['pending','local_only','conflict'].includes(j.sync_status)){ j.sync_status='synced'; j.last_synced_at=nowIso(); j.remote_id=j.remote_id || j.local_uuid; }}); save(); toast('Mock sync gotovo - sve lokalno'); }
-function showCloudPackage(){ const el=document.getElementById('cloudPreview'); const txt=document.getElementById('cloudText'); txt.textContent=JSON.stringify(packageData(),null,2).slice(0,12000); el.classList.remove('hide'); toast('Cloud package prikazan'); }
-function cloud(){ const m=meta(); m.cloud=m.cloud||{}; if(!m.cloud.url) m.cloud.url='https://vowzrtyaihalyjrmmlit.supabase.co'; if(!m.cloud.key) m.cloud.key='sb_publishable_zl3MOVbcmvSx5yvXLQt9Bw_lrrqc3Zz'; if(!m.cloud.table) m.cloud.table='croteak_jobs'; return m.cloud; }
-function saveCloud(c){ const m=meta(); m.cloud=Object.assign(cloud(), c||{}); if(m.cloud.auto_sync===undefined) m.cloud.auto_sync=true; saveMeta(m); renderAll(); }
-function isCloudLogged(){ const c=cloud(); return !!(c.access_token && c.user_id); }
-function setCloudPill(text, mode){ const st=document.getElementById('syncText'); if(st) st.textContent=text; const pill=document.getElementById('syncPill'); if(pill){ if(mode==='work') pill.style.background='rgba(245,158,11,.30)'; else if(mode==='bad') pill.style.background='rgba(220,38,38,.32)'; else pill.style.background='rgba(255,255,255,.15)'; } }
-let autoSyncTimer=null; let autoSyncBusy=false;
-function queueAutoSync(reason='save', delay=900){ const c=cloud(); if(c.auto_sync===false) { renderAll(); return; } if(!isCloudLogged()){ setCloudPill('čeka login','work'); renderAll(); return; } if(autoSyncTimer) clearTimeout(autoSyncTimer); autoSyncTimer=setTimeout(()=>autoCloudSync(reason), delay); }
-async function autoCloudSync(reason='auto'){ if(autoSyncBusy) return; if(!isCloudLogged()){ setCloudPill('čeka login','work'); return; } autoSyncBusy=true; setCloudPill('sync...','work'); try{ await pushCloud(true); await pullCloud(true); await syncBoatsNow(true); const c=cloud(); c.last_sync=new Date().toLocaleString('hr-HR'); saveCloud(c); setCloudPill('Cloud OK','ok'); toast('Cloud sync OK'); }catch(e){ setCloudPill('Cloud greška','bad'); console.warn(e); toast('Cloud greška - lokalno spremljeno'); } finally{ autoSyncBusy=false; renderAll(); } }
-function fillCloudFields(){ const c=cloud(); const ids={cloudUrl:'url',cloudKey:'key',cloudEmail:'email'}; Object.keys(ids).forEach(id=>{ const el=document.getElementById(id); if(el) el.value=c[ids[id]]||''; }); const logged=!!(c.access_token&&c.user_id); const st=document.getElementById('cloudLoginState'); if(st) st.textContent = logged ? 'prijavljen: '+(c.email||'') : 'nije prijavljen'; const lb=document.getElementById('loginBox'), gb=document.getElementById('loggedBox'), le=document.getElementById('loggedEmail'); if(lb) lb.classList.toggle('hide', logged); if(gb) gb.classList.toggle('hide', !logged); if(le) le.textContent=c.email||'-'; }
-function collectCloudSettings(){ const c=cloud(); const get=id=>{const el=document.getElementById(id); return el?el.value.trim():''}; c.url=(get('cloudUrl')||c.url||'').replace(/\/$/,''); c.key=get('cloudKey')||c.key||''; c.email=get('cloudEmail')||c.email||''; c.table='croteak_jobs'; saveCloud(c); return c; }
-function saveCloudSettings(){ collectCloudSettings(); toast('Cloud postavke spremljene'); }
-async function authRequest(endpoint, payload){ const c=collectCloudSettings(); if(!c.url||!c.key) throw new Error('Nedostaje Supabase URL/key'); const r=await fetch(c.url+'/auth/v1/'+endpoint,{method:'POST',headers:{apikey:c.key,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload||{})}); const text=await r.text(); let data=null; try{data=text?JSON.parse(text):null}catch(e){data=text} if(!r.ok) throw new Error('Auth HTTP '+r.status+': '+(typeof data==='string'?data:JSON.stringify(data))); return data; }
-function storeSession(data,email){ if(!data||!data.access_token) throw new Error('Nema sessiona. Ako Supabase traži email potvrdu, potvrdi email pa klikni Login.'); const c=cloud(); c.email=email||data.user?.email||c.email||''; c.access_token=data.access_token; c.refresh_token=data.refresh_token||''; c.user_id=data.user?.id||c.user_id||''; c.expires_at=Date.now()+Math.max(60000, ((data.expires_in||3600)-60)*1000); saveCloud(c); }
-async function signUpCloud(){ try{ const c=collectCloudSettings(); const pw=document.getElementById('cloudPassword').value; if(!c.email||!pw) throw new Error('Upiši email i lozinku'); const data=await authRequest('signup',{email:c.email,password:pw}); storeSession(data,c.email); toast('Registracija/login OK'); queueAutoSync('login',300); }catch(e){ alert('Registracija greška: '+e.message); } }
-async function signInCloud(){ try{ const c=collectCloudSettings(); const pw=document.getElementById('cloudPassword').value; if(!c.email||!pw) throw new Error('Upiši email i lozinku'); const data=await authRequest('token?grant_type=password',{email:c.email,password:pw}); storeSession(data,c.email); toast('Login OK'); queueAutoSync('login',300); }catch(e){ alert('Login greška: '+e.message); } }
-function signOutCloud(){ const c=cloud(); delete c.access_token; delete c.refresh_token; delete c.user_id; delete c.expires_at; saveCloud(c); toast('Odjavljen lokalno'); }
-async function refreshAuth(){ const c=cloud(); if(!c.access_token) throw new Error('Nisi prijavljen u cloud'); if(c.refresh_token && c.expires_at && Date.now()>=c.expires_at){ const data=await authRequest('token?grant_type=refresh_token',{refresh_token:c.refresh_token}); storeSession(data,c.email); } return cloud(); }
-function jobToCloudRow(j){ j=upgradeJob(j); return {local_uuid:j.local_uuid, job_id:j.id||'', client_name:j.client_name||'', boat_model:j.boat_model||j.boat_name||'', status:j.status||'', updated_at:j.updated_at||nowIso(), version:parseInt(j.version||1,10)||1, deleted:!!j.deleted, data:j}; }
-function cloudRowToJob(r){ const d=Object.assign({}, r.data||{}); if(r.local_uuid) d.local_uuid=r.local_uuid; if(r.job_id&&!d.id) d.id=r.job_id; if(r.updated_at) d.updated_at=r.updated_at; if(r.version) d.version=r.version; if('deleted' in r) d.deleted=!!r.deleted; d.sync_status='synced'; d.last_synced_at=nowIso(); return upgradeJob(d); }
-async function sbRequest(method, query, payload){ const c=await refreshAuth(); const url=c.url+'/rest/v1/'+encodeURIComponent(c.table||'croteak_jobs')+query; const opt={method,headers:{apikey:c.key,Authorization:'Bearer '+c.access_token,'Content-Type':'application/json','Accept':'application/json'}}; if(String(method).toUpperCase()==='POST') opt.headers['Prefer']='resolution=merge-duplicates,return=representation'; if(payload!==undefined) opt.body=JSON.stringify(payload); const r=await fetch(url,opt); const text=await r.text(); let data=null; try{data=text?JSON.parse(text):null}catch(e){data=text} if(!r.ok) throw new Error('Supabase HTTP '+r.status+': '+(typeof data==='string'?data:JSON.stringify(data))); return data; }
-async function testCloud(){ try{ collectCloudSettings(); await sbRequest('GET','?select=local_uuid&limit=1'); toast('Cloud test OK'); }catch(e){ alert('Cloud test greška: '+e.message); } }
-
-const signedUrlCache = new Map();
-async function storageSignedUrl(path){
-  if(!path) return '';
-  const cached=signedUrlCache.get(path);
-  if(cached && cached.exp>Date.now()) return cached.url;
-  const c=await refreshAuth();
-  const bucket=c.storage_bucket || 'croteak-files';
-  const url=c.url+'/storage/v1/object/sign/'+encodeURIComponent(bucket)+'/'+String(path).split('/').map(encodeURIComponent).join('/');
-  const r=await fetch(url,{method:'POST',headers:{apikey:c.key,Authorization:'Bearer '+c.access_token,'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});
-  const data=await r.json().catch(()=>({}));
-  if(!r.ok) throw new Error('Storage sign '+r.status+': '+JSON.stringify(data));
-  let signed=data.signedURL || data.signedUrl || '';
-  if(signed && signed.startsWith('/')) signed=c.url+'/storage/v1'+signed;
-  if(signed){ signedUrlCache.set(path,{url:signed,exp:Date.now()+55*60*1000}); }
-  return signed;
-}
-async function hydrateStorageImages(){
-  const imgs=[...document.querySelectorAll('img[data-storage-path]')];
-  for(const img of imgs){
-    const p=img.getAttribute('data-storage-path')||'';
-    if(!p || img.dataset.loaded==='1') continue;
-    try{
-      const u=await storageSignedUrl(p);
-      if(u){ img.src=u; img.dataset.loaded='1'; const ct=img.parentElement?.querySelector('.ct'); if(ct) ct.style.display='none'; }
-    }catch(e){ console.warn('storage image',e); }
-  }
-}
-async function pushCloud(quiet=false){ try{ const pending=jobs.filter(j=>['pending','local_only','conflict'].includes(j.sync_status)).map(jobToCloudRow); if(!pending.length){ if(!quiet) toast('Nema pending poslova'); return 0; } await sbRequest('POST','?on_conflict=local_uuid',pending); const t=nowIso(), set=new Set(pending.map(r=>r.local_uuid)); jobs.forEach(j=>{ if(set.has(j.local_uuid)){ j.sync_status='synced'; j.last_synced_at=t; j.remote_id=j.local_uuid; }}); save(); if(!quiet) toast('Push gotovo: '+pending.length); return pending.length; }catch(e){ if(!quiet) alert('Push greška: '+e.message); else throw e; } }
-function mergeCloudRows(rows){ let changed=0; const map=new Map(jobs.map((j,i)=>[j.local_uuid,i])); (rows||[]).forEach(r=>{ const cj=cloudRowToJob(r); const idx=map.get(cj.local_uuid); if(idx===undefined){ jobs.push(cj); map.set(cj.local_uuid,jobs.length-1); changed++; return; } const local=jobs[idx]; const lv=parseInt(local.version||1,10)||1, cv=parseInt(cj.version||1,10)||1; if(local.sync_status==='pending' && (cv>lv || String(cj.updated_at)>String(local.updated_at||''))){ local.sync_status='conflict'; local.notes=(local.notes?local.notes+'\n\n':'')+'[SYNC CONFLICT] Cloud ima noviju verziju.'; changed++; } else if(cv>lv || String(cj.updated_at)>String(local.updated_at||'')){ jobs[idx]=cj; changed++; } }); if(changed) save(); else renderAll(); return changed; }
-async function pullCloud(quiet=false){ try{ const rows=await sbRequest('GET','?select=local_uuid,job_id,updated_at,version,deleted,data&limit=10000'); const ch=mergeCloudRows(Array.isArray(rows)?rows:[]); if(!quiet) toast('Pull gotovo: '+ch+' promjena'); return ch; }catch(e){ if(!quiet) alert('Pull greška: '+e.message); else throw e; } }
-async function fullCloudSync(){ try{ await autoCloudSync('manual'); }catch(e){ alert('Full sync greška: '+e.message); } }
-function wipeLocal(){ if(!confirm('Sigurno obrisati lokalne podatke na mobitelu?')) return; localStorage.removeItem(STORAGE_KEY); jobs=[]; save(); toast('Obrisano lokalno'); showScreen('home'); }
-
-
-let deferredPwaPrompt = null;
-function isStandaloneMode(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
-function updatePwaInstallUi(){
-  const btn=document.getElementById('pwaInstallBtn');
-  const hint=document.getElementById('pwaInstallHint');
-  if(!btn||!hint) return;
-  if(isStandaloneMode()){ btn.classList.remove('show'); hint.classList.remove('show'); return; }
-  if(deferredPwaPrompt){ btn.classList.add('show'); hint.classList.remove('show'); }
-  else if(location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') { hint.classList.add('show'); btn.classList.remove('show'); }
-}
-window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPwaPrompt=e; updatePwaInstallUi(); });
-window.addEventListener('appinstalled', ()=>{ deferredPwaPrompt=null; updatePwaInstallUi(); toast('CroTeak Planner instaliran'); });
-document.addEventListener('click', async (ev)=>{
-  if(ev.target && ev.target.id==='pwaInstallBtn'){
-    if(!deferredPwaPrompt){ alert('Instalacija će se pojaviti kad je app otvoren preko HTTPS linka u Chromeu.'); return; }
-    deferredPwaPrompt.prompt();
-    try{ await deferredPwaPrompt.userChoice; }catch(e){}
-    deferredPwaPrompt=null; updatePwaInstallUi();
-  }
-});
-setTimeout(updatePwaInstallUi,700);
-
-document.getElementById('globalSearch').addEventListener('input',()=>{ renderLists(); if(getSearch()) showScreen('search'); });
-document.getElementById('filterBtn').addEventListener('click',()=>{ showScreen('home'); toggleFilterPanel(); });
-document.getElementById('filterLocation').addEventListener('input',()=>{ applyFiltersFromUi(true,true); });
-document.getElementById('filterStatus').addEventListener('change',()=>{ applyFiltersFromUi(true,true); });
-document.getElementById('clearSearch').addEventListener('click',()=>{ document.getElementById('globalSearch').value=''; renderAll(); showScreen('home'); });
-document.getElementById('cloudRefreshBtn').addEventListener('click',()=>autoCloudSync('refresh'));
-window.addEventListener('focus',()=>{ if(isCloudLogged()) queueAutoSync('focus',700); });
-window.addEventListener('online',()=>queueAutoSync('online',300));
-window.addEventListener('beforeunload',()=>{ localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs)); });
-fillStatus(); load();
-setTimeout(()=>{ if(isCloudLogged()) queueAutoSync('startup',300); },800);
-setInterval(()=>{ if(isCloudLogged()) queueAutoSync('periodic',500); },30000);
-if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('./service-worker.js').then(reg=>{reg.update&&reg.update();}).catch(()=>{}); }); }
-</script>
+    if('serviceWorker' in navigator && location.protocol !== 'file:'){
+      window.addEventListener('load', ()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+    }
+    render();
+  </script>
 </body>
 </html>

@@ -1,0 +1,4 @@
+CroTeak Planner MOBILE BUILD032 PWA
+Schema: v4
+Root folder: CroTeak_Planner_MOBILE_BUILD032_PWA
+Main file: index.html
