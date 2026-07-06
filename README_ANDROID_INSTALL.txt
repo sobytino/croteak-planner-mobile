@@ -1,4 +1,4 @@
-CroTeak Planner MOBILE BUILD032 PWA
+CroTeak Planner MOBILE BUILD033 PWA
 
 Ovo je instalabilna Android/PWA verzija.
 
@@ -14,15 +14,16 @@ Tvoj workflow:
 
 Što je unutra:
 - index.html = glavna app stranica za hosting
-- CroTeak_Planner_MOBILE_BUILD032.html = isti app file s build imenom
+- CroTeak_Planner_MOBILE_BUILD033.html = isti app file s build imenom
 - manifest.webmanifest = PWA install konfiguracija
 - service-worker.js = offline/cache/update shell
 - icons/ = app ikone
 
-BUILD032:
-- ispravljene interne build oznake na MOBILE_BUILD032_PWA
-- bolji PWA/GitHub update flow: update banner + gumb Provjeri update appa
-- service worker ima novi cache croteak-mobile-build032-v1
-- HTML se vuče network-first da mobitel ne ostane zalijepljen na starom buildu
-- popravljeno da header/search ne bježi na uskim mobitelima
-- Cloud/Supabase i localStorage key nisu dirani da podaci ostanu sigurni
+BUILD033:
+- totalni makeup mobilnog sučelja: čišći premium izgled, manji razmaci, moderniji header, kartice i donja navigacija
+- poslovi su smanjeni u compact listu bez velike slike i bez velike finance-row sekcije
+- na jednom ekranu se vidi više poslova odjednom
+- gornji dio Dashboarda je smanjen: Aktivni poslovi / Čeka sync / Ukupno ponude / Za naplatiti sada su 4 mala compact polja
+- Home lista sada može prikazati do 50 aktivnih poslova, ne samo 12
+- service worker cache dignut na croteak-mobile-build033-v1
+- Cloud/Supabase, schema v3 i localStorage key nisu dirani da podaci ostanu sigurni

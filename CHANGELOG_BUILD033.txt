@@ -1,0 +1,18 @@
+CroTeak Planner MOBILE BUILD033 PWA
+
+MAKEUP / COMPACT UI BUILD
+
+Promjene:
+- Smanjene kartice poslova da ih se više vidi odjednom na mobitelu.
+- Iz kartice posla maknuta velika mini slika i velika 3-polja financijska zona.
+- Dodan compact red: telefon / m² / materijal + ponuda / ostatak / zarada u jednoj liniji.
+- Smanjene gornje dashboard kartice: poslovi, sync, ukupno ponude, za naplatiti.
+- Napravljen veći vizualni facelift: moderniji header, manje sjene, kompaktniji spacing, čišće kartice, manji bottom nav.
+- Home prikazuje do 50 aktivnih poslova.
+- Build oznake, HTML filename, manifest opis i service-worker cache prebačeni na BUILD033.
+
+Nije dirano:
+- Supabase cloud sync
+- schema v3
+- localStorage key
+- GitHub/Netlify update flow
