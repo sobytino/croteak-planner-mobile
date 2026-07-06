@@ -1,0 +1,17 @@
+CroTeak Planner MOBILE BUILD032 PWA
+
+Promjene:
+- Interni BUILD ispravljen na MOBILE_BUILD032_PWA.
+- UI title, Settings, README, backup filename i service worker usklađeni na BUILD032.
+- Dodan gumb Cloud/Postavke -> Provjeri update appa.
+- Dodan update banner: Nova verzija je spremna -> Ažuriraj.
+- Service worker cache dignut na croteak-mobile-build032-v1.
+- HTML/network-first update logika da mobitel bolje povuče novi GitHub/Netlify deploy.
+- Dodan no-cache za index.html i HTML fileove u netlify.toml.
+- Header/search CSS popravljeno za uske mobitele.
+
+Namjerno NIJE mijenjano:
+- Supabase URL/key/table.
+- LocalStorage ključ croteak_planner_mobile_build009_jobs_v3.
+- Schema v3.
+- Cloud sync logika i podaci poslova/brodova.
