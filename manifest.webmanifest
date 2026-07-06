@@ -1,0 +1,45 @@
+{
+  "name": "CroTeak Planner",
+  "short_name": "CroTeak",
+  "description": "CroTeak Planner mobile app za poslove, brodove i cloud sync.",
+  "id": "/croteak-planner/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "background_color": "#eef2f7",
+  "theme_color": "#0b1220",
+  "lang": "hr-HR",
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
