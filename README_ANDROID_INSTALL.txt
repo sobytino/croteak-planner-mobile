@@ -1,4 +1,4 @@
-CroTeak Planner MOBILE BUILD030 PWA
+CroTeak Planner MOBILE BUILD031 PWA
 
 Ovo je instalabilna Android/PWA verzija.
 
@@ -8,13 +8,13 @@ BITNO:
 
 Najlakši test/hosting:
 1. Otvori netlify.com i napravi free account ili login.
-2. Drag & drop cijeli folder CroTeak_Planner_MOBILE_BUILD030 na Netlify Deploys.
+2. Drag & drop cijeli folder CroTeak_Planner_MOBILE_BUILD031 na Netlify Deploys.
 3. Otvori dobiveni HTTPS link na Androidu u Chromeu.
 4. Klikni gumb Instaliraj ili Chrome meni (tri točkice) -> Install app / Add to Home screen.
 
 Što je unutra:
 - index.html = glavna app stranica za hosting
-- CroTeak_Planner_MOBILE_BUILD030.html = isti app file s build imenom
+- CroTeak_Planner_MOBILE_BUILD031.html = isti app file s build imenom
 - manifest.webmanifest = PWA install konfiguracija
 - service-worker.js = offline/cache shell
 - icons/ = app ikone napravljene iz CroTeak loga

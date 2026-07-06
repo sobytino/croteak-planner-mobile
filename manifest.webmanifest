@@ -2,7 +2,7 @@
   "name": "CroTeak Planner",
   "short_name": "CroTeak",
   "description": "CroTeak Planner mobile app za poslove, brodove i cloud sync.",
-  "id": "/croteak-planner/",
+  "id": "/croteak-planner-mobile/",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
