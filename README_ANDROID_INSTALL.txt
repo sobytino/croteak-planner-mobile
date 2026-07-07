@@ -1,45 +1,32 @@
-{
-  "name": "CroTeak Planner",
-  "short_name": "CroTeak",
-  "description": "CroTeak Planner MOBILE BUILD037 PWA za poslove, brodove, color samples i cloud sync.",
-  "id": "/croteak-planner-mobile/",
-  "start_url": "./index.html",
-  "scope": "./",
-  "display": "standalone",
-  "display_override": [
-    "standalone",
-    "minimal-ui"
-  ],
-  "orientation": "portrait",
-  "background_color": "#f3f6f8",
-  "theme_color": "#0b1220",
-  "lang": "hr-HR",
-  "categories": [
-    "business",
-    "productivity"
-  ],
-  "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/maskable-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ]
-}
+CroTeak Planner MOBILE BUILD037 PWA
+
+Ovo je instalabilna Android/PWA verzija.
+
+BITNO:
+- Ne može se pravo instalirati ako otvaraš HTML preko file:/// na mobitelu.
+- Za install/update treba HTTPS link.
+
+Tvoj workflow:
+1. Kopiraš sadržaj ovog foldera u GitHub repo.
+2. Netlify/hosting automatski deploya novi build.
+3. Na mobitelu otvoriš app i klikneš Cloud -> Provjeri update appa ili zatvori/otvori app.
+4. Kad se pojavi poruka Nova verzija je spremna, klikni Ažuriraj.
+
+Što je unutra:
+- index.html = glavna app stranica za hosting
+- CroTeak_Planner_MOBILE_BUILD037.html = isti app file s build imenom
+- manifest.webmanifest = PWA install konfiguracija
+- service-worker.js = offline/cache/update shell
+- icons/ = app ikone
+- samples/ = 24 odvojena NC color samplea: palette sheet + physical sample reference
+
+BUILD037:
+- dodan modul Color Samples / Palete s 24 NC kodova
+- nazivi su standardizirani/čišći za app, ali original label je sačuvan u detalju samplea
+- svaki sample ima dvije slike: čisti palette crop i fizički sample crop
+- u poslu se Boja materijala može odabrati po NC kodu preko datalista ili iz paleta
+- detalj posla prikazuje povezanu paletu i fizički sample
+- dodana lokalna Narudžba boja s +/- količinama i kopiranjem teksta za Melors Marine Deck Factory
+- JSON backup sada uključuje color_samples i sample_order
+- service worker cache dignut na croteak-mobile-build037-v1
+- Cloud/Supabase, schema v3 i localStorage key nisu dirani da podaci ostanu sigurni
