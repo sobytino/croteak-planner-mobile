@@ -1,4 +1,4 @@
-CroTeak Planner MOBILE BUILD034 PWA
+CroTeak Planner MOBILE BUILD035 PWA
 
 Ovo je instalabilna Android/PWA verzija.
 
@@ -14,19 +14,19 @@ Tvoj workflow:
 
 Što je unutra:
 - index.html = glavna app stranica za hosting
-- CroTeak_Planner_MOBILE_BUILD034.html = isti app file s build imenom
+- CroTeak_Planner_MOBILE_BUILD035.html = isti app file s build imenom
 - manifest.webmanifest = PWA install konfiguracija
 - service-worker.js = offline/cache/update shell
 - icons/ = app ikone
 - samples/ = 24 odvojena NC color samplea: palette sheet + physical sample reference
 
-BUILD034:
+BUILD035:
 - dodan modul Color Samples / Palete s 24 NC kodova
 - nazivi su standardizirani/čišći za app, ali original label je sačuvan u detalju samplea
 - svaki sample ima dvije slike: čisti palette crop i fizički sample crop
 - u poslu se Boja materijala može odabrati po NC kodu preko datalista ili iz paleta
 - detalj posla prikazuje povezanu paletu i fizički sample
-- dodana lokalna Narudžba boja s +/- količinama i kopiranjem teksta za Yuki
+- dodana lokalna Narudžba boja s +/- količinama i kopiranjem teksta za Melors Marine Deck Factory
 - JSON backup sada uključuje color_samples i sample_order
-- service worker cache dignut na croteak-mobile-build034-v1
+- service worker cache dignut na croteak-mobile-build035-v1
 - Cloud/Supabase, schema v3 i localStorage key nisu dirani da podaci ostanu sigurni
