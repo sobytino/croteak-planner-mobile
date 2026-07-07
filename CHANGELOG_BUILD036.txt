@@ -1,0 +1,14 @@
+- dodan modul Color Samples / Palete s 24 NC kodova
+- nazivi su standardizirani/čišći za app, ali original label je sačuvan u detalju samplea
+- svaki sample ima dvije slike: čisti palette crop i fizički sample crop
+- u poslu se Boja materijala može odabrati po NC kodu preko datalista ili iz paleta
+- detalj posla prikazuje povezanu paletu i fizički sample
+- dodana lokalna Narudžba boja s +/- količinama i kopiranjem teksta za Melors Marine Deck Factory
+- JSON backup sada uključuje color_samples i sample_order
+- service worker cache dignut na croteak-mobile-build036-v1
+- Cloud/Supabase, schema v3 i localStorage key nisu dirani da podaci ostanu sigurni
+
+- BUILD036: totalni makeup modula Palete / Narudžba boja
+- premium sample kartice s inset fizičkim sampleom i family chipom
+- family filter chips (Sve/Teak/Brown/Grey/...)
+- sređen order screen: summary kartice, veće kontrole količine i remove gumb
