@@ -1,45 +1,711 @@
-{
-  "name": "CroTeak Planner",
-  "short_name": "CroTeak",
-  "description": "CroTeak Planner MOBILE BUILD036 PWA za poslove, brodove, color samples i cloud sync.",
-  "id": "/croteak-planner-mobile/",
-  "start_url": "./index.html",
-  "scope": "./",
-  "display": "standalone",
-  "display_override": [
-    "standalone",
-    "minimal-ui"
-  ],
-  "orientation": "portrait",
-  "background_color": "#f3f6f8",
-  "theme_color": "#0b1220",
-  "lang": "hr-HR",
-  "categories": [
-    "business",
-    "productivity"
-  ],
-  "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/maskable-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="application-name" content="CroTeak Planner">
+  <meta name="description" content="CroTeak Planner mobile PWA - poslovi, brodovi, cloud sync i teren.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="CroTeak Mobile">
+  <title>CroTeak Planner MOBILE BUILD037 PWA</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <style>
+    :root{
+      --bg:#eef2f7;
+      --card:#ffffff;
+      --ink:#122126;
+      --muted:#64747a;
+      --line:#dce5e8;
+      --brand:#0f766e;
+      --brand2:#0b1220;
+      --warn:#f59e0b;
+      --bad:#dc2626;
+      --ok:#16a34a;
+      --shadow:0 8px 22px rgba(5,35,40,.08);
+      --radius:18px;
+      --safe-bottom:env(safe-area-inset-bottom,0px);
     }
-  ]
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      padding-bottom:calc(82px + var(--safe-bottom));
+    }
+    .topbar{
+      position:sticky;top:0;z-index:30;
+      background:linear-gradient(135deg,#0b1220 0%,#0f766e 58%,#14b8a6 100%);
+      color:white;
+      padding:14px 14px 12px;
+      box-shadow:0 14px 34px rgba(2,6,23,.24);
+    }
+    .topline{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+    .topline>div:first-child{min-width:0}
+    .title{font-weight:800;font-size:18px;letter-spacing:.2px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .build{font-size:11px;opacity:.85;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:rgba(255,255,255,.15);padding:7px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+    .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);display:inline-block}
+    .searchbox{margin-top:12px;display:flex;gap:8px}
+    .searchbox input{flex:1;min-width:0;border:0;border-radius:14px;padding:13px 14px;font-size:16px;outline:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+    .iconbtn{flex:0 0 48px;border:0;border-radius:14px;background:rgba(255,255,255,.16);color:white;font-weight:800;padding:0 10px;font-size:18px}
+    .installbtn{display:none;border:0;border-radius:14px;background:rgba(255,255,255,.22);color:white;font-weight:900;padding:0 12px;font-size:13px;white-space:nowrap}
+    .installHint{display:none;margin-top:10px;border-radius:14px;background:rgba(255,255,255,.14);padding:10px 12px;font-size:12px;font-weight:700;line-height:1.35}
+    .installHint.show{display:block}.installbtn.show{display:inline-flex;align-items:center;justify-content:center}
+    .updateBanner{position:fixed;left:14px;right:14px;bottom:92px;z-index:90;background:#0b1220;color:white;border:1px solid rgba(255,255,255,.20);border-radius:18px;box-shadow:0 12px 28px rgba(2,6,23,.28);padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:850}.updateBanner button{border:0;border-radius:13px;background:#14b8a6;color:white;font-weight:950;padding:10px 12px;white-space:nowrap}
+
+    main{padding:14px;max-width:640px;margin:0 auto}
+    .screen{display:none}.screen.active{display:block}
+    .miniSummary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+    .miniStat{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:0 4px 12px rgba(5,35,40,.05)}
+    .miniStat .num{font-size:16px;font-weight:900;line-height:1.05}.miniStat .lbl{font-size:11px;color:var(--muted);font-weight:800;margin-top:4px}
+    .filterCard{padding:10px 12px;margin-top:10px}.filterRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.filterActions{display:flex;gap:8px;margin-top:8px}.filterActions .btn{flex:1}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}.chip{display:inline-flex;align-items:center;gap:6px;background:#e7f5f3;color:#0f766e;border:1px solid #c8e6e2;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800}.chip button{border:0;background:transparent;color:#0f766e;font-size:14px;font-weight:900;padding:0;line-height:1;cursor:pointer}.listHeader{display:flex;align-items:center;justify-content:space-between;gap:10px}.smallFilterBtn{display:inline-flex;align-items:center;justify-content:center;border:1px solid #b7d7d2;background:#f2fbfa;color:#0f766e;border-radius:12px;padding:10px 12px;font-size:13px;font-weight:900;min-width:44px}
+    .section-title{font-size:14px;font-weight:900;color:#20343a;margin:18px 2px 9px;text-transform:uppercase;letter-spacing:.6px}
+    .card{background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;margin:10px 0}
+    .jobcard{position:relative;overflow:hidden}.jobcard:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--brand)}
+    .jobcard.status-Ponuda:before{background:#2563eb}.jobcard.status-Avans:before{background:#f59e0b}.jobcard.status-Izmjera:before{background:#ea580c}.jobcard.status-Dizajn:before{background:#7c3aed}.jobcard.status-CNC:before{background:#1d4ed8}.jobcard.status-Spremno:before{background:#16a34a}.jobcard.status-Montaža:before{background:#059669}.jobcard.status-Naplaćeno:before{background:#111827}.jobcard.status-Arhiva:before{background:#6b7280}
+    .jobhead{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;padding-left:4px}
+    .jobtitle{font-weight:900;font-size:17px;line-height:1.18}.jobsub{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.35}.status{border-radius:999px;font-size:12px;font-weight:800;background:#e8f5f3;color:#0f766e;padding:6px 8px;white-space:nowrap}
+    .moneyrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;padding-left:4px}.money{background:#f8fafb;border:1px solid #edf2f4;border-radius:12px;padding:8px}.money b{display:block;font-size:15px}.money span{font-size:11px;color:var(--muted);font-weight:700}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{border:0;border-radius:14px;background:linear-gradient(135deg,#0f766e,#14b8a6);color:white;font-size:15px;font-weight:900;padding:12px 14px;min-height:44px;box-shadow:0 8px 18px rgba(15,118,110,.20)}.btn.secondary{background:#e9f0f2;color:#14333a}.btn.warn{background:var(--warn);color:#2b1b00}.btn.bad{background:var(--bad)}.btn.full{width:100%}.btn.ghost{background:transparent;color:var(--brand);border:1px solid #b7d7d2}
+    .form{display:grid;gap:10px}.field label{display:block;font-size:12px;font-weight:900;color:#51646a;margin:0 0 5px 2px;text-transform:uppercase;letter-spacing:.3px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:white;padding:13px;font-size:16px;color:var(--ink);outline:none}.field textarea{min-height:92px;resize:vertical}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .small{font-size:12px;color:var(--muted);line-height:1.4}.hint{font-size:11px;color:var(--muted);margin-top:5px}.hr{height:1px;background:var(--line);margin:14px 0}.empty{padding:26px;text-align:center;color:var(--muted);background:white;border-radius:var(--radius);border:1px dashed #cbd5d9}
+    .bottomnav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:7px 7px calc(7px + var(--safe-bottom));display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.navbtn{border:0;background:transparent;color:#63757a;border-radius:14px;padding:7px 2px;font-size:11px;font-weight:800}.navbtn .ico{display:block;font-size:20px;line-height:21px}.navbtn.active{background:#e5f3f1;color:var(--brand2)}
+    .detail-title{font-size:23px;font-weight:950;line-height:1.1;margin:2px 0 4px}.kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #edf2f4}.kv span:first-child{color:var(--muted);font-weight:800}.kv span:last-child{text-align:right;font-weight:800}.badgebar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.badge{border-radius:999px;background:#f0f5f6;padding:8px 10px;font-size:12px;font-weight:800;color:#44575d}
+    .toast{position:fixed;left:14px;right:14px;bottom:92px;background:#102a31;color:white;padding:13px 15px;border-radius:16px;box-shadow:var(--shadow);z-index:80;font-weight:800;display:none}.toast.show{display:block;animation:fade .2s ease}@keyframes fade{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+    .dangerzone{border:1px solid #fecaca;background:#fff7f7}.syncbox{border-left:6px solid var(--brand);padding-left:12px}.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#f7fafb;border-radius:12px;padding:11px;white-space:pre-wrap;word-break:break-word}.hide{display:none!important}
+    details.advanced{border:1px solid var(--line);border-radius:16px;background:#f8fafb;padding:10px;margin-top:10px}details.advanced summary{font-weight:900;color:#31545b;cursor:pointer}
+    .cover{height:160px;border-radius:18px;background:linear-gradient(135deg,#dbeafe,#ccfbf1);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:12px;position:relative}.cover:after{content:"CroTeak Preview";position:absolute;left:12px;bottom:10px;background:rgba(15,23,42,.70);color:white;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}.cover img{width:100%;height:100%;object-fit:cover}.cover.mini{width:78px;height:58px;margin:0;flex:0 0 78px;border-radius:13px}.cover.mini:after{display:none}.cover .ct{font-size:34px;font-weight:950;color:#0f766e}
+    .filelist{display:grid;gap:8px;margin-top:8px}.fileitem{border:1px solid #dce5e8;border-radius:14px;background:#f8fafc;padding:10px}.fileitem b{display:block;font-size:14px}.fileitem span{display:block;font-size:12px;color:var(--muted);margin-top:3px}.fileitem button{margin-top:8px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;font-weight:800;padding:7px 9px}.fileitem button.main{background:#d1fae5;color:#065f46;margin-right:6px}
+    @media (min-width:700px){body{background:#edf3f4}main{max-width:760px}.bottomnav{left:50%;transform:translateX(-50%);max-width:760px;border-radius:22px 22px 0 0}.topbar{border-radius:0 0 22px 22px;max-width:760px;margin:0 auto}.miniSummary{grid-template-columns:repeat(4,1fr)}}
+
+
+
+    /* BUILD037 COLOR SAMPLES / ORDER MODULE */
+        .sampleToolbar{display:grid;gap:10px}
+    .sampleStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+    .sampleStat{background:linear-gradient(180deg,#ffffff,#f7fbfb);border:1px solid var(--line);border-radius:16px;padding:10px 10px 9px;box-shadow:0 6px 16px rgba(7,35,40,.05)}
+    .sampleStat b{display:block;font-size:18px;line-height:1;margin-bottom:4px}.sampleStat span{display:block;font-size:11px;color:var(--muted);font-weight:800}
+    .sampleFilterChips{display:flex;gap:7px;overflow:auto;padding:2px 0 1px}.sampleFilterChips::-webkit-scrollbar{display:none}
+    .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:12px;font-weight:900;color:#17343a;white-space:nowrap;box-shadow:0 4px 10px rgba(8,35,40,.04)}
+    .chip.active{background:linear-gradient(135deg,var(--teal),#27c4ba);color:#fff;border-color:transparent}
+    .sampleGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+    .sampleCard{background:linear-gradient(180deg,#ffffff,#f8fbfb);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 18px rgba(5,35,40,.07);overflow:hidden;position:relative}
+    .sampleThumb{position:relative;padding:10px 10px 0}
+    .sampleThumbMain{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#f3f4f6;border-radius:16px;border:1px solid #dbe6e9}
+    .sampleThumbInset{position:absolute;right:18px;bottom:8px;width:58px;height:58px;border-radius:14px;border:3px solid #fff;object-fit:cover;background:#f3f4f6;box-shadow:0 10px 18px rgba(0,0,0,.12)}
+    .sampleBadgeRow{position:absolute;left:18px;top:18px;right:18px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
+    .sampleBadgeCode{background:rgba(10,23,28,.86);color:#fff;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;backdrop-filter:blur(4px)}
+    .sampleBadgeFamily{background:rgba(255,255,255,.88);color:#0f766e;border:1px solid rgba(201,227,223,.9);border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;backdrop-filter:blur(4px)}
+    .sampleInfo{padding:10px 11px 12px}.sampleName{font-size:13px;font-weight:900;line-height:1.2;color:#152c31;min-height:32px}.sampleOriginal{font-size:11px;color:var(--muted);font-weight:700;margin-top:4px;min-height:28px}.sampleActions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.sampleActions button{border:0;border-radius:12px;padding:10px 11px;font-weight:900;font-size:12px}.sampleActions button:first-child{background:#eef4f5;color:#17343a}.sampleActions button.dark{background:linear-gradient(135deg,#10353a,#14585f);color:#fff}
+    .sampleFocus{margin-top:10px}.sampleHero{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sampleHero img{width:100%;border-radius:18px;border:1px solid var(--line);background:#f3f4f6}.sampleHero label{display:block;font-size:10px;font-weight:900;color:var(--muted);margin:0 0 4px 2px;text-transform:uppercase;letter-spacing:.4px}.sampleMeta{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.sampleMeta span{border-radius:999px;background:#eef7f6;color:#0f766e;border:1px solid #c8e6e2;padding:6px 9px;font-size:11px;font-weight:900}.sampleTiny{width:24px;height:24px;border-radius:8px;border:1px solid #cfd9dc;object-fit:cover;vertical-align:middle;margin-right:6px;background:#f3f4f6}.samplePickerPreview{margin-top:7px}.samplePickerBox{display:flex;gap:9px;align-items:center;background:#f8fafb;border:1px solid var(--line);border-radius:14px;padding:8px}.samplePickerBox img{width:54px;height:54px;border-radius:12px;object-fit:cover;border:1px solid #d5dee1}.samplePickerBox b{display:block;font-size:13px}.samplePickerBox span{font-size:12px;color:var(--muted);font-weight:700}
+    .sampleSearchRow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.sampleSearchRow .btn{padding:10px 12px;min-height:42px;font-size:13px}
+    .sampleOrderSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 10px}.sampleOrderSummary .sampleStat{padding:10px 10px 8px}
+    .orderCard{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:16px;padding:9px;background:linear-gradient(180deg,#fff,#f9fbfc);box-shadow:0 6px 14px rgba(8,35,40,.05);margin-bottom:8px}
+    .orderThumbWrap{position:relative}.orderThumb{width:62px;height:62px;border-radius:14px;object-fit:cover;border:1px solid var(--line);background:#f3f4f6}.orderInset{position:absolute;right:-3px;bottom:-3px;width:24px;height:24px;border-radius:8px;border:2px solid #fff;object-fit:cover;background:#f3f4f6;box-shadow:0 6px 12px rgba(0,0,0,.15)}
+    .orderTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.orderCode{font-size:11px;font-weight:900;color:#0f766e;background:#edf8f7;border:1px solid #cfeae6;border-radius:999px;padding:4px 8px;display:inline-block;margin-bottom:5px}.orderName{font-size:13px;font-weight:900;line-height:1.2;color:#163037}.orderSub{font-size:11px;color:var(--muted);font-weight:700;margin-top:4px}
+    .orderControls{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:9px}.qtyBtns{display:flex;align-items:center;gap:6px;background:#eef3f4;border:1px solid #d7e3e6;border-radius:14px;padding:4px}.qtyBtns button{border:0;border-radius:10px;background:#fff;font-weight:950;font-size:17px;width:30px;height:30px;box-shadow:0 2px 4px rgba(0,0,0,.05)}.qtyBtns b{min-width:20px;text-align:center;font-size:14px}.orderRemove{border:0;background:#fff0f0;color:#a33b3b;border:1px solid #f2d0d0;border-radius:12px;padding:8px 10px;font-weight:900;font-size:12px}
+    @media (min-width:700px){.sampleGrid{grid-template-columns:repeat(3,1fr)}}
+
+    /* BUILD037 TOTAL MAKEUP / COMPACT MOBILE UI */
+    :root{
+      --bg:#f3f6f8;
+      --card:#ffffff;
+      --ink:#0f1f24;
+      --muted:#66777d;
+      --line:#d9e3e6;
+      --brand:#0d9488;
+      --brand2:#07151a;
+      --shadow:0 5px 15px rgba(5,35,40,.07);
+      --radius:15px;
+    }
+    body{background:radial-gradient(circle at top left,#d9fbf5 0,#f3f6f8 34%,#eef3f6 100%);}
+    .topbar{padding:10px 10px 9px;border-bottom:1px solid rgba(255,255,255,.12);box-shadow:0 10px 24px rgba(2,6,23,.18);}
+    .title{font-size:17px;letter-spacing:.1px}.build{font-size:10px;margin-top:1px}.pill{padding:5px 7px;font-size:11px;gap:5px;max-width:112px;overflow:hidden;text-overflow:ellipsis}.dot{width:7px;height:7px}
+    .searchbox{margin-top:8px;gap:6px}.searchbox input{border-radius:12px;padding:10px 11px;font-size:15px}.iconbtn{flex-basis:40px;border-radius:12px;font-size:17px}.installbtn{border-radius:12px;font-size:12px;padding:0 9px}
+    main{padding:9px 9px 12px;max-width:680px}.section-title{font-size:12px;margin:12px 2px 7px;letter-spacing:.55px;color:#2d4248}
+    .miniSummary{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-bottom:7px}.miniStat{border-radius:13px;padding:7px 5px;text-align:center;box-shadow:0 3px 9px rgba(5,35,40,.045);background:rgba(255,255,255,.82)}.miniStat .num{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.miniStat .lbl{font-size:8.8px;margin-top:2px;line-height:1.05;letter-spacing:-.1px}
+    .filterCard{padding:8px 9px;margin-top:7px}.filterRow{gap:6px}.chips{margin:6px 0 2px;gap:5px}.chip{font-size:11px;padding:4px 8px}.smallFilterBtn{padding:8px 9px;min-width:40px;border-radius:11px;font-size:12px}
+    .card{border-radius:15px;padding:10px;margin:6px 0;box-shadow:0 4px 12px rgba(5,35,40,.06);background:linear-gradient(180deg,#fff,#fcfeff)}
+    .jobcard{padding:9px 10px 8px 14px;margin:6px 0;border-color:#dce7ea;box-shadow:0 3px 10px rgba(5,35,40,.055)}.jobcard:before{width:4px;border-radius:15px 0 0 15px}.jobhead{gap:7px;align-items:center;padding-left:0}.jobhead.compact{align-items:flex-start}.jobmain{min-width:0;flex:1}.jobtitle{font-size:14px;line-height:1.14;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jobsub{font-size:11px;margin-top:2px;line-height:1.18;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.status{font-size:10.5px;padding:4px 6px;max-width:86px;overflow:hidden;text-overflow:ellipsis}.jobminirow{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:5px;padding-left:0}.jobminirow span{font-size:10.5px;color:var(--muted);font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jobminirow b{font-size:11px;color:#0b3b36;font-weight:950;white-space:nowrap}.moneyrow{display:none}.cover.mini{display:none}.cover{height:135px;border-radius:15px;margin-bottom:9px}
+    .actions{gap:6px;margin-top:9px}.btn{border-radius:12px;font-size:14px;padding:10px 11px;min-height:40px;box-shadow:0 5px 12px rgba(15,118,110,.16)}.field label{font-size:11px;margin-bottom:4px}.field input,.field select,.field textarea{border-radius:12px;padding:11px;font-size:15px}.field textarea{min-height:78px}.row2{gap:7px}.row3{gap:6px}.small{font-size:11.5px}.hint{font-size:10.5px}
+    .detail-title{font-size:20px}.kv{padding:7px 0;font-size:13px}.badgebar{gap:6px;margin-top:8px}.badge{font-size:11px;padding:6px 8px}.mono{font-size:11px;padding:9px;border-radius:12px}.syncbox{border-left-width:4px}.bottomnav{padding:5px 6px calc(5px + var(--safe-bottom));gap:3px}.navbtn{border-radius:12px;padding:5px 1px;font-size:10px}.navbtn .ico{font-size:18px;line-height:19px}.toast{bottom:82px}.updateBanner{bottom:82px;border-radius:15px;padding:10px;font-size:12px}
+    @media (max-width:380px){.miniStat .num{font-size:11px}.miniStat .lbl{font-size:8px}.jobtitle{font-size:13.5px}.jobminirow b{font-size:10.5px}.status{max-width:74px}.searchbox input{font-size:14px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topline">
+      <div><div class="title">CroTeak Planner</div><div class="build">MOBILE BUILD037 PWA · schema v3</div></div>
+      <div class="pill" id="syncPill"><span class="dot"></span><span id="syncText">Local</span></div>
+    </div>
+    <div class="searchbox">
+      <input id="globalSearch" type="search" autocomplete="off" placeholder="Traži kupca, brod, lokaciju, chat...">
+      <button class="iconbtn" id="filterBtn" title="Filter">☰</button>
+      <button class="iconbtn" id="cloudRefreshBtn" title="Refresh cloud">↻</button>
+      <button class="installbtn" id="pwaInstallBtn" title="Instaliraj aplikaciju">Instaliraj</button>
+      <button class="iconbtn" id="clearSearch" title="Očisti">×</button>
+    </div>
+    <div class="installHint" id="pwaInstallHint">Za instalaciju na Android otvori ovu stranicu preko HTTPS linka u Chromeu i klikni Instaliraj.</div>
+  </header>
+  <div id="appUpdateBanner" class="updateBanner hide"><span>Nova verzija CroTeak Plannera je spremna.</span><button onclick="applyAppUpdate()">Ažuriraj</button></div>
+
+  <main>
+    <section id="screen-home" class="screen active">
+      <div class="miniSummary">
+        <div class="miniStat"><div class="num" id="statActive">0</div><div class="lbl">Aktivni poslovi</div></div>
+        <div class="miniStat"><div class="num" id="statPending">0</div><div class="lbl">Čeka sync</div></div>
+        <div class="miniStat"><div class="num" id="statQuote">0 €</div><div class="lbl">Ukupno ponude</div></div>
+        <div class="miniStat"><div class="num" id="statRemaining">0 €</div><div class="lbl">Za naplatiti</div></div>
+      </div>
+      <div class="actions"><button class="btn full" onclick="newJob()">+ Novi posao na mobitelu</button></div>
+      <div id="filterPanel" class="card filterCard hide">
+        <div class="section-title" style="margin-top:0">Filter</div>
+        <div class="filterRow">
+          <div class="field"><label>Lokacija / regija</label><input id="filterLocation" placeholder="Split, Istra, Zadar..."></div>
+          <div class="field"><label>Status</label><select id="filterStatus"><option value="">Svi</option></select></div>
+        </div>
+        <div class="filterActions">
+          <button class="btn secondary" type="button" onclick="applyFiltersFromUi()">Primijeni</button>
+          <button class="btn ghost" type="button" onclick="resetFilters()">Reset</button>
+        </div>
+      </div>
+      <div id="activeFilterChips" class="chips hide"></div>
+      <div class="listHeader"><div class="section-title" style="margin-bottom:0">Nedavni / aktivni poslovi</div><button class="smallFilterBtn" type="button" onclick="toggleFilterPanel()">Filter</button></div>
+      <div id="homeList"></div>
+    </section>
+
+    <section id="screen-search" class="screen">
+      <div class="section-title">Search rezultati</div>
+      <div class="small">Traži po klijentu, brodu, telefonu, lokaciji, statusu, chat porukama, bilješkama i financijama.</div>
+      <div id="searchFilterChips" class="chips hide"></div>
+      <div id="searchList"></div>
+    </section>
+
+    <section id="screen-edit" class="screen">
+      <div class="card">
+        <div class="detail-title" id="editTitle">Novi posao</div>
+        <div class="small" id="editSub">Unesi osnovne podatke s terena.</div>
+        <div class="hr"></div>
+        <div class="form">
+          <div class="field"><label>Klijent</label><input id="client_name" placeholder="Ime kupca"></div>
+          <div class="row2"><div class="field"><label>Telefon</label><input id="phone" inputmode="tel" placeholder="+385..."></div><div class="field"><label>WhatsApp</label><input id="whatsapp" inputmode="tel" placeholder="ako je drugi broj"></div></div>
+          <div class="field"><label>Email</label><input id="email" inputmode="email" placeholder="email"></div>
+          <div class="field"><label>Izvor upita</label><input id="source_channel" placeholder="Facebook, WhatsApp, preporuka..."></div>
+          <div class="row2"><div class="field"><label>Model broda</label><input id="boat_model" list="boatModelSuggestions" oninput="updateBoatModelDatalist()" onchange="applyBoatModelAutocomplete()" placeholder="npr. Merry Fisher 695"><datalist id="boatModelSuggestions"></datalist><div class="hint">Počni tipkati, npr. M → nudi modele iz Baze brodova.</div></div><div class="field"><label>Ime broda</label><input id="boat_name" placeholder="opcionalno"></div></div><div class="actions"><button class="btn secondary full" type="button" onclick="pickBoatForJob()">📚 Popuni iz baze brodova</button><button class="btn ghost full" type="button" onclick="saveCurrentBoatToDb()">Spremi ovaj brod u bazu</button></div>
+          <div class="field"><label>Lokacija broda</label><input id="boat_location" placeholder="Pirovac, Zadar, Split..."></div>
+          <div class="field"><label>Pristup brodu</label><input id="boat_access" placeholder="suhi vez, marina, u moru..."></div>
+          <div class="row3"><div class="field"><label>Dužina</label><input id="boat_length" placeholder="npr. 6.95 m"></div><div class="field"><label>m²</label><input id="measured_area_m2" inputmode="decimal" placeholder="izmjera"></div><div class="field"><label>€/m²</label><input id="price_per_m2" inputmode="decimal" placeholder="180"></div></div>
+          <div class="field"><label>Tip posla</label><input id="install_type" placeholder="izmjera, izrada, montaža, komplet..."></div>
+          <div class="row2"><div class="field"><label>Status</label><select id="status"></select></div><div class="field"><label>Prioritet</label><select id="priority"><option>Normalno</option><option>Hitno</option><option>Nisko</option></select></div></div>
+          <div class="row3"><div class="field"><label>Ponuda €</label><input id="quote_amount" inputmode="decimal" value="0"></div><div class="field"><label>Avans €</label><input id="advance_received" inputmode="decimal" value="0"></div><div class="field"><label>Završno €</label><input id="final_received" inputmode="decimal" value="0"></div></div>
+          <div class="actions"><button class="btn secondary full" type="button" onclick="calcQuoteFromArea()">m² × €/m² → ponuda</button></div>
+          <div class="row2"><div class="field"><label>Mat. trošak €</label><input id="material_cost" inputmode="decimal" value="0"></div><div class="field"><label>Put €</label><input id="travel_cost" inputmode="decimal" value="0"></div></div>
+          <div class="row2"><div class="field"><label>Rad €</label><input id="labor_cost" inputmode="decimal" value="0"></div><div class="field"><label>Ostalo €</label><input id="other_cost" inputmode="decimal" value="0"></div></div>
+          <div class="row2"><div class="field"><label>Boja materijala / NC kod</label><input id="material_color" list="colorSampleSuggestions" oninput="renderMaterialSamplePreview()" onchange="renderMaterialSamplePreview()" placeholder="npr. NC-7 - Light Grey + Black"><datalist id="colorSampleSuggestions"></datalist><div id="materialSamplePreview" class="samplePickerPreview"></div></div><div class="field"><label>Debljina</label><input id="material_thickness" value="6 mm"></div></div><div class="actions"><button class="btn secondary full" type="button" onclick="showScreen('samples')">🎨 Otvori color samples</button></div>
+          <div class="row2"><div class="field"><label>Materijal rezerviran</label><select id="material_reserved"><option>Ne</option><option>Da</option><option>Čeka provjeru</option></select></div><div class="field"><label>Rok kupca</label><input id="deadline_date" type="date"></div></div>
+          <div class="row2"><div class="field"><label>Izmjera</label><input id="measure_date" type="date"></div><div class="field"><label>Montaža</label><input id="install_date" type="date"></div></div>
+          <div class="field"><label>Poruke / chat</label><textarea id="chat_log" placeholder="Zalijepi Facebook/WhatsApp chat ili bitan dio poruke..."></textarea></div>
+          <div class="field"><label>Bilješke</label><textarea id="notes" placeholder="Mjere, dogovori, problemi, detalji broda..."></textarea></div>
+          <div class="field"><label>Napomena plaćanja</label><textarea id="payment_note" placeholder="avans, ostatak, keš/račun, dogovor..."></textarea></div>
+          <div class="field"><label>Slike / dokumenti</label><input id="filePicker" type="file" multiple onchange="addFilesToEdit(event)"><div class="hint">Mobitel za sada sprema popis/nazive datoteka u cloud. Pravi upload datoteka ide kasnije preko Storagea.</div><textarea id="files_manifest" class="hide"></textarea><input id="main_image_path" class="hide"><div id="filesList" class="filelist"></div></div>
+          <div class="field"><label>Dokumenti / slike napomena</label><textarea id="documents_note" placeholder="npr. slike na mobitelu, DXF na PC-u, ponuda PDF..."></textarea></div>
+          <div class="actions"><button class="btn full" onclick="saveEdit()">Spremi posao</button><button class="btn secondary full" onclick="cancelEdit()">Odustani</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-detail" class="screen">
+      <div id="detailContent"></div>
+    </section>
+
+
+    <section id="screen-boats" class="screen">
+      <div class="card">
+        <div class="detail-title">Baza brodova</div>
+        <div class="small">Spremaj modele brodova, tipične m², dužinu i €/m². Kod novog posla možeš brzo popuniti podatke iz baze.</div>
+        <div class="actions"><button class="btn full" onclick="newBoat()">+ Novi model broda</button><button class="btn secondary full" onclick="syncBoatsNow()">↻ Sync brodova</button></div>
+      </div>
+      <div id="boatsList"></div>
+    </section>
+
+    <section id="screen-boat-edit" class="screen">
+      <div class="card">
+        <div class="detail-title" id="boatEditTitle">Model broda</div>
+        <div class="form">
+          <div class="field"><label>Model broda</label><input id="bm_model" placeholder="npr. Merry Fisher 695"></div>
+          <div class="field"><label>Proizvođač</label><input id="bm_manufacturer" placeholder="Jeanneau, Beneteau, Zar..."></div>
+          <div class="row2"><div class="field"><label>Dužina</label><input id="bm_length" placeholder="6.95 m"></div><div class="field"><label>Tipična m²</label><input id="bm_area" inputmode="decimal" placeholder="4.8"></div></div>
+          <div class="row2"><div class="field"><label>€/m²</label><input id="bm_price" inputmode="decimal" placeholder="180"></div><div class="field"><label>Kategorija</label><input id="bm_category" placeholder="gumenjak, fisher..."></div></div>
+          <div class="field"><label>Materijal napomena</label><input id="bm_material" placeholder="teak/crno 6 mm..."></div>
+          <div class="field"><label>Alias / druga imena</label><input id="bm_aliases" placeholder="Cap Camarat 545, CC 5.45..."></div>
+          <div class="field"><label>Napomene</label><textarea id="bm_notes" placeholder="detalji, gdje je rađeno, tipičan otpad..."></textarea></div>
+          <div class="actions"><button class="btn full" onclick="saveBoatEdit()">Spremi model</button><button class="btn secondary full" onclick="showScreen('boats')">Odustani</button></div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="screen-samples" class="screen">
+      <div class="card">
+        <div class="detail-title">Color Samples</div>
+        <div class="small">Top pregled paleta za izbor boje i slaganje narudžbe. Zadržani su clean nazivi za app, a originalni label i fizički sample ostaju povezani.</div>
+        <div class="sampleStats">
+          <div class="sampleStat"><b>24</b><span>NC palete</span></div>
+          <div class="sampleStat"><b id="sampleOrderDistinctTop">0</b><span>U narudžbi</span></div>
+          <div class="sampleStat"><b id="sampleOrderPiecesTop">0</b><span>Ukupno pcs</span></div>
+        </div>
+        <div class="hr"></div>
+        <div class="sampleToolbar">
+          <div class="sampleSearchRow">
+            <div class="field"><label>Traži kod / boju</label><input id="sampleSearch" type="search" placeholder="NC-7, grey, blue, camouflage..." oninput="renderSamples()"></div>
+            <button class="btn secondary" type="button" onclick="renderSamples();toast('Palete osvježene')">↻</button>
+          </div>
+          <div id="sampleFamilyFilters" class="sampleFilterChips"></div>
+        </div>
+        <div class="actions"><button class="btn full" onclick="copySampleOrderText()">Kopiraj narudžbu za Melors Marine Deck Factory</button><button class="btn ghost full" onclick="clearSampleOrder()">Očisti narudžbu</button></div>
+      </div>
+      <div id="sampleFocus" class="sampleFocus"></div>
+      <div class="section-title">Sve palete</div>
+      <div id="sampleGrid" class="sampleGrid"></div>
+      <div class="card">
+        <div class="section-title" style="margin-top:0">Narudžba / izbor boja</div>
+        <div class="small">Složi količine po NC kodu. Ovaj blok je sada sređen da izgleda ozbiljnije i da odmah vidiš koliko različitih boja i koliko ukupno komada ide u narudžbu.</div>
+        <div class="sampleOrderSummary">
+          <div class="sampleStat"><b id="sampleOrderDistinct">0</b><span>Različite boje</span></div>
+          <div class="sampleStat"><b id="sampleOrderPieces">0</b><span>Ukupno pcs</span></div>
+          <div class="sampleStat"><b>NC</b><span>Ready to copy</span></div>
+        </div>
+        <div id="sampleOrderList"></div>
+      </div>
+    </section>
+
+    <section id="screen-sync" class="screen">
+      <div class="card syncbox">
+        <div class="detail-title">Sync / Backup</div>
+        <div class="small">MOBILE BUILD037 PWA ima automatski Supabase sync i instalaciju na Android. GitHub/Netlify update ostaje isti: kad prebaciš novi build na repo, mobitel će nakon refresh/update povući novu verziju.</div>
+        <div class="hr"></div>
+        <div class="kv"><span>Lokalnih poslova</span><span id="syncJobs">0</span></div>
+        <div class="kv"><span>Čeka sync</span><span id="syncPending">0</span></div>
+        <div class="kv"><span>Zadnji backup</span><span id="lastBackup">nikad</span></div>
+        <div class="kv"><span>Cloud login</span><span id="cloudLoginState">nije prijavljen</span></div>
+        <div class="actions"><button class="btn full" onclick="exportBackup()">Backup / Export JSON</button><button class="btn secondary full" onclick="document.getElementById('importFile').click()">Import PC/Mobile JSON</button><input id="importFile" class="hide" type="file" accept=".json,application/json" onchange="importBackup(event)"></div>
+        <div class="actions"><button class="btn full" onclick="fullCloudSync()">Sync sada / Refresh</button><button class="btn ghost full" onclick="testCloud()">Test cloud</button></div>
+        <div class="actions"><button class="btn secondary full" onclick="checkForAppUpdate()">Provjeri update appa</button></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-top:0">CroTeak cloud login</div>
+        <div id="loggedBox" class="hide">
+          <div class="kv"><span>Prijavljen</span><span id="loggedEmail">-</span></div>
+          <div class="small">Session je spremljen lokalno. Ne spremamo lozinku kao običan tekst; app koristi Supabase session/refresh token.</div>
+          <div class="actions"><button class="btn full" onclick="fullCloudSync()">↻ Refresh sada</button><button class="btn bad full" onclick="signOutCloud()">Odjava lokalno</button></div>
+        </div>
+        <div id="loginBox">
+          <div class="field"><label>Email</label><input id="cloudEmail" inputmode="email" placeholder="tvoj login email"></div>
+          <div class="field"><label>Lozinka</label><input id="cloudPassword" type="password" placeholder="lozinka"></div>
+          <div class="actions"><button class="btn secondary full" onclick="signUpCloud()">Registriraj</button><button class="btn full" onclick="signInCloud()">Login</button></div>
+          <div class="small">Email confirmation ostaje uključen. Nakon potvrde maila vrati se i klikni Login.</div>
+        </div>
+        <details class="advanced">
+          <summary>Napredno: Supabase URL / key</summary>
+          <div class="field"><label>Supabase URL</label><input id="cloudUrl" value="https://vowzrtyaihalyjrmmlit.supabase.co"></div>
+          <div class="field"><label>Public / anon key</label><input id="cloudKey" type="password" value="sb_publishable_zl3MOVbcmvSx5yvXLQt9Bw_lrrqc3Zz"></div>
+          <div class="actions"><button class="btn secondary full" onclick="saveCloudSettings()">Spremi cloud postavke</button></div>
+        </details>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-top:0">Upute za prvi test</div>
+        <div class="small">
+          1. Ovdje upiši isti email/lozinku kao na PC-u i klikni Login.<br>
+          2. Klikni <b>Sync sada / Refresh</b> za prvo povlačenje podataka.<br>
+          3. Nakon toga samo dodaj ili promijeni posao i klikni Spremi.<br>
+          4. Mobitel automatski šalje promjene u cloud. Gumb ↻ gore desno je brzi refresh.
+        </div>
+      </div>
+      <div id="cloudPreview" class="card hide"><div class="section-title" style="margin-top:0">Cloud Package preview</div><div class="mono" id="cloudText"></div></div>
+    </section>
+
+    <section id="screen-settings" class="screen">
+      <div class="card">
+        <div class="detail-title">Postavke</div>
+        <div class="small">Mobitel build radi lokalno + Supabase cloud sync. Podaci ostaju i u browseru kao lokalni cache.</div>
+        <div class="hr"></div>
+        <div class="kv"><span>Build</span><span>MOBILE BUILD037 PWA</span></div>
+        <div class="kv"><span>Schema</span><span>3</span></div>
+        <div class="kv"><span>Storage</span><span>Local browser + Supabase</span></div>
+        <div class="kv"><span>App cache</span><span>croteak-mobile-build037-v1</span></div>
+        <div class="actions"><button class="btn secondary full" onclick="checkForAppUpdate()">Provjeri update appa</button><button class="btn secondary full" onclick="exportBackup()">Napravi backup prije brisanja</button></div>
+      </div>
+      <div class="card dangerzone">
+        <div class="section-title" style="margin-top:0;color:#991b1b">Opasna zona</div>
+        <div class="small">Ovo briše samo lokalne podatke iz browsera na ovom mobitelu.</div>
+        <div class="actions"><button class="btn bad full" onclick="wipeLocal()">Obriši lokalne podatke</button></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottomnav">
+    <button class="navbtn active" data-target="home" onclick="showScreen('home')"><span class="ico">🏠</span>Home</button>
+    <button class="navbtn" data-target="search" onclick="showScreen('search')"><span class="ico">🔍</span>Search</button>
+    <button class="navbtn" data-target="edit" onclick="newJob()"><span class="ico">＋</span>Novi</button>
+    <button class="navbtn" data-target="samples" onclick="showScreen('samples')"><span class="ico">🎨</span>Palete</button>
+    <button class="navbtn" data-target="boats" onclick="showScreen('boats')"><span class="ico">📚</span>Brodovi</button>
+    <button class="navbtn" data-target="sync" onclick="showScreen('sync')"><span class="ico">☁️</span>Cloud</button>
+    <button class="navbtn" data-target="settings" onclick="showScreen('settings')"><span class="ico">⚙️</span>Set</button>
+  </nav>
+  <div id="toast" class="toast"></div>
+
+<script>
+const BUILD = 'MOBILE_BUILD037_PWA';
+const SCHEMA_VERSION = 3;
+const STORAGE_KEY = 'croteak_planner_mobile_build009_jobs_v3';
+const BOATS_KEY = 'croteak_planner_mobile_boats_v1';
+const META_KEY = 'croteak_planner_mobile_build009_meta';
+
+const SAMPLES_ORDER_KEY = 'croteak_color_samples_order_v1';
+const COLOR_SAMPLES = [
+  {code:'NC-1', name:'Teak + Black', original:'Teak + Black', family:'Teak', keywords:'teak black crno tik'},
+  {code:'NC-2', name:'Teak + White', original:'Teak + White', family:'Teak', keywords:'teak white bijelo tik'},
+  {code:'NC-3', name:'Light Brown + Black', original:'Light Brown+Black', family:'Brown', keywords:'light brown black svijetlo smeđa crno'},
+  {code:'NC-4', name:'Light Brown + Teak', original:'Light Brown+Teak', family:'Brown', keywords:'light brown teak svijetlo smeđa tik'},
+  {code:'NC-5', name:'Light Brown + White', original:'Light Brown+White', family:'Brown', keywords:'light brown white svijetlo smeđa bijelo'},
+  {code:'NC-6', name:'Dark Brown + Black', original:'Dark Brown+Black', family:'Brown', keywords:'dark brown black tamno smeđa crno'},
+  {code:'NC-7', name:'Light Grey + Black', original:'Light Grey+Black', family:'Grey', keywords:'light grey gray black svijetlo siva crno'},
+  {code:'NC-8', name:'Light Grey + White', original:'Light Grey+White', family:'Grey', keywords:'light grey gray white svijetlo siva bijelo'},
+  {code:'NC-9', name:'Light Grey + Aqua Green', original:'Light Grey+Aqua Green', family:'Grey', keywords:'light grey aqua green tirkiz zelena'},
+  {code:'NC-10', name:'Light Grey + Blue', original:'Light Grey+Blue', family:'Grey', keywords:'light grey blue plava'},
+  {code:'NC-11', name:'Light Grey + Navy Blue', original:'Light Grey+Navy Blue', family:'Grey', keywords:'light grey navy blue tamno plava'},
+  {code:'NC-12', name:'Medium Grey + Black', original:'Med Grey+Black', family:'Grey', keywords:'medium grey gray black srednje siva crno'},
+  {code:'NC-13', name:'Mid Grey + Orange', original:'Mld Grey+Orange', family:'Grey', keywords:'mid grey orange narančasta'},
+  {code:'NC-14', name:'Dark Grey + Black', original:'Dark Grey+Black', family:'Grey', keywords:'dark grey gray black tamno siva crno'},
+  {code:'NC-15', name:'Dark Grey + Light Grey', original:'Dark Grey+Light Grey', family:'Grey', keywords:'dark grey light grey tamno siva svijetlo'},
+  {code:'NC-16', name:'Black + Red', original:'Black + Red', family:'Black', keywords:'black red crno crvena'},
+  {code:'NC-17', name:'Light Brown + Sand', original:'light Brown + Sand', family:'Brown', keywords:'light brown sand pijesak bež'},
+  {code:'NC-18', name:'Smoke Grey + Black', original:'Smoke Grey+black', family:'Grey', keywords:'smoke grey black dim siva crno'},
+  {code:'NC-19', name:'Terra + Black', original:'Terra+Black', family:'Terra', keywords:'terra black bež taupe crno'},
+  {code:'NC-20', name:'Charcoal + Black', original:'Charcoal + Black', family:'Black', keywords:'charcoal black ugljen crno'},
+  {code:'NC-21', name:'Blue Camouflage', original:'Blue camouflage', family:'Camouflage', keywords:'blue camouflage camo plava'},
+  {code:'NC-22', name:'Black & White Camouflage', original:'Black and white camouflage', family:'Camouflage', keywords:'black white camouflage camo crno bijelo'},
+  {code:'NC-23', name:'Green Camouflage', original:'Green Camo', family:'Camouflage', keywords:'green camouflage camo zelena'},
+  {code:'NC-24', name:'Beige Camouflage', original:'Beige camouflage', family:'Camouflage', keywords:'beige camouflage camo bež'}
+];
+function sampleNum(code){ return parseInt(String(code||'').replace(/[^0-9]/g,''),10)||0; }
+function samplePaletteImg(s){ return `samples/nc-${String(sampleNum(s.code)).padStart(2,'0')}-palette.jpg`; }
+function sampleRealImg(s){ return `samples/nc-${String(sampleNum(s.code)).padStart(2,'0')}-sample.jpg`; }
+function sampleValue(s){ return `${s.code} - ${s.name}`; }
+function sampleFromCode(code){ code=String(code||'').toUpperCase().match(/NC\s*-?\s*(\d{1,2})/); if(!code) return null; return COLOR_SAMPLES.find(s=>sampleNum(s.code)===parseInt(code[1],10))||null; }
+function sampleFromMaterial(v){ return sampleFromCode(v) || COLOR_SAMPLES.find(s=>String(v||'').toLowerCase().includes(s.name.toLowerCase())); }
+function normalizeMaterialColorValue(v){ const s=sampleFromMaterial(v); if(!s) return String(v||'').trim(); return sampleValue(s); }
+function fillColorSampleDatalist(){ const dl=document.getElementById('colorSampleSuggestions'); if(dl) dl.innerHTML=COLOR_SAMPLES.map(s=>`<option value="${esc(sampleValue(s))}">${esc(s.original)}</option>`).join(''); }
+function renderMaterialSamplePreview(){ const el=document.getElementById('materialSamplePreview'); if(!el) return; const val=document.getElementById('material_color')?.value||''; const s=sampleFromMaterial(val); if(!s){ el.innerHTML='<div class="hint">Možeš upisati ručno ili odabrati NC kod iz paleta.</div>'; return; } el.innerHTML=`<div class="samplePickerBox" onclick="openSample('${s.code}');showScreen('samples')"><img src="${samplePaletteImg(s)}" alt="${esc(s.code)}"><div><b>${esc(sampleValue(s))}</b><span>Original: ${esc(s.original)} · klik za detalj</span></div></div>`; }
+function setMaterialColorFromSample(code, backToEdit=false){ const s=sampleFromCode(code); if(!s) return; const el=document.getElementById('material_color'); if(el){ el.value=sampleValue(s); renderMaterialSamplePreview(); toast('Odabrano: '+sampleValue(s)); if(backToEdit) showScreen('edit'); } else { toast(sampleValue(s)); } }
+function sampleOrder(){ try{return JSON.parse(localStorage.getItem(SAMPLES_ORDER_KEY)||'{}')||{};}catch(e){return {};}}
+function saveSampleOrder(o){ localStorage.setItem(SAMPLES_ORDER_KEY, JSON.stringify(o||{})); renderSampleOrder(); }
+function addSampleToOrder(code, delta=1){ const s=sampleFromCode(code); if(!s) return; const o=sampleOrder(); o[s.code]=Math.max(0,(parseInt(o[s.code]||0,10)||0)+delta); if(!o[s.code]) delete o[s.code]; saveSampleOrder(o); toast('Narudžba: '+s.code+' = '+(o[s.code]||0)); }
+function clearSampleOrder(){ if(!confirm('Očistiti sve NC kodove iz narudžbe?')) return; saveSampleOrder({}); }
+function copySampleOrderText(){ const o=sampleOrder(); const lines=Object.keys(o).sort((a,b)=>sampleNum(a)-sampleNum(b)).map(code=>{ const s=sampleFromCode(code); return `${code} - ${s?s.name:''}: ${o[code]} pcs`; }); const txt=lines.length ? 'Melors Marine Deck Factory\nColor order:\n'+lines.join('\n') : 'Melors Marine Deck Factory\nColor order: /'; if(navigator.clipboard) navigator.clipboard.writeText(txt).then(()=>toast('Narudžba kopirana')).catch(()=>alert(txt)); else alert(txt); }
+function sampleSearchText(s){ return [s.code,s.name,s.original,s.family,s.keywords].join(' ').toLowerCase(); }
+function sampleFamilies(){ return ['Sve', ...Array.from(new Set(COLOR_SAMPLES.map(s=>s.family))).sort((a,b)=>a.localeCompare(b))]; }
+function renderSampleFamilyFilters(){ const el=document.getElementById('sampleFamilyFilters'); if(!el) return; el.innerHTML=sampleFamilies().map(f=>`<button type="button" class="chip ${currentSampleFamily===f?'active':''}" onclick="setSampleFamily('${f}')">${esc(f)}</button>`).join(''); }
+function setSampleFamily(f){ currentSampleFamily=f; renderSampleFamilyFilters(); renderSamples(); }
+function filteredSamples(){ const q=String(document.getElementById('sampleSearch')?.value||'').trim().toLowerCase(); const toks=q?q.split(/\s+/).filter(Boolean):[]; return COLOR_SAMPLES.filter(s=>{ if(currentSampleFamily!=='Sve' && s.family!==currentSampleFamily) return false; return toks.every(t=>sampleSearchText(s).includes(t)); }); }
+function sampleCard(s){ return `<div class="sampleCard"><div class="sampleThumb" onclick="openSample('${s.code}')"><img class="sampleThumbMain" loading="lazy" src="${samplePaletteImg(s)}" alt="${esc(sampleValue(s))}"><img class="sampleThumbInset" loading="lazy" src="${sampleRealImg(s)}" alt="${esc(s.code)} real sample"><div class="sampleBadgeRow"><span class="sampleBadgeCode">${esc(s.code)}</span><span class="sampleBadgeFamily">${esc(s.family)}</span></div></div><div class="sampleInfo"><div class="sampleName">${esc(s.name)}</div><div class="sampleOriginal">Original: ${esc(s.original)}</div><div class="sampleActions"><button type="button" onclick="openSample('${s.code}')">Detalj</button><button class="dark" type="button" onclick="addSampleToOrder('${s.code}',1)">+ Nar.</button></div></div></div>`; }
+function renderSamples(){ const grid=document.getElementById('sampleGrid'); if(grid) grid.innerHTML=filteredSamples().map(sampleCard).join('') || '<div class="empty">Nema paleta za taj search/filter.</div>'; renderSampleFamilyFilters(); renderSampleOrder(); }
+function openSample(code){ const s=sampleFromCode(code); const el=document.getElementById('sampleFocus'); if(!s||!el) return; el.innerHTML=`<div class="card"><div class="detail-title">${esc(sampleValue(s))}</div><div class="small">Original label sa supplier slike: <b>${esc(s.original)}</b></div><div class="sampleMeta"><span>${esc(s.family)}</span><span>kod za narudžbu: ${esc(s.code)}</span><span>clean naziv</span></div><div class="hr"></div><div class="sampleHero"><div><label>Palette sheet</label><img src="${samplePaletteImg(s)}" alt="${esc(s.code)} palette"></div><div><label>Physical sample</label><img src="${sampleRealImg(s)}" alt="${esc(s.code)} sample"></div></div><div class="actions"><button class="btn full" onclick="setMaterialColorFromSample('${s.code}',true)">Postavi na otvoreni posao</button><button class="btn secondary full" onclick="addSampleToOrder('${s.code}',1)">+ Dodaj u narudžbu</button><button class="btn ghost full" onclick="navigator.clipboard?navigator.clipboard.writeText('${esc(sampleValue(s))}').then(()=>toast('Kopirano')):alert('${esc(sampleValue(s))}')">Kopiraj kod</button></div></div>`; el.scrollIntoView({behavior:'smooth',block:'start'}); }
+function sampleOrderTotals(){ const o=sampleOrder(); const codes=Object.keys(o).filter(k=>(parseInt(o[k]||0,10)||0)>0); const pieces=codes.reduce((a,k)=>a+(parseInt(o[k]||0,10)||0),0); return {distinct:codes.length,pieces}; }
+function renderSampleOrder(){ const el=document.getElementById('sampleOrderList'); if(!el) return; const o=sampleOrder(); const codes=Object.keys(o).sort((a,b)=>sampleNum(a)-sampleNum(b)); const totals=sampleOrderTotals(); ['sampleOrderDistinct','sampleOrderDistinctTop'].forEach(id=>{ const n=document.getElementById(id); if(n) n.textContent=totals.distinct;}); ['sampleOrderPieces','sampleOrderPiecesTop'].forEach(id=>{ const n=document.getElementById(id); if(n) n.textContent=totals.pieces;}); if(!codes.length){ el.innerHTML='<div class="empty">Još nema boja u narudžbi.</div>'; return; } el.innerHTML=codes.map(code=>{ const s=sampleFromCode(code); if(!s) return ''; return `<div class="orderCard"><div class="orderThumbWrap"><img class="orderThumb" src="${samplePaletteImg(s)}" alt="${esc(code)}"><img class="orderInset" src="${sampleRealImg(s)}" alt="${esc(code)} sample"></div><div><div class="orderTop"><div><span class="orderCode">${esc(s.code)}</span><div class="orderName">${esc(s.name)}</div><div class="orderSub">Original: ${esc(s.original)}</div></div></div><div class="orderControls"><div class="qtyBtns"><button onclick="addSampleToOrder('${code}',-1)">−</button><b>${esc(o[code])}</b><button onclick="addSampleToOrder('${code}',1)">+</button></div><button class="orderRemove" onclick="removeSampleFromOrder('${code}')">Makni</button></div></div></div>`; }).join(''); }
+function removeSampleFromOrder(code){ const o=sampleOrder(); delete o[code]; saveSampleOrder(o); toast(code+' maknut iz narudžbe'); }
+function materialSampleDetailCard(j){ const s=sampleFromMaterial(j.material_color); if(!s) return ''; return `<div class="card"><div class="section-title" style="margin-top:0">Color sample</div><div class="sampleHero"><div><label>${esc(s.code)} palette</label><img src="${samplePaletteImg(s)}" alt="${esc(s.code)}"></div><div><label>physical sample</label><img src="${sampleRealImg(s)}" alt="${esc(s.code)}"></div></div><div class="kv"><span>Clean naziv</span><span>${esc(s.name)}</span></div><div class="kv"><span>Original</span><span>${esc(s.original)}</span></div><div class="actions"><button class="btn secondary full" onclick="openSample('${s.code}');showScreen('samples')">Otvori paletu</button></div></div>`; }
+function sampleTinyHtml(v){ const s=sampleFromMaterial(v); return s?`<img class="sampleTiny" src="${samplePaletteImg(s)}" alt="${esc(s.code)}">`:''; }
+
+const STATUSES = ['Upit','Ponuda','Avans','Izmjera','Dizajn','CNC','Spremno','Montaža','Naplaćeno','Arhiva'];
+const FORM_FIELDS = ['client_name','phone','whatsapp','email','source_channel','boat_model','boat_name','boat_location','boat_access','boat_length','measured_area_m2','price_per_m2','install_type','status','priority','material_color','material_thickness','material_reserved','quote_amount','advance_received','final_received','material_cost','travel_cost','labor_cost','other_cost','payment_note','measure_date','install_date','deadline_date','chat_log','notes','files_manifest','main_image_path','documents_note'];
+let jobs = [];
+let boats = [];
+let currentBoatId = null;
+let pickingBoatForJob = false;
+let currentId = null;
+let lastScreen = 'home';
+let currentSampleFamily = 'Sve';
+
+function nowIso(){ return new Date().toISOString(); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function uuid(){ if(window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID(); return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&0x3|0x8);return v.toString(16)}); }
+function money(v){ const n = parseFloat(String(v||'0').replace(',','.')) || 0; return n; }
+function euro(v){ return Math.round(money(v)).toLocaleString('hr-HR') + ' €'; }
+function esc(s){ return String(s ?? '').replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+function normalizePhone(p){ return String(p||'').replace(/[^0-9+]/g,''); }
+function stableId(prefix, parts){ const txt = parts.map(x=>String(x||'').trim().toLowerCase()).filter(Boolean).join('|') || uuid(); let h=0; for(let i=0;i<txt.length;i++) h=((h<<5)-h+txt.charCodeAt(i))|0; return prefix+'_'+Math.abs(h); }
+function nextJobId(){ const y = new Date().getFullYear(); let max=0; jobs.forEach(j=>{ const id=String(j.id||''); if(id.startsWith('CT-'+y+'-')){ const n=parseInt(id.split('-').pop(),10); if(!isNaN(n)) max=Math.max(max,n); }}); return `CT-${y}-${String(max+1).padStart(4,'0')}`; }
+function defaultJob(){
+  const j = {id:nextJobId(), schema_version:SCHEMA_VERSION, local_uuid:uuid(), remote_id:'', client_id:'', boat_id:'', sync_status:'pending', last_synced_at:'', version:1, deleted:false, source:'MOBILE', source_channel:'', client_name:'', phone:'', whatsapp:'', email:'', boat_model:'', boat_name:'', boat_location:'', boat_access:'', boat_length:'', measured_area_m2:'', price_per_m2:'', install_type:'', status:'Upit', priority:'Normalno', material_color:'', material_thickness:'6 mm', material_reserved:'Ne', quote_amount:'0', advance_received:'0', final_received:'0', material_cost:'0', travel_cost:'0', labor_cost:'0', other_cost:'0', payment_note:'', inquiry_date:today(), measure_date:'', design_date:'', cnc_date:'', install_date:'', deadline_date:'', job_folder:'', last_contact_date:'', chat_log:'', documents_note:'', files_manifest:'[]', main_image_path:'', notes:'', created_at:nowIso(), updated_at:nowIso()};
+  j.client_id = stableId('client',[j.client_name,j.phone,j.email]);
+  j.boat_id = stableId('boat',[j.boat_model,j.boat_name,j.boat_location,j.client_name]);
+  return j;
 }
+function upgradeJob(raw){
+  const j = Object.assign(defaultJob(), raw||{});
+  j.schema_version = Math.max(SCHEMA_VERSION, parseInt(j.schema_version||SCHEMA_VERSION,10)||SCHEMA_VERSION);
+  j.local_uuid = j.local_uuid || uuid();
+  j.id = j.id || nextJobId();
+  j.client_id = j.client_id || stableId('client',[j.client_name,j.phone,j.email]);
+  j.boat_id = j.boat_id || stableId('boat',[j.boat_model,j.boat_name,j.boat_location,j.client_name]);
+  j.sync_status = j.sync_status || 'pending';
+  j.version = parseInt(j.version||1,10)||1;
+  j.created_at = j.created_at || nowIso();
+  j.updated_at = j.updated_at || nowIso();
+  return j;
+}
+
+function defaultBoat(){ return {boat_uuid:uuid(),model:'',manufacturer:'',category:'',length:'',typical_area_m2:'',default_price_per_m2:'',material_note:'',aliases:'',notes:'',source:'MOBILE',sync_status:'pending',last_synced_at:'',version:1,deleted:false,created_at:nowIso(),updated_at:nowIso()}; }
+function upgradeBoat(raw){ const b=Object.assign(defaultBoat(), raw||{}); b.boat_uuid=b.boat_uuid||uuid(); b.model=b.model||b.boat_model||''; b.length=b.length||b.boat_length||''; b.typical_area_m2=b.typical_area_m2||b.measured_area_m2||''; b.default_price_per_m2=b.default_price_per_m2||b.price_per_m2||''; b.version=parseInt(b.version||1,10)||1; b.sync_status=b.sync_status||'pending'; b.created_at=b.created_at||nowIso(); b.updated_at=b.updated_at||nowIso(); return b; }
+function loadBoats(){ const raw=localStorage.getItem(BOATS_KEY); if(raw){ try{boats=JSON.parse(raw).map(upgradeBoat);}catch(e){boats=[];} } }
+function saveBoats(){ localStorage.setItem(BOATS_KEY, JSON.stringify(boats)); renderAll(); }
+function boatSearchable(b){ return Object.values(b).join(' ').toLowerCase(); }
+function boatAutocompleteMatches(q){
+  q=String(q||'').trim().toLowerCase();
+  if(!q) return boats.filter(b=>!b.deleted && b.model).sort((a,b)=>String(a.manufacturer+' '+a.model).localeCompare(String(b.manufacturer+' '+b.model))).slice(0,50);
+  const tokens=q.replace(/[\/\-]/g,' ').split(/\s+/).filter(Boolean);
+  return boats.filter(b=>!b.deleted && b.model && tokens.every(t=>boatSearchable(b).includes(t))).sort((a,b)=>{
+    const am=String(a.model||'').toLowerCase(), bm=String(b.model||'').toLowerCase();
+    const af=String((a.manufacturer||'')+' '+(a.model||'')).trim().toLowerCase(), bf=String((b.manufacturer||'')+' '+(b.model||'')).trim().toLowerCase();
+    const as=(am.startsWith(q)?0:af.startsWith(q)?1:am.includes(q)?2:3), bs=(bm.startsWith(q)?0:bf.startsWith(q)?1:bm.includes(q)?2:3);
+    return as-bs || am.localeCompare(bm);
+  }).slice(0,50);
+}
+function updateBoatModelDatalist(){
+  const list=document.getElementById('boatModelSuggestions'); if(!list) return;
+  const q=document.getElementById('boat_model')?.value||'';
+  const opts=boatAutocompleteMatches(q).map(b=>{
+    const label=[b.manufacturer,b.length,b.typical_area_m2?b.typical_area_m2+' m²':'',b.default_price_per_m2?b.default_price_per_m2+' €/m²':''].filter(Boolean).join(' · ');
+    return `<option value="${esc(b.model||'')}" label="${esc(label)}"></option>`;
+  }).join('');
+  list.innerHTML=opts;
+}
+function findBoatByTypedModel(v){
+  const q=String(v||'').trim().toLowerCase(); if(!q) return null;
+  return boats.find(b=>!b.deleted && String(b.model||'').trim().toLowerCase()===q) ||
+         boats.find(b=>!b.deleted && String((b.manufacturer||'')+' '+(b.model||'')).trim().toLowerCase()===q) ||
+         boats.find(b=>!b.deleted && String(b.aliases||'').toLowerCase().split(/[;,\n]/).map(x=>x.trim()).includes(q)) || null;
+}
+function applyBoatDataToForm(b, quiet=false){
+  if(!b) return;
+  const set=(id,val,force=false)=>{ const el=document.getElementById(id); if(el && val && (force || !el.value)) el.value=val; };
+  set('boat_model', b.model, true);
+  set('boat_length', b.length, true);
+  set('measured_area_m2', b.typical_area_m2, true);
+  set('price_per_m2', b.default_price_per_m2, true);
+  set('material_color', b.material_note, false);
+  if(!quiet) toast('Popunjeno iz baze: '+(b.model||''));
+}
+function applyBoatModelAutocomplete(){
+  const b=findBoatByTypedModel(document.getElementById('boat_model')?.value||'');
+  if(b) applyBoatDataToForm(b,false);
+}
+function filteredBoats(){ const q=getSearch(); let arr=boats.filter(b=>!b.deleted); if(q) arr=arr.filter(b=>boatSearchable(b).includes(q)); return arr.sort((a,b)=>String(a.manufacturer+' '+a.model).localeCompare(String(b.manufacturer+' '+b.model))); }
+function boatCard(b){ return `<div class="card"><div class="jobhead"><div><div class="jobtitle">${esc(b.model||'Bez modela')}</div><div class="jobsub">${esc([b.manufacturer,b.length,b.typical_area_m2?b.typical_area_m2+' m²':'',b.default_price_per_m2?b.default_price_per_m2+' €/m²':''].filter(Boolean).join(' · '))}</div></div><div class="status">${esc(b.sync_status||'local')}</div></div>${b.material_note?`<div class="small" style="margin-top:8px">${esc(b.material_note)}</div>`:''}<div class="actions"><button class="btn" onclick="applyBoatToJob('${b.boat_uuid}')">Primijeni</button><button class="btn secondary" onclick="editBoat('${b.boat_uuid}')">Uredi</button><button class="btn bad" onclick="deleteBoat('${b.boat_uuid}')">Obriši</button></div></div>`; }
+function renderBoats(){ const el=document.getElementById('boatsList'); if(el) el.innerHTML=filteredBoats().length?filteredBoats().map(boatCard).join(''):'<div class="empty">Još nema brodova u bazi.</div>'; }
+function newBoat(){ currentBoatId=null; const b=defaultBoat(); loadBoatForm(b); showScreen('boat-edit'); }
+function editBoat(uid){ const b=boats.find(x=>x.boat_uuid===uid); if(!b)return; currentBoatId=uid; loadBoatForm(b); showScreen('boat-edit'); }
+function loadBoatForm(b){ document.getElementById('boatEditTitle').textContent=b.model||'Novi model broda'; const map={bm_model:'model',bm_manufacturer:'manufacturer',bm_length:'length',bm_area:'typical_area_m2',bm_price:'default_price_per_m2',bm_category:'category',bm_material:'material_note',bm_aliases:'aliases',bm_notes:'notes'}; Object.keys(map).forEach(id=>{const el=document.getElementById(id); if(el) el.value=b[map[id]]||'';}); }
+function saveBoatEdit(){ let b=currentBoatId?boats.find(x=>x.boat_uuid===currentBoatId):null; if(!b){b=defaultBoat(); boats.push(b); currentBoatId=b.boat_uuid;} const g=id=>document.getElementById(id)?.value||''; Object.assign(b,{model:g('bm_model'),manufacturer:g('bm_manufacturer'),length:g('bm_length'),typical_area_m2:g('bm_area'),default_price_per_m2:g('bm_price'),category:g('bm_category'),material_note:g('bm_material'),aliases:g('bm_aliases'),notes:g('bm_notes'),updated_at:nowIso(),sync_status:'pending',source:'MOBILE'}); b.version=(parseInt(b.version||1,10)||1)+1; saveBoats(); toast('Brod spremljen - auto sync'); showScreen('boats'); queueAutoSync('boat_save'); }
+function deleteBoat(uid){ const b=boats.find(x=>x.boat_uuid===uid); if(!b)return; if(!confirm('Obrisati model iz baze brodova?'))return; b.deleted=true; b.sync_status='pending'; b.updated_at=nowIso(); saveBoats(); queueAutoSync('boat_delete'); }
+function pickBoatForJob(){ pickingBoatForJob=true; showScreen('boats'); toast('Odaberi brod i klikni Primijeni'); }
+function applyBoatToJob(uid){ const b=boats.find(x=>x.boat_uuid===uid); if(!b)return; if(lastScreen==='edit' || pickingBoatForJob || document.getElementById('screen-edit').classList.contains('active')){ applyBoatDataToForm(b,true); pickingBoatForJob=false; showScreen('edit'); toast('Primijenjen brod: '+(b.model||'')); } else { newJob(); applyBoatDataToForm(b,true); } updateBoatModelDatalist(); }
+function saveCurrentBoatToDb(){ const model=document.getElementById('boat_model')?.value||''; if(!model){ toast('Upiši model broda'); return;} let b=boats.find(x=>(x.model||'').trim().toLowerCase()===model.trim().toLowerCase()); if(!b){b=defaultBoat(); boats.push(b);} b.model=model; b.length=document.getElementById('boat_length')?.value||b.length; b.typical_area_m2=document.getElementById('measured_area_m2')?.value||b.typical_area_m2; b.default_price_per_m2=document.getElementById('price_per_m2')?.value||b.default_price_per_m2; b.material_note=document.getElementById('material_color')?.value||b.material_note; b.updated_at=nowIso(); b.sync_status='pending'; b.version=(parseInt(b.version||1,10)||1)+1; saveBoats(); toast('Brod spremljen u bazu'); queueAutoSync('boat_from_job'); }
+function boatToCloudRow(b){ b=upgradeBoat(b); return {boat_uuid:b.boat_uuid,model:b.model||'',manufacturer:b.manufacturer||'',updated_at:b.updated_at||nowIso(),version:parseInt(b.version||1,10)||1,deleted:!!b.deleted,data:b}; }
+function cloudRowToBoat(r){ const d=Object.assign({}, r.data||{}); if(r.boat_uuid)d.boat_uuid=r.boat_uuid; if(r.updated_at)d.updated_at=r.updated_at; if(r.version)d.version=r.version; if('deleted' in r)d.deleted=!!r.deleted; d.sync_status='synced'; d.last_synced_at=nowIso(); return upgradeBoat(d); }
+function mergeBoatRows(rows){ let changed=0; const map=new Map(boats.map((b,i)=>[b.boat_uuid,i])); (rows||[]).forEach(r=>{ const cb=cloudRowToBoat(r); const idx=map.get(cb.boat_uuid); if(idx===undefined){boats.push(cb); changed++; return;} const local=boats[idx]; const lv=parseInt(local.version||1,10)||1, cv=parseInt(cb.version||1,10)||1; if(cv>lv || String(cb.updated_at)>String(local.updated_at||'')){boats[idx]=cb; changed++;} }); if(changed) saveBoats(); return changed; }
+async function sbRequestTable(method, table, query, payload){ const c=await refreshAuth(); const url=c.url+'/rest/v1/'+encodeURIComponent(table)+query; const opt={method,headers:{apikey:c.key,Authorization:'Bearer '+c.access_token,'Content-Type':'application/json','Accept':'application/json'}}; if(String(method).toUpperCase()==='POST') opt.headers['Prefer']='resolution=merge-duplicates,return=representation'; if(payload!==undefined) opt.body=JSON.stringify(payload); const r=await fetch(url,opt); const text=await r.text(); let data=null; try{data=text?JSON.parse(text):null}catch(e){data=text} if(!r.ok) throw new Error('Supabase HTTP '+r.status+': '+(typeof data==='string'?data:JSON.stringify(data))); return data; }
+async function syncBoatsNow(quiet=false){ try{ const pending=boats.filter(b=>['pending','local_only','conflict'].includes(b.sync_status)).map(boatToCloudRow); if(pending.length){ await sbRequestTable('POST','croteak_boats','?on_conflict=boat_uuid',pending); const t=nowIso(), set=new Set(pending.map(r=>r.boat_uuid)); boats.forEach(b=>{if(set.has(b.boat_uuid)){b.sync_status='synced'; b.last_synced_at=t;}}); saveBoats(); } const rows=await sbRequestTable('GET','croteak_boats','?select=boat_uuid,model,manufacturer,updated_at,version,deleted,data&limit=10000'); const ch=mergeBoatRows(Array.isArray(rows)?rows:[]); if(!quiet) toast('Brodovi sync OK: '+ch+' promjena'); return [pending.length,ch]; }catch(e){ if(!quiet) alert('Brodovi sync greška: '+e.message+'\nAko nisi, pokreni SQL iz BUILD029.'); else console.warn('boat sync',e); return [0,0]; } }
+
+function load(){
+  loadBoats();
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw){ try{ jobs = JSON.parse(raw).map(upgradeJob); }catch(e){ jobs=[]; toast('Greška kod učitavanja lokalnih podataka'); }}
+  renderAll();
+}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs)); renderAll(); }
+function meta(){ try{return JSON.parse(localStorage.getItem(META_KEY)||'{}')}catch(e){return {}} }
+function saveMeta(m){ localStorage.setItem(META_KEY, JSON.stringify(m)); }
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+function findJob(uid){ return jobs.find(j=>j.local_uuid===uid || j.id===uid); }
+function getSearch(){ return document.getElementById('globalSearch').value.trim().toLowerCase(); }
+const FILTERS_KEY='croteak_mobile_filters_v1';
+function filters(){ try{return Object.assign({location:'',status:''}, JSON.parse(localStorage.getItem(FILTERS_KEY)||'{}'));}catch(e){return {location:'',status:''};} }
+function saveFilters(f){ localStorage.setItem(FILTERS_KEY, JSON.stringify({location:f.location||'', status:f.status||''})); }
+function fillFilterStatus(){ const s=document.getElementById('filterStatus'); if(!s) return; const cur=(filters().status||''); s.innerHTML='<option value="">Svi</option>'+STATUSES.map(x=>`<option value="${x}">${x}</option>`).join(''); s.value=cur; }
+function fillFilterUi(){ const f=filters(); const loc=document.getElementById('filterLocation'); const st=document.getElementById('filterStatus'); if(loc) loc.value=f.location||''; if(st){ if(!st.options.length) fillFilterStatus(); st.value=f.status||''; } }
+function toggleFilterPanel(force){ const p=document.getElementById('filterPanel'); if(!p) return; if(force===true) p.classList.remove('hide'); else if(force===false) p.classList.add('hide'); else p.classList.toggle('hide'); }
+function applyFiltersFromUi(silent=false, keepOpen=false){ const f={location:(document.getElementById('filterLocation')?.value||'').trim(), status:(document.getElementById('filterStatus')?.value||'').trim()}; saveFilters(f); renderLists(); renderFilterChips(); if(!keepOpen) toggleFilterPanel(false); if(!silent) toast('Filter primijenjen'); }
+function resetFilters(){ saveFilters({location:'',status:''}); fillFilterUi(); renderLists(); renderFilterChips(); toggleFilterPanel(false); toast('Filter resetiran'); }
+function clearSingleFilter(key){ const f=filters(); f[key]=''; saveFilters(f); fillFilterUi(); renderLists(); renderFilterChips(); }
+function renderFilterChips(){ const f=filters(); const chips=[]; if(f.location) chips.push(`<div class="chip">Lokacija: ${esc(f.location)} <button onclick="clearSingleFilter('location')">×</button></div>`); if(f.status) chips.push(`<div class="chip">Status: ${esc(f.status)} <button onclick="clearSingleFilter('status')">×</button></div>`); ['activeFilterChips','searchFilterChips'].forEach(id=>{ const el=document.getElementById(id); if(!el) return; el.innerHTML=chips.join(''); el.classList.toggle('hide', !chips.length); }); }
+function searchable(j){ return Object.values(j).join(' ').toLowerCase(); }
+function filteredJobs(){ const q=getSearch(); const f=filters(); let arr = jobs.filter(j=>!j.deleted); if(f.location){ const loc=f.location.toLowerCase(); arr=arr.filter(j=>String(j.boat_location||'').toLowerCase().includes(loc)); } if(f.status){ arr=arr.filter(j=>String(j.status||'')===f.status); } if(q) arr=arr.filter(j=>searchable(j).includes(q)); return arr.sort((a,b)=>String(b.updated_at).localeCompare(String(a.updated_at))); }
+function calc(j){ const quote=money(j.quote_amount), received=money(j.advance_received)+money(j.final_received), costs=money(j.material_cost)+money(j.travel_cost)+money(j.labor_cost)+money(j.other_cost); return {quote,received,costs,remaining:Math.max(0,quote-received),profit:quote-costs,real:received-costs}; }
+function statusClass(s){ return 'status-'+String(s||'Upit').replace(/[^A-Za-zÀ-ž0-9_-]/g,''); }
+
+function imageEntries(j){ return parseFilesManifest(j.files_manifest).filter(f=>String(f.category||'').toLowerCase().startsWith('slika') || /\.(jpg|jpeg|png|webp|bmp|gif)$/i.test(String(f.name||''))); }
+function mainImageEntry(j){ const imgs=imageEntries(j); if(!imgs.length) return null; const main=String(j.main_image_path||''); return imgs.find(f=>f.is_main || f.file_id===main || f.relative_path===main) || imgs[0]; }
+function coverHtml(j, mini=false){ const f=mainImageEntry(j); const cls=mini?'cover mini':'cover'; const sp=f&&f.storage_path?String(f.storage_path):''; if(sp){ return `<div class="${cls}"><img data-storage-path="${esc(sp)}" alt="preview"><div class="ct">★</div></div>`; } return `<div class="${cls}"><div class="ct">${f?'★':'CT'}</div></div>`; }
+function setEditMainFile(fid){ const list=editFiles(); list.forEach(f=>f.is_main=(f.file_id===fid)); const main=list.find(f=>f.file_id===fid); const m=document.getElementById('main_image_path'); if(m) m.value=fid; setEditFiles(list); toast('Postavljeno kao glavna slika'); }
+function jobCard(j){ const c=calc(j); const title = j.boat_model || j.boat_name || 'Nepoznat brod'; const sub = [j.client_name, j.boat_location].filter(Boolean).join(' · '); const meta=[j.phone,j.measured_area_m2?j.measured_area_m2+' m²':'',j.material_color].filter(Boolean).join(' · '); const money=`${euro(c.quote)} · ost ${euro(c.remaining)} · zar ${euro(c.profit)}`; return `<div class="card jobcard compact ${statusClass(j.status)}" onclick="openDetail('${j.local_uuid}')"><div class="jobhead compact"><div class="jobmain"><div class="jobtitle">${esc(title)}</div><div class="jobsub">${esc(sub || 'Bez podataka')}</div></div><div class="status">${esc(j.status)}</div></div><div class="jobminirow"><span>${sampleTinyHtml(j.material_color)}${esc(meta || 'nema detalja')}</span><b>${esc(money)}</b></div></div>`; }
+function renderStats(){ const active = jobs.filter(j=>!j.deleted && !['Naplaćeno','Arhiva'].includes(j.status)); const pending=jobs.filter(j=>!j.deleted && ['pending','local_only','conflict'].includes(j.sync_status)); let quote=0, rem=0; jobs.filter(j=>!j.deleted).forEach(j=>{const c=calc(j); quote+=c.quote; rem+=c.remaining}); document.getElementById('statActive').textContent=active.length; document.getElementById('statPending').textContent=pending.length; document.getElementById('statQuote').textContent=euro(quote); document.getElementById('statRemaining').textContent=euro(rem); document.getElementById('syncJobs').textContent=jobs.filter(j=>!j.deleted).length; document.getElementById('syncPending').textContent=pending.length; document.getElementById('syncText').textContent = isCloudLogged() ? (pending.length ? pending.length+' pending' : 'Cloud OK') : (pending.length ? pending.length+' pending' : 'Local'); const m=meta(); document.getElementById('lastBackup').textContent=m.lastBackup || 'nikad'; document.getElementById('syncPill').style.background = pending.length ? 'rgba(245,158,11,.25)' : 'rgba(255,255,255,.15)'; fillCloudFields(); }
+function renderLists(){ const arr=filteredJobs(); const home = arr.filter(j=>!['Naplaćeno','Arhiva'].includes(j.status)).slice(0,50); document.getElementById('homeList').innerHTML = home.length ? home.map(jobCard).join('') : `<div class="empty">Nema aktivnih poslova za zadani filter.</div>`; document.getElementById('searchList').innerHTML = arr.length ? arr.map(jobCard).join('') : `<div class="empty">Nema rezultata.</div>`; renderFilterChips(); }
+function renderAll(){ renderStats(); fillFilterStatus(); fillFilterUi(); renderLists(); renderBoats(); renderSamples(); fillColorSampleDatalist(); updateBoatModelDatalist(); renderMaterialSamplePreview(); if(document.getElementById('screen-detail').classList.contains('active') && currentId) renderDetail(currentId); setTimeout(hydrateStorageImages,50); }
+function showScreen(name){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+name).classList.add('active'); document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active', b.dataset.target===name)); lastScreen=name; if(name==='search') document.getElementById('globalSearch').focus(); renderAll(); if(name==='samples') renderSamples(); if(name==='sync') fillCloudFields(); }
+function fillStatus(){ const s=document.getElementById('status'); s.innerHTML=STATUSES.map(x=>`<option>${x}</option>`).join(''); }
+function calcQuoteFromArea(){ const a=money(document.getElementById('measured_area_m2')?.value), p=money(document.getElementById('price_per_m2')?.value); if(!a||!p){ toast('Upiši m² i €/m²'); return; } document.getElementById('quote_amount').value = Math.round(a*p*100)/100; toast('Ponuda izračunata'); }
+
+function parseFilesManifest(raw){
+  if(Array.isArray(raw)) return raw;
+  try{ const v=JSON.parse(raw||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; }
+}
+function editFiles(){ return parseFilesManifest(document.getElementById('files_manifest')?.value || '[]'); }
+function setEditFiles(files){ const el=document.getElementById('files_manifest'); if(el) el.value=JSON.stringify(files||[]); renderEditFiles(); }
+function fileCategory(name){ const ext=String(name||'').split('.').pop().toLowerCase(); if(['jpg','jpeg','png','webp','bmp','gif','heic'].includes(ext)) return 'Slika'; if(['dxf','dwg','dgl','dgl2','svg'].includes(ext)) return 'CAD / mjere'; if(ext==='pdf') return 'PDF'; if(['xlsx','xls','csv'].includes(ext)) return 'Tablica'; return 'Datoteka'; }
+function humanSize(n){ n=Number(n||0); const u=['B','KB','MB','GB']; let i=0; while(n>=1024&&i<u.length-1){n/=1024;i++;} return (i? n.toFixed(1):Math.round(n))+' '+u[i]; }
+function addFilesToEdit(ev){ const fs=Array.from(ev.target.files||[]); if(!fs.length) return; const list=editFiles(); fs.forEach(f=>{ const cat=fileCategory(f.name); const firstMain=(cat==='Slika' && !list.some(x=>x.is_main)); const fid='file_'+uuid().slice(0,50); list.push({file_id:fid, name:f.name, category:cat, size:f.size||0, added_at:nowIso(), source:'MOBILE', is_main:firstMain, note:firstMain?'Glavna preview slika / DigiLine render':'Odabrano na mobitelu - upload datoteke u cloud Storage radi PC verzija'}); if(firstMain){ const m=document.getElementById('main_image_path'); if(m) m.value=fid; } }); setEditFiles(list); ev.target.value=''; toast('Dodano u popis: '+fs.length); }
+function removeEditFile(fid){ const list=editFiles().filter(f=>f.file_id!==fid); if(document.getElementById('main_image_path')?.value===fid){ const m=document.getElementById('main_image_path'); if(m) m.value=''; } setEditFiles(list); }
+function renderEditFiles(){ const el=document.getElementById('filesList'); if(!el) return; const list=editFiles(); el.innerHTML=list.length?list.map(f=>`<div class="fileitem"><b>${f.is_main?'★ ':''}${esc(f.name||'datoteka')}</b><span>${esc(f.category||'Datoteka')} · ${humanSize(f.size)} · ${esc(String(f.added_at||'').slice(0,16).replace('T',' '))}</span>${String(f.category||'')==='Slika'?`<button class="main" type="button" onclick="setEditMainFile('${esc(f.file_id)}')">Postavi kao glavnu</button>`:''}<button type="button" onclick="removeEditFile('${esc(f.file_id)}')">Makni iz popisa</button></div>`).join(''):'<div class="hint">Još nema slika/dokumenata uz ovaj posao.</div>'; }
+function filesCard(j){ const list=parseFilesManifest(j.files_manifest); if(!list.length && !j.documents_note) return ''; return `<div class="card"><div class="section-title" style="margin-top:0">Slike / dokumenti</div>${list.length?`<div class="filelist">${list.map(f=>`<div class="fileitem"><b>${f.is_main?'★ ':''}${esc(f.name||'datoteka')}</b><span>${esc(f.category||'Datoteka')} · ${humanSize(f.size)} · ${esc(String(f.added_at||'').slice(0,16).replace('T',' '))}</span>${f.note?`<span>${esc(f.note)}</span>`:''}</div>`).join('')}</div>`:'<div class="small">Nema datoteka u popisu.</div>'}${j.documents_note?`<div class="hr"></div><div class="small" style="white-space:pre-wrap">${esc(j.documents_note)}</div>`:''}</div>`; }
+function loadForm(j){ FORM_FIELDS.forEach(f=>{ const el=document.getElementById(f); if(el) el.value = j[f] ?? ''; }); document.getElementById('editTitle').textContent = j.id ? 'Uredi posao' : 'Novi posao'; document.getElementById('editSub').textContent = `${j.id || ''} ${j.local_uuid ? '· '+j.local_uuid.slice(0,8) : ''}`; renderEditFiles(); fillColorSampleDatalist(); renderMaterialSamplePreview(); }
+function formToJob(j){ FORM_FIELDS.forEach(f=>{ const el=document.getElementById(f); if(el) j[f]=el.value; }); j.material_color=normalizeMaterialColorValue(j.material_color); j.updated_at=nowIso(); j.version=(parseInt(j.version||1,10)||1)+1; j.sync_status='pending'; j.source='MOBILE'; j.schema_version=SCHEMA_VERSION; j.client_id = j.client_id || stableId('client',[j.client_name,j.phone,j.email]); j.boat_id = j.boat_id || stableId('boat',[j.boat_model,j.boat_name,j.boat_location,j.client_name]); return j; }
+function newJob(){ currentId=null; const j=defaultJob(); loadForm(j); showScreen('edit'); }
+function editJob(uid){ const j=findJob(uid); if(!j) return; currentId=j.local_uuid; loadForm(j); showScreen('edit'); }
+function saveEdit(){ let j = currentId ? findJob(currentId) : null; if(!j){ j=defaultJob(); jobs.push(j); currentId=j.local_uuid; } formToJob(j); save(); toast('Spremljeno - auto sync'); openDetail(j.local_uuid); queueAutoSync('save'); }
+function cancelEdit(){ if(currentId) openDetail(currentId); else showScreen('home'); }
+function openDetail(uid){ currentId=uid; renderDetail(uid); showScreen('detail'); }
+function renderDetail(uid){ const j=findJob(uid); const el=document.getElementById('detailContent'); if(!j){el.innerHTML='<div class="empty">Posao nije pronađen.</div>';return;} const c=calc(j); const phone = normalizePhone(j.whatsapp || j.phone); const waPhone = phone.replace(/^\+/, ''); const title=j.boat_model||j.boat_name||'Nepoznat brod'; el.innerHTML = `<div class="card">${coverHtml(j,false)}<div class="detail-title">${esc(title)}</div><div class="small">${esc(j.id)} · ${esc(j.client_name || 'bez klijenta')}</div><div class="badgebar"><div class="badge">${esc(j.status)}</div><div class="badge">${esc(j.boat_location || 'bez lokacije')}</div><div class="badge">${esc(j.sync_status)}</div></div><div class="actions"><button class="btn" onclick="editJob('${j.local_uuid}')">Uredi</button>${phone?`<button class="btn secondary" onclick="location.href='tel:${phone}'">Nazovi</button><button class="btn secondary" onclick="location.href='https://wa.me/${waPhone}'">WhatsApp</button>`:''}</div></div><div class="card"><div class="section-title" style="margin-top:0">Financije</div><div class="kv"><span>Ponuda</span><span>${euro(c.quote)}</span></div><div class="kv"><span>Primljeno</span><span>${euro(c.received)}</span></div><div class="kv"><span>Za naplatiti</span><span>${euro(c.remaining)}</span></div><div class="kv"><span>Troškovi</span><span>${euro(c.costs)}</span></div><div class="kv"><span>Procjena zarade</span><span>${euro(c.profit)}</span></div><div class="kv"><span>€/m²</span><span>${esc(j.price_per_m2||'-')}</span></div>${j.payment_note?`<div class="kv"><span>Plaćanje</span><span>${esc(j.payment_note)}</span></div>`:''}</div><div class="card"><div class="section-title" style="margin-top:0">Brod / kupac</div><div class="kv"><span>Kupac</span><span>${esc(j.client_name)}</span></div><div class="kv"><span>Telefon</span><span>${esc(j.phone)}</span></div><div class="kv"><span>Email</span><span>${esc(j.email)}</span></div><div class="kv"><span>Lokacija</span><span>${esc(j.boat_location)}</span></div><div class="kv"><span>Pristup</span><span>${esc(j.boat_access)}</span></div><div class="kv"><span>Dužina / m²</span><span>${esc([j.boat_length,j.measured_area_m2?j.measured_area_m2+' m²':''].filter(Boolean).join(' · '))}</span></div><div class="kv"><span>Izvor / tip</span><span>${esc([j.source_channel,j.install_type].filter(Boolean).join(' · '))}</span></div><div class="kv"><span>Materijal</span><span>${esc([j.material_color,j.material_thickness].filter(Boolean).join(' · '))}</span></div><div class="kv"><span>Rezervirano</span><span>${esc(j.material_reserved)}</span></div></div>${materialSampleDetailCard(j)}<div class="card"><div class="section-title" style="margin-top:0">Datumi</div><div class="kv"><span>Upit</span><span>${esc(j.inquiry_date)}</span></div><div class="kv"><span>Izmjera</span><span>${esc(j.measure_date)}</span></div><div class="kv"><span>Montaža</span><span>${esc(j.install_date)}</span></div><div class="kv"><span>Rok kupca</span><span>${esc(j.deadline_date)}</span></div></div>${j.chat_log?`<div class="card"><div class="section-title" style="margin-top:0">Poruke / chat</div><div class="small" style="white-space:pre-wrap">${esc(j.chat_log)}</div></div>`:''}${j.notes?`<div class="card"><div class="section-title" style="margin-top:0">Bilješke</div><div class="small" style="white-space:pre-wrap">${esc(j.notes)}</div></div>`:''}${filesCard(j)}<div class="card"><div class="section-title" style="margin-top:0">Sync info</div><div class="mono">local_uuid: ${esc(j.local_uuid)}\nclient_id: ${esc(j.client_id)}\nboat_id: ${esc(j.boat_id)}\nversion: ${esc(j.version)}\nschema_version: ${esc(j.schema_version)}\nupdated_at: ${esc(j.updated_at)}</div><div class="actions"><button class="btn secondary full" onclick="duplicateJob('${j.local_uuid}')">Dupliciraj posao</button><button class="btn bad full" onclick="deleteJob('${j.local_uuid}')">Premjesti u Arhiva/Deleted</button></div></div>`; setTimeout(hydrateStorageImages,50); }
+function duplicateJob(uid){ const old=findJob(uid); if(!old)return; const j=upgradeJob(JSON.parse(JSON.stringify(old))); j.id=nextJobId(); j.local_uuid=uuid(); j.remote_id=''; j.sync_status='pending'; j.created_at=nowIso(); j.updated_at=nowIso(); j.version=1; j.notes=(j.notes?j.notes+'\n\n':'')+'Duplicirano iz '+old.id; jobs.push(j); save(); toast('Duplicirano - auto sync'); openDetail(j.local_uuid); queueAutoSync('duplicate'); }
+function deleteJob(uid){ const j=findJob(uid); if(!j)return; if(!confirm('Obrisati lokalno / označiti deleted?')) return; j.deleted=true; j.sync_status='pending'; j.updated_at=nowIso(); j.version=(parseInt(j.version||1,10)||1)+1; save(); toast('Označeno kao deleted - auto sync'); showScreen('home'); queueAutoSync('delete'); }
+function packageData(){ return {build:BUILD, schema_version:SCHEMA_VERSION, created_at:nowIso(), source:'MOBILE', jobs:jobs.map(upgradeJob), boats:boats.map(upgradeBoat), color_samples:COLOR_SAMPLES, sample_order:sampleOrder(), materials:[]}; }
+function exportBackup(){ const data=packageData(); const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='CroTeak_Planner_MOBILE_BUILD037_PWA_backup_'+today()+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href); const m=meta(); m.lastBackup=new Date().toLocaleString('hr-HR'); saveMeta(m); renderAll(); toast('Backup spremljen/preuzet'); }
+function importBackup(ev){ const file=ev.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{ try{ const data=JSON.parse(reader.result); const incoming = Array.isArray(data) ? data : (data.jobs || []); if(!Array.isArray(incoming)) throw new Error('Nema jobs polja'); const incomingBoats = Array.isArray(data.boats) ? data.boats.map(upgradeBoat) : []; const mode = confirm('OK = MERGE s postojećim\nCancel = REPLACE sve lokalno'); const up = incoming.map(upgradeJob); if(mode){ const map=new Map(jobs.map(j=>[j.local_uuid,j])); up.forEach(j=>{ const old=map.get(j.local_uuid); if(!old || String(j.updated_at||'')>=String(old.updated_at||'')) map.set(j.local_uuid,j); }); jobs=Array.from(map.values()); }else{ jobs=up; } if(incomingBoats.length){ const bm=new Map(boats.map(b=>[b.boat_uuid,b])); incomingBoats.forEach(b=>bm.set(b.boat_uuid,b)); boats=Array.from(bm.values()); saveBoats(); } save(); toast('Import gotovo: '+up.length+' poslova, '+incomingBoats.length+' brodova'); showScreen('home'); }catch(e){ alert('Import greška: '+e.message); } ev.target.value=''; }; reader.readAsText(file); }
+function mockSync(){ jobs.forEach(j=>{ if(['pending','local_only','conflict'].includes(j.sync_status)){ j.sync_status='synced'; j.last_synced_at=nowIso(); j.remote_id=j.remote_id || j.local_uuid; }}); save(); toast('Mock sync gotovo - sve lokalno'); }
+function showCloudPackage(){ const el=document.getElementById('cloudPreview'); const txt=document.getElementById('cloudText'); txt.textContent=JSON.stringify(packageData(),null,2).slice(0,12000); el.classList.remove('hide'); toast('Cloud package prikazan'); }
+function cloud(){ const m=meta(); m.cloud=m.cloud||{}; if(!m.cloud.url) m.cloud.url='https://vowzrtyaihalyjrmmlit.supabase.co'; if(!m.cloud.key) m.cloud.key='sb_publishable_zl3MOVbcmvSx5yvXLQt9Bw_lrrqc3Zz'; if(!m.cloud.table) m.cloud.table='croteak_jobs'; return m.cloud; }
+function saveCloud(c){ const m=meta(); m.cloud=Object.assign(cloud(), c||{}); if(m.cloud.auto_sync===undefined) m.cloud.auto_sync=true; saveMeta(m); renderAll(); }
+function isCloudLogged(){ const c=cloud(); return !!(c.access_token && c.user_id); }
+function setCloudPill(text, mode){ const st=document.getElementById('syncText'); if(st) st.textContent=text; const pill=document.getElementById('syncPill'); if(pill){ if(mode==='work') pill.style.background='rgba(245,158,11,.30)'; else if(mode==='bad') pill.style.background='rgba(220,38,38,.32)'; else pill.style.background='rgba(255,255,255,.15)'; } }
+let autoSyncTimer=null; let autoSyncBusy=false;
+function queueAutoSync(reason='save', delay=900){ const c=cloud(); if(c.auto_sync===false) { renderAll(); return; } if(!isCloudLogged()){ setCloudPill('čeka login','work'); renderAll(); return; } if(autoSyncTimer) clearTimeout(autoSyncTimer); autoSyncTimer=setTimeout(()=>autoCloudSync(reason), delay); }
+async function autoCloudSync(reason='auto'){ if(autoSyncBusy) return; if(!isCloudLogged()){ setCloudPill('čeka login','work'); return; } autoSyncBusy=true; setCloudPill('sync...','work'); try{ await pushCloud(true); await pullCloud(true); await syncBoatsNow(true); const c=cloud(); c.last_sync=new Date().toLocaleString('hr-HR'); saveCloud(c); setCloudPill('Cloud OK','ok'); toast('Cloud sync OK'); }catch(e){ setCloudPill('Cloud greška','bad'); console.warn(e); toast('Cloud greška - lokalno spremljeno'); } finally{ autoSyncBusy=false; renderAll(); } }
+function fillCloudFields(){ const c=cloud(); const ids={cloudUrl:'url',cloudKey:'key',cloudEmail:'email'}; Object.keys(ids).forEach(id=>{ const el=document.getElementById(id); if(el) el.value=c[ids[id]]||''; }); const logged=!!(c.access_token&&c.user_id); const st=document.getElementById('cloudLoginState'); if(st) st.textContent = logged ? 'prijavljen: '+(c.email||'') : 'nije prijavljen'; const lb=document.getElementById('loginBox'), gb=document.getElementById('loggedBox'), le=document.getElementById('loggedEmail'); if(lb) lb.classList.toggle('hide', logged); if(gb) gb.classList.toggle('hide', !logged); if(le) le.textContent=c.email||'-'; }
+function collectCloudSettings(){ const c=cloud(); const get=id=>{const el=document.getElementById(id); return el?el.value.trim():''}; c.url=(get('cloudUrl')||c.url||'').replace(/\/$/,''); c.key=get('cloudKey')||c.key||''; c.email=get('cloudEmail')||c.email||''; c.table='croteak_jobs'; saveCloud(c); return c; }
+function saveCloudSettings(){ collectCloudSettings(); toast('Cloud postavke spremljene'); }
+async function authRequest(endpoint, payload){ const c=collectCloudSettings(); if(!c.url||!c.key) throw new Error('Nedostaje Supabase URL/key'); const r=await fetch(c.url+'/auth/v1/'+endpoint,{method:'POST',headers:{apikey:c.key,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload||{})}); const text=await r.text(); let data=null; try{data=text?JSON.parse(text):null}catch(e){data=text} if(!r.ok) throw new Error('Auth HTTP '+r.status+': '+(typeof data==='string'?data:JSON.stringify(data))); return data; }
+function storeSession(data,email){ if(!data||!data.access_token) throw new Error('Nema sessiona. Ako Supabase traži email potvrdu, potvrdi email pa klikni Login.'); const c=cloud(); c.email=email||data.user?.email||c.email||''; c.access_token=data.access_token; c.refresh_token=data.refresh_token||''; c.user_id=data.user?.id||c.user_id||''; c.expires_at=Date.now()+Math.max(60000, ((data.expires_in||3600)-60)*1000); saveCloud(c); }
+async function signUpCloud(){ try{ const c=collectCloudSettings(); const pw=document.getElementById('cloudPassword').value; if(!c.email||!pw) throw new Error('Upiši email i lozinku'); const data=await authRequest('signup',{email:c.email,password:pw}); storeSession(data,c.email); toast('Registracija/login OK'); queueAutoSync('login',300); }catch(e){ alert('Registracija greška: '+e.message); } }
+async function signInCloud(){ try{ const c=collectCloudSettings(); const pw=document.getElementById('cloudPassword').value; if(!c.email||!pw) throw new Error('Upiši email i lozinku'); const data=await authRequest('token?grant_type=password',{email:c.email,password:pw}); storeSession(data,c.email); toast('Login OK'); queueAutoSync('login',300); }catch(e){ alert('Login greška: '+e.message); } }
+function signOutCloud(){ const c=cloud(); delete c.access_token; delete c.refresh_token; delete c.user_id; delete c.expires_at; saveCloud(c); toast('Odjavljen lokalno'); }
+async function refreshAuth(){ const c=cloud(); if(!c.access_token) throw new Error('Nisi prijavljen u cloud'); if(c.refresh_token && c.expires_at && Date.now()>=c.expires_at){ const data=await authRequest('token?grant_type=refresh_token',{refresh_token:c.refresh_token}); storeSession(data,c.email); } return cloud(); }
+function jobToCloudRow(j){ j=upgradeJob(j); return {local_uuid:j.local_uuid, job_id:j.id||'', client_name:j.client_name||'', boat_model:j.boat_model||j.boat_name||'', status:j.status||'', updated_at:j.updated_at||nowIso(), version:parseInt(j.version||1,10)||1, deleted:!!j.deleted, data:j}; }
+function cloudRowToJob(r){ const d=Object.assign({}, r.data||{}); if(r.local_uuid) d.local_uuid=r.local_uuid; if(r.job_id&&!d.id) d.id=r.job_id; if(r.updated_at) d.updated_at=r.updated_at; if(r.version) d.version=r.version; if('deleted' in r) d.deleted=!!r.deleted; d.sync_status='synced'; d.last_synced_at=nowIso(); return upgradeJob(d); }
+async function sbRequest(method, query, payload){ const c=await refreshAuth(); const url=c.url+'/rest/v1/'+encodeURIComponent(c.table||'croteak_jobs')+query; const opt={method,headers:{apikey:c.key,Authorization:'Bearer '+c.access_token,'Content-Type':'application/json','Accept':'application/json'}}; if(String(method).toUpperCase()==='POST') opt.headers['Prefer']='resolution=merge-duplicates,return=representation'; if(payload!==undefined) opt.body=JSON.stringify(payload); const r=await fetch(url,opt); const text=await r.text(); let data=null; try{data=text?JSON.parse(text):null}catch(e){data=text} if(!r.ok) throw new Error('Supabase HTTP '+r.status+': '+(typeof data==='string'?data:JSON.stringify(data))); return data; }
+async function testCloud(){ try{ collectCloudSettings(); await sbRequest('GET','?select=local_uuid&limit=1'); toast('Cloud test OK'); }catch(e){ alert('Cloud test greška: '+e.message); } }
+
+const signedUrlCache = new Map();
+async function storageSignedUrl(path){
+  if(!path) return '';
+  const cached=signedUrlCache.get(path);
+  if(cached && cached.exp>Date.now()) return cached.url;
+  const c=await refreshAuth();
+  const bucket=c.storage_bucket || 'croteak-files';
+  const url=c.url+'/storage/v1/object/sign/'+encodeURIComponent(bucket)+'/'+String(path).split('/').map(encodeURIComponent).join('/');
+  const r=await fetch(url,{method:'POST',headers:{apikey:c.key,Authorization:'Bearer '+c.access_token,'Content-Type':'application/json'},body:JSON.stringify({expiresIn:3600})});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error('Storage sign '+r.status+': '+JSON.stringify(data));
+  let signed=data.signedURL || data.signedUrl || '';
+  if(signed && signed.startsWith('/')) signed=c.url+'/storage/v1'+signed;
+  if(signed){ signedUrlCache.set(path,{url:signed,exp:Date.now()+55*60*1000}); }
+  return signed;
+}
+async function hydrateStorageImages(){
+  const imgs=[...document.querySelectorAll('img[data-storage-path]')];
+  for(const img of imgs){
+    const p=img.getAttribute('data-storage-path')||'';
+    if(!p || img.dataset.loaded==='1') continue;
+    try{
+      const u=await storageSignedUrl(p);
+      if(u){ img.src=u; img.dataset.loaded='1'; const ct=img.parentElement?.querySelector('.ct'); if(ct) ct.style.display='none'; }
+    }catch(e){ console.warn('storage image',e); }
+  }
+}
+async function pushCloud(quiet=false){ try{ const pending=jobs.filter(j=>['pending','local_only','conflict'].includes(j.sync_status)).map(jobToCloudRow); if(!pending.length){ if(!quiet) toast('Nema pending poslova'); return 0; } await sbRequest('POST','?on_conflict=local_uuid',pending); const t=nowIso(), set=new Set(pending.map(r=>r.local_uuid)); jobs.forEach(j=>{ if(set.has(j.local_uuid)){ j.sync_status='synced'; j.last_synced_at=t; j.remote_id=j.local_uuid; }}); save(); if(!quiet) toast('Push gotovo: '+pending.length); return pending.length; }catch(e){ if(!quiet) alert('Push greška: '+e.message); else throw e; } }
+function mergeCloudRows(rows){ let changed=0; const map=new Map(jobs.map((j,i)=>[j.local_uuid,i])); (rows||[]).forEach(r=>{ const cj=cloudRowToJob(r); const idx=map.get(cj.local_uuid); if(idx===undefined){ jobs.push(cj); map.set(cj.local_uuid,jobs.length-1); changed++; return; } const local=jobs[idx]; const lv=parseInt(local.version||1,10)||1, cv=parseInt(cj.version||1,10)||1; if(local.sync_status==='pending' && (cv>lv || String(cj.updated_at)>String(local.updated_at||''))){ local.sync_status='conflict'; local.notes=(local.notes?local.notes+'\n\n':'')+'[SYNC CONFLICT] Cloud ima noviju verziju.'; changed++; } else if(cv>lv || String(cj.updated_at)>String(local.updated_at||'')){ jobs[idx]=cj; changed++; } }); if(changed) save(); else renderAll(); return changed; }
+async function pullCloud(quiet=false){ try{ const rows=await sbRequest('GET','?select=local_uuid,job_id,updated_at,version,deleted,data&limit=10000'); const ch=mergeCloudRows(Array.isArray(rows)?rows:[]); if(!quiet) toast('Pull gotovo: '+ch+' promjena'); return ch; }catch(e){ if(!quiet) alert('Pull greška: '+e.message); else throw e; } }
+async function fullCloudSync(){ try{ await autoCloudSync('manual'); }catch(e){ alert('Full sync greška: '+e.message); } }
+function wipeLocal(){ if(!confirm('Sigurno obrisati lokalne podatke na mobitelu?')) return; localStorage.removeItem(STORAGE_KEY); jobs=[]; save(); toast('Obrisano lokalno'); showScreen('home'); }
+
+
+let deferredPwaPrompt = null;
+function isStandaloneMode(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
+function updatePwaInstallUi(){
+  const btn=document.getElementById('pwaInstallBtn');
+  const hint=document.getElementById('pwaInstallHint');
+  if(!btn||!hint) return;
+  if(isStandaloneMode()){ btn.classList.remove('show'); hint.classList.remove('show'); return; }
+  if(deferredPwaPrompt){ btn.classList.add('show'); hint.classList.remove('show'); }
+  else if(location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') { hint.classList.add('show'); btn.classList.remove('show'); }
+}
+window.addEventListener('beforeinstallprompt', (e)=>{ e.preventDefault(); deferredPwaPrompt=e; updatePwaInstallUi(); });
+window.addEventListener('appinstalled', ()=>{ deferredPwaPrompt=null; updatePwaInstallUi(); toast('CroTeak Planner instaliran'); });
+document.addEventListener('click', async (ev)=>{
+  if(ev.target && ev.target.id==='pwaInstallBtn'){
+    if(!deferredPwaPrompt){ alert('Instalacija će se pojaviti kad je app otvoren preko HTTPS linka u Chromeu.'); return; }
+    deferredPwaPrompt.prompt();
+    try{ await deferredPwaPrompt.userChoice; }catch(e){}
+    deferredPwaPrompt=null; updatePwaInstallUi();
+  }
+});
+setTimeout(updatePwaInstallUi,700);
+
+document.getElementById('globalSearch').addEventListener('input',()=>{ renderLists(); if(getSearch()) showScreen('search'); });
+document.getElementById('filterBtn').addEventListener('click',()=>{ showScreen('home'); toggleFilterPanel(); });
+document.getElementById('filterLocation').addEventListener('input',()=>{ applyFiltersFromUi(true,true); });
+document.getElementById('filterStatus').addEventListener('change',()=>{ applyFiltersFromUi(true,true); });
+document.getElementById('clearSearch').addEventListener('click',()=>{ document.getElementById('globalSearch').value=''; renderAll(); showScreen('home'); });
+document.getElementById('cloudRefreshBtn').addEventListener('click',()=>autoCloudSync('refresh'));
+window.addEventListener('focus',()=>{ if(isCloudLogged()) queueAutoSync('focus',700); });
+window.addEventListener('online',()=>queueAutoSync('online',300));
+window.addEventListener('beforeunload',()=>{ localStorage.setItem(STORAGE_KEY, JSON.stringify(jobs)); });
+fillStatus(); load();
+setTimeout(()=>{ if(isCloudLogged()) queueAutoSync('startup',300); },800);
+setInterval(()=>{ if(isCloudLogged()) queueAutoSync('periodic',500); },30000);
+let pendingServiceWorker = null;
+function showAppUpdateBanner(){ const b=document.getElementById('appUpdateBanner'); if(b) b.classList.remove('hide'); }
+function hideAppUpdateBanner(){ const b=document.getElementById('appUpdateBanner'); if(b) b.classList.add('hide'); }
+function applyAppUpdate(){ if(pendingServiceWorker){ pendingServiceWorker.postMessage({type:'SKIP_WAITING'}); } else { location.reload(); } }
+async function checkForAppUpdate(){
+  if(!('serviceWorker' in navigator)){ toast('Update radi tek preko HTTPS/PWA hostinga'); return; }
+  try{
+    const reg = await navigator.serviceWorker.getRegistration();
+    if(reg && reg.update){ await reg.update(); }
+    if(reg && reg.waiting){ pendingServiceWorker=reg.waiting; showAppUpdateBanner(); toast('Nova verzija spremna'); }
+    else { toast('Provjera updatea gotova'); }
+  }catch(e){ console.warn(e); toast('Update provjera nije uspjela'); }
+}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./service-worker.js').then(reg=>{
+      const watchWaiting = sw => { if(!sw) return; pendingServiceWorker=sw; showAppUpdateBanner(); };
+      if(reg.waiting) watchWaiting(reg.waiting);
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;
+        if(!nw) return;
+        nw.addEventListener('statechange',()=>{ if(nw.state==='installed' && navigator.serviceWorker.controller) watchWaiting(nw); });
+      });
+      reg.update&&reg.update();
+    }).catch(()=>{});
+  });
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{ if(window.__croteakUpdating) return; window.__croteakUpdating=true; hideAppUpdateBanner(); location.reload(); });
+}
+</script>
+</body>
+</html>

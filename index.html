@@ -9,7 +9,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="CroTeak Mobile">
-  <title>CroTeak Planner MOBILE BUILD036 PWA</title>
+  <title>CroTeak Planner MOBILE BUILD035 PWA</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -85,33 +85,15 @@
 
 
 
-    /* BUILD036 COLOR SAMPLES / ORDER MODULE */
-        .sampleToolbar{display:grid;gap:10px}
-    .sampleStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-    .sampleStat{background:linear-gradient(180deg,#ffffff,#f7fbfb);border:1px solid var(--line);border-radius:16px;padding:10px 10px 9px;box-shadow:0 6px 16px rgba(7,35,40,.05)}
-    .sampleStat b{display:block;font-size:18px;line-height:1;margin-bottom:4px}.sampleStat span{display:block;font-size:11px;color:var(--muted);font-weight:800}
-    .sampleFilterChips{display:flex;gap:7px;overflow:auto;padding:2px 0 1px}.sampleFilterChips::-webkit-scrollbar{display:none}
-    .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:12px;font-weight:900;color:#17343a;white-space:nowrap;box-shadow:0 4px 10px rgba(8,35,40,.04)}
-    .chip.active{background:linear-gradient(135deg,var(--teal),#27c4ba);color:#fff;border-color:transparent}
-    .sampleGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
-    .sampleCard{background:linear-gradient(180deg,#ffffff,#f8fbfb);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 18px rgba(5,35,40,.07);overflow:hidden;position:relative}
-    .sampleThumb{position:relative;padding:10px 10px 0}
-    .sampleThumbMain{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#f3f4f6;border-radius:16px;border:1px solid #dbe6e9}
-    .sampleThumbInset{position:absolute;right:18px;bottom:8px;width:58px;height:58px;border-radius:14px;border:3px solid #fff;object-fit:cover;background:#f3f4f6;box-shadow:0 10px 18px rgba(0,0,0,.12)}
-    .sampleBadgeRow{position:absolute;left:18px;top:18px;right:18px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none}
-    .sampleBadgeCode{background:rgba(10,23,28,.86);color:#fff;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;backdrop-filter:blur(4px)}
-    .sampleBadgeFamily{background:rgba(255,255,255,.88);color:#0f766e;border:1px solid rgba(201,227,223,.9);border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;backdrop-filter:blur(4px)}
-    .sampleInfo{padding:10px 11px 12px}.sampleName{font-size:13px;font-weight:900;line-height:1.2;color:#152c31;min-height:32px}.sampleOriginal{font-size:11px;color:var(--muted);font-weight:700;margin-top:4px;min-height:28px}.sampleActions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.sampleActions button{border:0;border-radius:12px;padding:10px 11px;font-weight:900;font-size:12px}.sampleActions button:first-child{background:#eef4f5;color:#17343a}.sampleActions button.dark{background:linear-gradient(135deg,#10353a,#14585f);color:#fff}
-    .sampleFocus{margin-top:10px}.sampleHero{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sampleHero img{width:100%;border-radius:18px;border:1px solid var(--line);background:#f3f4f6}.sampleHero label{display:block;font-size:10px;font-weight:900;color:var(--muted);margin:0 0 4px 2px;text-transform:uppercase;letter-spacing:.4px}.sampleMeta{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.sampleMeta span{border-radius:999px;background:#eef7f6;color:#0f766e;border:1px solid #c8e6e2;padding:6px 9px;font-size:11px;font-weight:900}.sampleTiny{width:24px;height:24px;border-radius:8px;border:1px solid #cfd9dc;object-fit:cover;vertical-align:middle;margin-right:6px;background:#f3f4f6}.samplePickerPreview{margin-top:7px}.samplePickerBox{display:flex;gap:9px;align-items:center;background:#f8fafb;border:1px solid var(--line);border-radius:14px;padding:8px}.samplePickerBox img{width:54px;height:54px;border-radius:12px;object-fit:cover;border:1px solid #d5dee1}.samplePickerBox b{display:block;font-size:13px}.samplePickerBox span{font-size:12px;color:var(--muted);font-weight:700}
-    .sampleSearchRow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.sampleSearchRow .btn{padding:10px 12px;min-height:42px;font-size:13px}
-    .sampleOrderSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 10px}.sampleOrderSummary .sampleStat{padding:10px 10px 8px}
-    .orderCard{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:16px;padding:9px;background:linear-gradient(180deg,#fff,#f9fbfc);box-shadow:0 6px 14px rgba(8,35,40,.05);margin-bottom:8px}
-    .orderThumbWrap{position:relative}.orderThumb{width:62px;height:62px;border-radius:14px;object-fit:cover;border:1px solid var(--line);background:#f3f4f6}.orderInset{position:absolute;right:-3px;bottom:-3px;width:24px;height:24px;border-radius:8px;border:2px solid #fff;object-fit:cover;background:#f3f4f6;box-shadow:0 6px 12px rgba(0,0,0,.15)}
-    .orderTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.orderCode{font-size:11px;font-weight:900;color:#0f766e;background:#edf8f7;border:1px solid #cfeae6;border-radius:999px;padding:4px 8px;display:inline-block;margin-bottom:5px}.orderName{font-size:13px;font-weight:900;line-height:1.2;color:#163037}.orderSub{font-size:11px;color:var(--muted);font-weight:700;margin-top:4px}
-    .orderControls{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:9px}.qtyBtns{display:flex;align-items:center;gap:6px;background:#eef3f4;border:1px solid #d7e3e6;border-radius:14px;padding:4px}.qtyBtns button{border:0;border-radius:10px;background:#fff;font-weight:950;font-size:17px;width:30px;height:30px;box-shadow:0 2px 4px rgba(0,0,0,.05)}.qtyBtns b{min-width:20px;text-align:center;font-size:14px}.orderRemove{border:0;background:#fff0f0;color:#a33b3b;border:1px solid #f2d0d0;border-radius:12px;padding:8px 10px;font-weight:900;font-size:12px}
-    @media (min-width:700px){.sampleGrid{grid-template-columns:repeat(3,1fr)}}
+    /* BUILD035 COLOR SAMPLES / ORDER MODULE */
+    .sampleGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
+    .sampleCard{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 5px 14px rgba(5,35,40,.06);overflow:hidden;position:relative}
+    .sampleCard img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#f3f4f6}
+    .sampleInfo{padding:8px}.sampleCode{font-size:14px;font-weight:950;color:#0b1220;line-height:1}.sampleName{font-size:10.5px;color:var(--muted);font-weight:800;line-height:1.25;margin-top:4px;min-height:26px}.sampleActions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px}.sampleActions button{border:0;border-radius:10px;background:#eef7f6;color:#0f766e;font-size:10px;font-weight:950;padding:8px 5px}.sampleActions button.dark{background:#0f766e;color:#fff}
+    .sampleFocus{margin-top:10px}.sampleHero{display:grid;grid-template-columns:1fr 1fr;gap:9px}.sampleHero img{width:100%;border-radius:16px;border:1px solid var(--line);background:#f3f4f6}.sampleHero label{display:block;font-size:10px;font-weight:900;color:var(--muted);margin:0 0 4px 2px;text-transform:uppercase;letter-spacing:.4px}.sampleMeta{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.sampleMeta span{border-radius:999px;background:#eef7f6;color:#0f766e;border:1px solid #c8e6e2;padding:6px 9px;font-size:11px;font-weight:900}.sampleTiny{width:24px;height:24px;border-radius:8px;border:1px solid #cfd9dc;object-fit:cover;vertical-align:middle;margin-right:6px;background:#f3f4f6}.samplePickerPreview{margin-top:7px}.samplePickerBox{display:flex;gap:9px;align-items:center;background:#f8fafb;border:1px solid var(--line);border-radius:14px;padding:8px}.samplePickerBox img{width:54px;height:54px;border-radius:12px;object-fit:cover;border:1px solid #d5dee1}.samplePickerBox b{display:block;font-size:13px}.samplePickerBox span{font-size:12px;color:var(--muted);font-weight:700}.orderLine{display:grid;grid-template-columns:56px 1fr auto;gap:9px;align-items:center;border-bottom:1px solid #edf2f4;padding:9px 0}.orderLine:last-child{border-bottom:0}.orderLine img{width:48px;height:48px;border-radius:12px;object-fit:cover;border:1px solid var(--line)}.qtyBtns{display:flex;align-items:center;gap:4px}.qtyBtns button{border:0;border-radius:10px;background:#eef2f4;font-weight:950;font-size:15px;padding:7px 10px}.qtyBtns b{min-width:18px;text-align:center}.sampleSearchRow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}.sampleSearchRow .btn{padding:10px 12px;min-height:42px;font-size:13px}
+    @media (min-width:700px){.sampleGrid{grid-template-columns:repeat(4,1fr)}}
 
-    /* BUILD036 TOTAL MAKEUP / COMPACT MOBILE UI */
+    /* BUILD035 TOTAL MAKEUP / COMPACT MOBILE UI */
     :root{
       --bg:#f3f6f8;
       --card:#ffffff;
@@ -140,7 +122,7 @@
 <body>
   <header class="topbar">
     <div class="topline">
-      <div><div class="title">CroTeak Planner</div><div class="build">MOBILE BUILD036 PWA · schema v3</div></div>
+      <div><div class="title">CroTeak Planner</div><div class="build">MOBILE BUILD035 PWA · schema v3</div></div>
       <div class="pill" id="syncPill"><span class="dot"></span><span id="syncText">Local</span></div>
     </div>
     <div class="searchbox">
@@ -253,19 +235,11 @@
     <section id="screen-samples" class="screen">
       <div class="card">
         <div class="detail-title">Color Samples</div>
-        <div class="small">Top pregled paleta za izbor boje i slaganje narudžbe. Zadržani su clean nazivi za app, a originalni label i fizički sample ostaju povezani.</div>
-        <div class="sampleStats">
-          <div class="sampleStat"><b>24</b><span>NC palete</span></div>
-          <div class="sampleStat"><b id="sampleOrderDistinctTop">0</b><span>U narudžbi</span></div>
-          <div class="sampleStat"><b id="sampleOrderPiecesTop">0</b><span>Ukupno pcs</span></div>
-        </div>
+        <div class="small">24 standardizirane palete po NC kodu. Nazivi su očišćeni za app, a originalni uzorak i realni fizički sample ostaju povezani.</div>
         <div class="hr"></div>
-        <div class="sampleToolbar">
-          <div class="sampleSearchRow">
-            <div class="field"><label>Traži kod / boju</label><input id="sampleSearch" type="search" placeholder="NC-7, grey, blue, camouflage..." oninput="renderSamples()"></div>
-            <button class="btn secondary" type="button" onclick="renderSamples();toast('Palete osvježene')">↻</button>
-          </div>
-          <div id="sampleFamilyFilters" class="sampleFilterChips"></div>
+        <div class="sampleSearchRow">
+          <div class="field"><label>Traži kod / boju</label><input id="sampleSearch" type="search" placeholder="NC-7, grey, blue, camouflage..." oninput="renderSamples()"></div>
+          <button class="btn secondary" type="button" onclick="renderSamples();toast('Palete osvježene')">↻</button>
         </div>
         <div class="actions"><button class="btn full" onclick="copySampleOrderText()">Kopiraj narudžbu za Melors Marine Deck Factory</button><button class="btn ghost full" onclick="clearSampleOrder()">Očisti narudžbu</button></div>
       </div>
@@ -274,12 +248,7 @@
       <div id="sampleGrid" class="sampleGrid"></div>
       <div class="card">
         <div class="section-title" style="margin-top:0">Narudžba / izbor boja</div>
-        <div class="small">Složi količine po NC kodu. Ovaj blok je sada sređen da izgleda ozbiljnije i da odmah vidiš koliko različitih boja i koliko ukupno komada ide u narudžbu.</div>
-        <div class="sampleOrderSummary">
-          <div class="sampleStat"><b id="sampleOrderDistinct">0</b><span>Različite boje</span></div>
-          <div class="sampleStat"><b id="sampleOrderPieces">0</b><span>Ukupno pcs</span></div>
-          <div class="sampleStat"><b>NC</b><span>Ready to copy</span></div>
-        </div>
+        <div class="small">Tu možeš slagati koliko komada/ploča želiš po NC kodu. Za sada je lokalno na mobitelu i ide u JSON backup.</div>
         <div id="sampleOrderList"></div>
       </div>
     </section>
@@ -287,7 +256,7 @@
     <section id="screen-sync" class="screen">
       <div class="card syncbox">
         <div class="detail-title">Sync / Backup</div>
-        <div class="small">MOBILE BUILD036 PWA ima automatski Supabase sync i instalaciju na Android. GitHub/Netlify update ostaje isti: kad prebaciš novi build na repo, mobitel će nakon refresh/update povući novu verziju.</div>
+        <div class="small">MOBILE BUILD035 PWA ima automatski Supabase sync i instalaciju na Android. GitHub/Netlify update ostaje isti: kad prebaciš novi build na repo, mobitel će nakon refresh/update povući novu verziju.</div>
         <div class="hr"></div>
         <div class="kv"><span>Lokalnih poslova</span><span id="syncJobs">0</span></div>
         <div class="kv"><span>Čeka sync</span><span id="syncPending">0</span></div>
@@ -334,10 +303,10 @@
         <div class="detail-title">Postavke</div>
         <div class="small">Mobitel build radi lokalno + Supabase cloud sync. Podaci ostaju i u browseru kao lokalni cache.</div>
         <div class="hr"></div>
-        <div class="kv"><span>Build</span><span>MOBILE BUILD036 PWA</span></div>
+        <div class="kv"><span>Build</span><span>MOBILE BUILD035 PWA</span></div>
         <div class="kv"><span>Schema</span><span>3</span></div>
         <div class="kv"><span>Storage</span><span>Local browser + Supabase</span></div>
-        <div class="kv"><span>App cache</span><span>croteak-mobile-build036-v1</span></div>
+        <div class="kv"><span>App cache</span><span>croteak-mobile-build035-v1</span></div>
         <div class="actions"><button class="btn secondary full" onclick="checkForAppUpdate()">Provjeri update appa</button><button class="btn secondary full" onclick="exportBackup()">Napravi backup prije brisanja</button></div>
       </div>
       <div class="card dangerzone">
@@ -360,7 +329,7 @@
   <div id="toast" class="toast"></div>
 
 <script>
-const BUILD = 'MOBILE_BUILD036_PWA';
+const BUILD = 'MOBILE_BUILD035_PWA';
 const SCHEMA_VERSION = 3;
 const STORAGE_KEY = 'croteak_planner_mobile_build009_jobs_v3';
 const BOATS_KEY = 'croteak_planner_mobile_boats_v1';
@@ -409,16 +378,11 @@ function addSampleToOrder(code, delta=1){ const s=sampleFromCode(code); if(!s) r
 function clearSampleOrder(){ if(!confirm('Očistiti sve NC kodove iz narudžbe?')) return; saveSampleOrder({}); }
 function copySampleOrderText(){ const o=sampleOrder(); const lines=Object.keys(o).sort((a,b)=>sampleNum(a)-sampleNum(b)).map(code=>{ const s=sampleFromCode(code); return `${code} - ${s?s.name:''}: ${o[code]} pcs`; }); const txt=lines.length ? 'Melors Marine Deck Factory\nColor order:\n'+lines.join('\n') : 'Melors Marine Deck Factory\nColor order: /'; if(navigator.clipboard) navigator.clipboard.writeText(txt).then(()=>toast('Narudžba kopirana')).catch(()=>alert(txt)); else alert(txt); }
 function sampleSearchText(s){ return [s.code,s.name,s.original,s.family,s.keywords].join(' ').toLowerCase(); }
-function sampleFamilies(){ return ['Sve', ...Array.from(new Set(COLOR_SAMPLES.map(s=>s.family))).sort((a,b)=>a.localeCompare(b))]; }
-function renderSampleFamilyFilters(){ const el=document.getElementById('sampleFamilyFilters'); if(!el) return; el.innerHTML=sampleFamilies().map(f=>`<button type="button" class="chip ${currentSampleFamily===f?'active':''}" onclick="setSampleFamily('${f}')">${esc(f)}</button>`).join(''); }
-function setSampleFamily(f){ currentSampleFamily=f; renderSampleFamilyFilters(); renderSamples(); }
-function filteredSamples(){ const q=String(document.getElementById('sampleSearch')?.value||'').trim().toLowerCase(); const toks=q?q.split(/\s+/).filter(Boolean):[]; return COLOR_SAMPLES.filter(s=>{ if(currentSampleFamily!=='Sve' && s.family!==currentSampleFamily) return false; return toks.every(t=>sampleSearchText(s).includes(t)); }); }
-function sampleCard(s){ return `<div class="sampleCard"><div class="sampleThumb" onclick="openSample('${s.code}')"><img class="sampleThumbMain" loading="lazy" src="${samplePaletteImg(s)}" alt="${esc(sampleValue(s))}"><img class="sampleThumbInset" loading="lazy" src="${sampleRealImg(s)}" alt="${esc(s.code)} real sample"><div class="sampleBadgeRow"><span class="sampleBadgeCode">${esc(s.code)}</span><span class="sampleBadgeFamily">${esc(s.family)}</span></div></div><div class="sampleInfo"><div class="sampleName">${esc(s.name)}</div><div class="sampleOriginal">Original: ${esc(s.original)}</div><div class="sampleActions"><button type="button" onclick="openSample('${s.code}')">Detalj</button><button class="dark" type="button" onclick="addSampleToOrder('${s.code}',1)">+ Nar.</button></div></div></div>`; }
-function renderSamples(){ const grid=document.getElementById('sampleGrid'); if(grid) grid.innerHTML=filteredSamples().map(sampleCard).join('') || '<div class="empty">Nema paleta za taj search/filter.</div>'; renderSampleFamilyFilters(); renderSampleOrder(); }
+function filteredSamples(){ const q=String(document.getElementById('sampleSearch')?.value||'').trim().toLowerCase(); if(!q) return COLOR_SAMPLES; const toks=q.split(/\s+/).filter(Boolean); return COLOR_SAMPLES.filter(s=>toks.every(t=>sampleSearchText(s).includes(t))); }
+function sampleCard(s){ return `<div class="sampleCard"><img loading="lazy" src="${samplePaletteImg(s)}" alt="${esc(sampleValue(s))}" onclick="openSample('${s.code}')"><div class="sampleInfo"><div class="sampleCode">${esc(s.code)}</div><div class="sampleName">${esc(s.name)}</div><div class="sampleActions"><button type="button" onclick="openSample('${s.code}')">Detalj</button><button class="dark" type="button" onclick="addSampleToOrder('${s.code}',1)">+ Nar.</button></div></div></div>`; }
+function renderSamples(){ const grid=document.getElementById('sampleGrid'); if(grid) grid.innerHTML=filteredSamples().map(sampleCard).join('') || '<div class="empty">Nema paleta za taj search.</div>'; renderSampleOrder(); }
 function openSample(code){ const s=sampleFromCode(code); const el=document.getElementById('sampleFocus'); if(!s||!el) return; el.innerHTML=`<div class="card"><div class="detail-title">${esc(sampleValue(s))}</div><div class="small">Original label sa supplier slike: <b>${esc(s.original)}</b></div><div class="sampleMeta"><span>${esc(s.family)}</span><span>kod za narudžbu: ${esc(s.code)}</span><span>clean naziv</span></div><div class="hr"></div><div class="sampleHero"><div><label>Palette sheet</label><img src="${samplePaletteImg(s)}" alt="${esc(s.code)} palette"></div><div><label>Physical sample</label><img src="${sampleRealImg(s)}" alt="${esc(s.code)} sample"></div></div><div class="actions"><button class="btn full" onclick="setMaterialColorFromSample('${s.code}',true)">Postavi na otvoreni posao</button><button class="btn secondary full" onclick="addSampleToOrder('${s.code}',1)">+ Dodaj u narudžbu</button><button class="btn ghost full" onclick="navigator.clipboard?navigator.clipboard.writeText('${esc(sampleValue(s))}').then(()=>toast('Kopirano')):alert('${esc(sampleValue(s))}')">Kopiraj kod</button></div></div>`; el.scrollIntoView({behavior:'smooth',block:'start'}); }
-function sampleOrderTotals(){ const o=sampleOrder(); const codes=Object.keys(o).filter(k=>(parseInt(o[k]||0,10)||0)>0); const pieces=codes.reduce((a,k)=>a+(parseInt(o[k]||0,10)||0),0); return {distinct:codes.length,pieces}; }
-function renderSampleOrder(){ const el=document.getElementById('sampleOrderList'); if(!el) return; const o=sampleOrder(); const codes=Object.keys(o).sort((a,b)=>sampleNum(a)-sampleNum(b)); const totals=sampleOrderTotals(); ['sampleOrderDistinct','sampleOrderDistinctTop'].forEach(id=>{ const n=document.getElementById(id); if(n) n.textContent=totals.distinct;}); ['sampleOrderPieces','sampleOrderPiecesTop'].forEach(id=>{ const n=document.getElementById(id); if(n) n.textContent=totals.pieces;}); if(!codes.length){ el.innerHTML='<div class="empty">Još nema boja u narudžbi.</div>'; return; } el.innerHTML=codes.map(code=>{ const s=sampleFromCode(code); if(!s) return ''; return `<div class="orderCard"><div class="orderThumbWrap"><img class="orderThumb" src="${samplePaletteImg(s)}" alt="${esc(code)}"><img class="orderInset" src="${sampleRealImg(s)}" alt="${esc(code)} sample"></div><div><div class="orderTop"><div><span class="orderCode">${esc(s.code)}</span><div class="orderName">${esc(s.name)}</div><div class="orderSub">Original: ${esc(s.original)}</div></div></div><div class="orderControls"><div class="qtyBtns"><button onclick="addSampleToOrder('${code}',-1)">−</button><b>${esc(o[code])}</b><button onclick="addSampleToOrder('${code}',1)">+</button></div><button class="orderRemove" onclick="removeSampleFromOrder('${code}')">Makni</button></div></div></div>`; }).join(''); }
-function removeSampleFromOrder(code){ const o=sampleOrder(); delete o[code]; saveSampleOrder(o); toast(code+' maknut iz narudžbe'); }
+function renderSampleOrder(){ const el=document.getElementById('sampleOrderList'); if(!el) return; const o=sampleOrder(); const codes=Object.keys(o).sort((a,b)=>sampleNum(a)-sampleNum(b)); if(!codes.length){ el.innerHTML='<div class="empty">Još nema boja u narudžbi.</div>'; return; } el.innerHTML=codes.map(code=>{ const s=sampleFromCode(code); if(!s) return ''; return `<div class="orderLine"><img src="${samplePaletteImg(s)}" alt="${esc(code)}"><div><b>${esc(sampleValue(s))}</b><div class="small">Original: ${esc(s.original)}</div></div><div class="qtyBtns"><button onclick="addSampleToOrder('${code}',-1)">−</button><b>${esc(o[code])}</b><button onclick="addSampleToOrder('${code}',1)">+</button></div></div>`; }).join(''); }
 function materialSampleDetailCard(j){ const s=sampleFromMaterial(j.material_color); if(!s) return ''; return `<div class="card"><div class="section-title" style="margin-top:0">Color sample</div><div class="sampleHero"><div><label>${esc(s.code)} palette</label><img src="${samplePaletteImg(s)}" alt="${esc(s.code)}"></div><div><label>physical sample</label><img src="${sampleRealImg(s)}" alt="${esc(s.code)}"></div></div><div class="kv"><span>Clean naziv</span><span>${esc(s.name)}</span></div><div class="kv"><span>Original</span><span>${esc(s.original)}</span></div><div class="actions"><button class="btn secondary full" onclick="openSample('${s.code}');showScreen('samples')">Otvori paletu</button></div></div>`; }
 function sampleTinyHtml(v){ const s=sampleFromMaterial(v); return s?`<img class="sampleTiny" src="${samplePaletteImg(s)}" alt="${esc(s.code)}">`:''; }
 
@@ -430,7 +394,6 @@ let currentBoatId = null;
 let pickingBoatForJob = false;
 let currentId = null;
 let lastScreen = 'home';
-let currentSampleFamily = 'Sve';
 
 function nowIso(){ return new Date().toISOString(); }
 function today(){ return new Date().toISOString().slice(0,10); }
@@ -585,7 +548,7 @@ function renderDetail(uid){ const j=findJob(uid); const el=document.getElementBy
 function duplicateJob(uid){ const old=findJob(uid); if(!old)return; const j=upgradeJob(JSON.parse(JSON.stringify(old))); j.id=nextJobId(); j.local_uuid=uuid(); j.remote_id=''; j.sync_status='pending'; j.created_at=nowIso(); j.updated_at=nowIso(); j.version=1; j.notes=(j.notes?j.notes+'\n\n':'')+'Duplicirano iz '+old.id; jobs.push(j); save(); toast('Duplicirano - auto sync'); openDetail(j.local_uuid); queueAutoSync('duplicate'); }
 function deleteJob(uid){ const j=findJob(uid); if(!j)return; if(!confirm('Obrisati lokalno / označiti deleted?')) return; j.deleted=true; j.sync_status='pending'; j.updated_at=nowIso(); j.version=(parseInt(j.version||1,10)||1)+1; save(); toast('Označeno kao deleted - auto sync'); showScreen('home'); queueAutoSync('delete'); }
 function packageData(){ return {build:BUILD, schema_version:SCHEMA_VERSION, created_at:nowIso(), source:'MOBILE', jobs:jobs.map(upgradeJob), boats:boats.map(upgradeBoat), color_samples:COLOR_SAMPLES, sample_order:sampleOrder(), materials:[]}; }
-function exportBackup(){ const data=packageData(); const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='CroTeak_Planner_MOBILE_BUILD036_PWA_backup_'+today()+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href); const m=meta(); m.lastBackup=new Date().toLocaleString('hr-HR'); saveMeta(m); renderAll(); toast('Backup spremljen/preuzet'); }
+function exportBackup(){ const data=packageData(); const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='CroTeak_Planner_MOBILE_BUILD035_PWA_backup_'+today()+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href); const m=meta(); m.lastBackup=new Date().toLocaleString('hr-HR'); saveMeta(m); renderAll(); toast('Backup spremljen/preuzet'); }
 function importBackup(ev){ const file=ev.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{ try{ const data=JSON.parse(reader.result); const incoming = Array.isArray(data) ? data : (data.jobs || []); if(!Array.isArray(incoming)) throw new Error('Nema jobs polja'); const incomingBoats = Array.isArray(data.boats) ? data.boats.map(upgradeBoat) : []; const mode = confirm('OK = MERGE s postojećim\nCancel = REPLACE sve lokalno'); const up = incoming.map(upgradeJob); if(mode){ const map=new Map(jobs.map(j=>[j.local_uuid,j])); up.forEach(j=>{ const old=map.get(j.local_uuid); if(!old || String(j.updated_at||'')>=String(old.updated_at||'')) map.set(j.local_uuid,j); }); jobs=Array.from(map.values()); }else{ jobs=up; } if(incomingBoats.length){ const bm=new Map(boats.map(b=>[b.boat_uuid,b])); incomingBoats.forEach(b=>bm.set(b.boat_uuid,b)); boats=Array.from(bm.values()); saveBoats(); } save(); toast('Import gotovo: '+up.length+' poslova, '+incomingBoats.length+' brodova'); showScreen('home'); }catch(e){ alert('Import greška: '+e.message); } ev.target.value=''; }; reader.readAsText(file); }
 function mockSync(){ jobs.forEach(j=>{ if(['pending','local_only','conflict'].includes(j.sync_status)){ j.sync_status='synced'; j.last_synced_at=nowIso(); j.remote_id=j.remote_id || j.local_uuid; }}); save(); toast('Mock sync gotovo - sve lokalno'); }
 function showCloudPackage(){ const el=document.getElementById('cloudPreview'); const txt=document.getElementById('cloudText'); txt.textContent=JSON.stringify(packageData(),null,2).slice(0,12000); el.classList.remove('hide'); toast('Cloud package prikazan'); }
