@@ -1,7 +1,7 @@
 {
   "name": "CroTeak Planner",
   "short_name": "CroTeak",
-  "description": "CroTeak Planner MOBILE BUILD048 PWA za poslove, brodove, color samples i cloud sync.",
+  "description": "CroTeak Planner MOBILE BUILD049 PWA za poslove, brodove, color samples i cloud sync.",
   "id": "/croteak-planner-mobile/",
   "start_url": "./index.html",
   "scope": "./",
@@ -11,8 +11,8 @@
     "minimal-ui"
   ],
   "orientation": "portrait",
-  "background_color": "#f3f6f8",
-  "theme_color": "#0b1220",
+  "background_color": "#f4efe6",
+  "theme_color": "#10201f",
   "lang": "hr-HR",
   "categories": [
     "business",
