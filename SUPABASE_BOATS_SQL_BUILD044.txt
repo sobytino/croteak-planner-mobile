@@ -1,4 +1,4 @@
--- CroTeak Planner BUILD044
+-- CroTeak Planner BUILD045
 -- Optional: create Supabase table for Boat Model cloud sync.
 -- Run in Supabase SQL editor if Brodovi sync says croteak_boats table is missing.
 
