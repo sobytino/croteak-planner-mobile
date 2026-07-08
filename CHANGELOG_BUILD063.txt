@@ -1,0 +1,204 @@
+- dodan modul Color Samples / Palete s 24 NC kodova
+- nazivi su standardizirani/čišći za app, ali original label je sačuvan u detalju samplea
+- svaki sample ima dvije slike: čisti palette crop i fizički sample crop
+- u poslu se Boja materijala može odabrati po NC kodu preko datalista ili iz paleta
+- detalj posla prikazuje povezanu paletu i fizički sample
+- dodana lokalna Narudžba boja s +/- količinama i kopiranjem teksta za Melors Marine Deck Factory
+- JSON backup sada uključuje color_samples i sample_order
+- service worker cache dignut na croteak-mobile-build063-v1
+- Cloud/Supabase, schema v3 i localStorage key nisu dirani da podaci ostanu sigurni
+
+- BUILD063: totalni makeup modula Palete / Narudžba boja
+- premium sample kartice s inset fizičkim sampleom i family chipom
+- family filter chips (Sve/Teak/Brown/Grey/...)
+- sređen order screen: summary kartice, veće kontrole količine i remove gumb
+
+- BUILD063: ručno prepeglani cropovi za physical sample sliku (image 2)
+- svih 24 NC samplea ponovno mapirani i uže/preciznije izrezani
+- fokus na točan matching po kodu bez bježanja na susjedne pločice
+
+- BUILD063: zamijenjeni svi physical sample cropovi ručno poslanim slikama korisnika
+- NC-1 do NC-24 sada koriste točne korisničke cropove sa slike 2
+- uklonjeni stari automatski/krivo poravnati cropovi iz samples foldera
+- očišćen paket od starih CroTeak_Planner_MOBILE_BUILD0xx.html ostataka
+
+- BUILD063: dodani Google Maps i Navigacija gumbi po lokaciji broda
+- quick actions na karticama poslova: Nazovi, WhatsApp, Maps, Ruta
+- detalj posla dobio zasebnu Lokacija / teren karticu
+- dodan Android polish: haptic feedback, bolji touch feedback, moderniji topbar/bottom nav, premium kartice
+- dodani deadline vizualni badgeovi za poslove koji kasne ili imaju rok unutar 3 dana
+- palete / BUILD038 sample cropovi nisu dirani
+
+- BUILD063: pametna normalizacija HR brojeva za 099/095/091/00385/+385 formate
+- WhatsApp sada otvara i kad je broj upisan kao hrvatski lokalni broj
+- Poziv koristi normalizirani +385 format kad je moguće
+- dodan gumb Dodaj u kontakte (.vcf export)
+- dodan CroTeak kontakt log po poslu: poziv, WhatsApp, Maps, navigacija, VCF
+- u detalju posla dodana sekcija Kontakt / povijest s normaliziranim brojem
+- Android PWA ograničenje: app ne čita pravi Android call log, nego vodi vlastiti log klikova
+
+- BUILD063: dodano polje Messenger / Facebook link u posao
+- dodan Messenger shortcut na karticama poslova i u detalju posla
+- Messenger klik se sprema u Kontakt / povijest
+- podržani oblici: m.me/ime, @ime, username, facebook.com link, messenger.com link
+- bez Meta API-ja i bez komplicirane integracije; app samo otvara spremljeni link
+
+- BUILD063: dodan PC / desktop responsive mode u istoj PWA aplikaciji
+- na širokom ekranu bottom nav prelazi u lijevi sidebar
+- Home i Search dobivaju split prikaz: lista poslova lijevo, brzi detalj desno
+- klik na posao na PC-u više ne baca odmah na mobile detail screen nego puni desni panel
+- dodan Full detalj gumb za otvaranje klasičnog detalja
+- desktop mode zadržava Maps, Ruta, WhatsApp, Messenger, kontakt log i cloud sync
+- Android/mobile izgled ostaje isti
+
+- BUILD063: dodan Kalendar tab za Android i PC
+- kalendar čita datume iz poslova: Izmjera, Montaža i Rok kupca
+- dodana polja vrijeme izmjere i vrijeme montaže
+- Home dashboard dobio blok Danas na rasporedu
+- kalendar ima filtere: Danas, Sutra, Ovaj tjedan, Sve
+- PC layout kalendara: termini lijevo, detalj termina desno
+- kalendar kartice imaju brze akcije: Nazovi, WhatsApp, Messenger, Maps, Ruta, Detalj
+- Android i PC layout ažurirani zajedno
+
+- BUILD063: u Bazu brodova dodana slika modela broda
+- slika se automatski smanji i sprema uz model kao lokalni data URL
+- prikaz slike dodan na kartice modela brodova
+- edit modela broda dobio preview slike i gumb Makni sliku
+- Brodovi sync više ne izbacuje ružan PGRST205 alert kad croteak_boats tablica ne postoji
+- ako croteak_boats tablica ne postoji, modeli brodova rade lokalno i app pokaže mekši hint
+- dodana SUPABASE_BOATS_SQL_BUILD063.txt datoteka za ručno kreiranje cloud tablice brodova
+
+- BUILD063: slike dodane u posao sada se stvarno prikazuju kao thumbnail i galerija
+- slike posla se automatski smanje i spremaju u files_manifest kao data URL
+- slike posla ulaze u normalan job cloud sync jer su dio job data JSON-a
+- klik na sliku otvara veliki lightbox prikaz
+- glavna slika posla sada se vidi kao cover/preview
+- stare slike dodane ranije kao samo naziv neće imati preview dok se ponovno ne dodaju
+- slike modela brodova više se ne režu; prikaz koristi contain umjesto cover
+- klik na sliku modela broda otvara je u većem prikazu
+
+- BUILD063: kad Brodovi sync uspije, automatski se briše žuto upozorenje za croteak_boats tablicu
+- dodan gumb Sakrij na žuto upozorenje baze brodova
+- ispravljen naziv SQL datoteke na SUPABASE_BOATS_SQL_BUILD063.txt
+- automatski Cloud sync više ne baca veliki toast "Cloud sync OK" svaki put
+- Cloud OK ostaje vidljiv samo kao mali status badge; toast ostaje za ručni refresh i greške
+
+- BUILD063: Baza brodova sada podržava više slika po modelu broda
+- dodana galerija slika u edit modela broda
+- jedna slika može biti označena kao MAIN
+- main slika se prikazuje na kartici broda
+- dodani tagovi slika: Kokpit, Krma, Prova, Boja, Detalj, Prije, Poslije, Main
+- dodan opis/naziv slike
+- slike se mogu pomicati gore/dolje
+- slike se mogu rotirati lijevo/desno
+- slike se mogu obrisati iz galerije
+- klik na sliku otvara veliki prikaz
+- stare single slike modela automatski se migriraju u novu galeriju
+
+- BUILD063 HITNI FIX: klik na posao ponovno otvara cijeli detalj posla kao prije
+- BUILD063 HITNI FIX: vraćena/fiksana resizeImageFile funkcija koju galerija brodova treba za dodavanje slika
+- dodavanje slika u galeriju brodova više ne završava s "Dodano 0 slika" bez jasne poruke
+- dodan fallback za slike: ako browser ne može komprimirati sliku, app je ipak pokuša spremiti kao data URL
+- slike za brodove se smanjuju agresivnije za lakši sync
+- background cloud greška više ne iskače kao veliki toast dok uređuješ slike; ostaje samo status badge
+- ručni sync i dalje prikazuje OK/grešku kad korisnik sam klikne
+
+- BUILD063: kompletan modern design pass kroz cijelu app
+- logo CroTeak dodan u header aplikacije
+- boje su usklađene s logom: tamni teal / morska zelena / zlatno-teak tonovi
+- modernizirani header, search, kartice, status badgeovi, bottom nav, forme i dashboard
+- PC sidebar i desktop layout vizualno usklađeni s novim stilom
+- funkcije nisu mijenjane: slike, sync, kalendar, brodovi i poslovi ostaju iz BUILD048
+
+- BUILD063 HITNI FIX: klik na karticu aktivnog posla ponovno otvara cijeli posao
+- dodan robustan openJobCard handler
+- dodan capture fallback za klik na .jobcard[data-uid]
+- pseudo elementi dizajna više ne mogu blokirati klik
+- quick action gumbi i dalje rade odvojeno
+
+- BUILD063 DUBLJI FIX: otvaranje posla sada radi preko click + touchend + pointerup handlera
+- dodan double-tap guard da se detalj ne otvara duplo
+- kartica posla je role=button i dostupna preko Enter/Space
+- dodan mali gumb Otvori u svaku karticu kao sigurna alternativa
+- quick action gumbi Nazovi/WA/MSG/Maps/Ruta ostaju odvojeni i ne otvaraju detalj
+- dizajnerski pseudo-elementi i overlayi ne mogu blokirati tap na karticu
+
+- BUILD063 DUBLJI FIX 2: openDetail više ne renderira detalj prije promjene ekrana
+- dodan showScreenOnly za sigurno prebacivanje ekrana bez renderAll loopa
+- dodan renderDetailSafe: ako neka kartica unutar detalja pukne, detalj se svejedno otvori s osnovnim podacima i gumbom Uredi
+- card tap sada ne koristi preventDefault prije otvaranja
+- dodan mousedown fallback uz click/touch/pointer
+- Otvori red na kartici također direktno otvara posao
+
+- BUILD063 FINAL FIX: vraćene missing image helper funkcije fileImageSrc / isImageFileEntry / openImageViewer / closeImageViewer
+- to je uzrokovalo grešku u renderDetail i zato se prikaz detalja nije normalno otvarao
+- klik/tap na posao ostaje iz BUILD052, ali detalj sada više ne puca na cover/image dijelu
+- slike poslova i galerije opet imaju helper funkcije za preview i lightbox
+
+- BUILD063: uklonjen gumb/red "Otvori" iz kartice posla
+- kartica posla se otvara samo normalnim click eventom
+- uklonjeni touchend/pointerup/mousedown fallbackovi koji su na Androidu mogli napraviti ghost click na Maps nakon otvaranja detalja
+- tap na karticu otvara posao, tap na quick action gumbe radi samo Nazovi/WA/MSG/Maps/Ruta
+
+- BUILD063: Kontakt/log u detalju posla premješten je na kraj
+- log je sada skriven u collapsible bloku i otvara se samo kad klikneš "Prikaži"
+- uklonjen stalni prikaz cijelog kontakt loga iz sredine posla
+- Sync info kartica sakrivena je iz detalja posla
+- Dupliciraj posao i Premjesti u Arhiva/Deleted ostali su dostupni u kartici "Upravljanje poslom"
+
+- BUILD063: dodan Customer Presentation Mode / "Prikaži kupcu"
+- detalj posla sada ima gumb Prikaži kupcu
+- prezentacijski ekran skriva sync/log/tehničke podatke
+- prikazuje CroTeak logo, brod, kupca/lokaciju, slike, boju/materijal, financije, rokove i status timeline
+- dodan gumb Ispis / PDF za print-to-PDF iz browsera
+- način rada za prezentaciju koristi postojeće slike posla i color sample palete
+
+- BUILD063: dodana PDF Ponuda / proposal view
+- u detalju posla dodan gumb PDF ponuda
+- ponuda prikazuje CroTeak logo, broj ponude, datum, kupca, brod, lokaciju, m², materijal/boju, stavke, ukupno, primljeno i za naplatiti
+- koristi postojeće slike posla kao reference u ponudi
+- dodan gumb Ispis / Spremi kao PDF kroz browser print
+- pripremljen print CSS da se PDF ispisuje kao čista ponuda bez app navigacije
+
+- BUILD063: popravljena PDF/print ponuda za PC
+- print sada otvara čisti print prozor s A4 stilom umjesto printanja cijele app
+- ponuda je kompaktirana da stane kao A4 preview / jedan A4 što bolje
+- dodan blok "Dogovoreno" da se jasno vidi materijal, debljina, površina i tip posla
+- promijenjen opis stavke: više ne piše "Izrada i montaža", nego neutralno "CroTeak / EVA decking prema dogovoru"
+- print CSS dodatno optimiziran za A4 portrait
+
+- BUILD063: dodan pravi direktni Preuzmi PDF gumb
+- PDF se generira lokalno u aplikaciji preko canvas + PDF generatora, bez Adobea, bez vanjskih servisa i bez print dialoga
+- naziv datoteke se automatski slaže iz broja posla i kupca
+- gumb Ispis ostaje kao pomoćna opcija, ali glavni workflow je Preuzmi PDF
+- PDF sadrži CroTeak header, dogovoreno, stavke, ukupno/primljeno/za naplatiti, rokove i do 3 slike/reference
+
+- BUILD063: popravljen Preuzmi PDF i Ispis
+- Preuzmi PDF sada koristi potpuno sinkroni lokalni PDF generator bez async čekanja slika, pa browser ne blokira download
+- PDF je vektorski/text PDF, bez Adobea, bez print dialoga i bez vanjskih servisa
+- Ispis sada printa trenutni proposal ekran kroz normalni browser print, bez popup prozora
+- PDF tekst je pojednostavljeno ASCII-normaliziran radi stabilnog prikaza u svim PDF preglednicima
+
+- BUILD063: Preuzmi PDF ponovno generira lijep A4 PDF kao vizualna ponuda
+- PDF sada uključuje CroTeak logo i sample slike materijala/boje
+- PDF layout je usklađen s izgledom ekrana ponude: bijela pozadina, zaobljene kartice, materijal, dogovoreno, stavke, napomena, iznosi i rokovi
+- zadržan fallback iz BUILD060: ako lijepi image PDF ne uspije, skida se jednostavni stabilni PDF
+- Ispis ostaje odvojen za browser print
+
+- BUILD063: dodan Portfolio / Primjeri radova tab
+- Portfolio pokazuje ručno dodane radove i slike iz postojećih poslova bez cijena i privatnih detalja
+- moguće ručno dodati više slika u portfolio s nazivom, kategorijom, bojom i napomenom
+- dodani filteri po kategoriji i tražilica portfolija
+- dodan Checklist posla u detalj posla
+- checklist ima 8 koraka: boja, avans, izmjera, dizajn poslan, dizajn potvrđen, CNC gotovo, montaža dogovorena, naplaćeno
+- checklist se sprema u posao i sync status ide na pending
+
+- BUILD063: visual polish / icon pass
+- funkcije nisu mijenjane, samo izgled i dojam
+- dotjeran bottom nav: ikone u zaobljenim badgeovima, bolji active state i manje gužve
+- skraćen Dashboard label u Home radi prostora na mobitelu
+- dotjeran topbar, logo badge, build badge i sync dot
+- job kartice dobile bolji premium card look i status chip
+- quick action gumbi dotjerani da se lakše razlikuju
+- dashboard stat kartice, portfolio i checklist dobili finiji vizualni polish
+- gumbi Prikaži kupcu / PDF ponuda / Preuzmi PDF dodatno istaknuti
