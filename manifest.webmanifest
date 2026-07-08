@@ -1,7 +1,7 @@
 {
   "name": "CroTeak Planner",
   "short_name": "CroTeak",
-  "description": "CroTeak Planner MOBILE BUILD060 PWA za poslove, brodove, color samples i cloud sync.",
+  "description": "CroTeak Planner MOBILE BUILD061 PWA za poslove, brodove, color samples i cloud sync.",
   "id": "/croteak-planner-mobile/",
   "start_url": "./index.html",
   "scope": "./",
