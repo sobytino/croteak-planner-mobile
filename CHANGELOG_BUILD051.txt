@@ -1,0 +1,124 @@
+- dodan modul Color Samples / Palete s 24 NC kodova
+- nazivi su standardizirani/čišći za app, ali original label je sačuvan u detalju samplea
+- svaki sample ima dvije slike: čisti palette crop i fizički sample crop
+- u poslu se Boja materijala može odabrati po NC kodu preko datalista ili iz paleta
+- detalj posla prikazuje povezanu paletu i fizički sample
+- dodana lokalna Narudžba boja s +/- količinama i kopiranjem teksta za Melors Marine Deck Factory
+- JSON backup sada uključuje color_samples i sample_order
+- service worker cache dignut na croteak-mobile-build051-v1
+- Cloud/Supabase, schema v3 i localStorage key nisu dirani da podaci ostanu sigurni
+
+- BUILD051: totalni makeup modula Palete / Narudžba boja
+- premium sample kartice s inset fizičkim sampleom i family chipom
+- family filter chips (Sve/Teak/Brown/Grey/...)
+- sređen order screen: summary kartice, veće kontrole količine i remove gumb
+
+- BUILD051: ručno prepeglani cropovi za physical sample sliku (image 2)
+- svih 24 NC samplea ponovno mapirani i uže/preciznije izrezani
+- fokus na točan matching po kodu bez bježanja na susjedne pločice
+
+- BUILD051: zamijenjeni svi physical sample cropovi ručno poslanim slikama korisnika
+- NC-1 do NC-24 sada koriste točne korisničke cropove sa slike 2
+- uklonjeni stari automatski/krivo poravnati cropovi iz samples foldera
+- očišćen paket od starih CroTeak_Planner_MOBILE_BUILD0xx.html ostataka
+
+- BUILD051: dodani Google Maps i Navigacija gumbi po lokaciji broda
+- quick actions na karticama poslova: Nazovi, WhatsApp, Maps, Ruta
+- detalj posla dobio zasebnu Lokacija / teren karticu
+- dodan Android polish: haptic feedback, bolji touch feedback, moderniji topbar/bottom nav, premium kartice
+- dodani deadline vizualni badgeovi za poslove koji kasne ili imaju rok unutar 3 dana
+- palete / BUILD038 sample cropovi nisu dirani
+
+- BUILD051: pametna normalizacija HR brojeva za 099/095/091/00385/+385 formate
+- WhatsApp sada otvara i kad je broj upisan kao hrvatski lokalni broj
+- Poziv koristi normalizirani +385 format kad je moguće
+- dodan gumb Dodaj u kontakte (.vcf export)
+- dodan CroTeak kontakt log po poslu: poziv, WhatsApp, Maps, navigacija, VCF
+- u detalju posla dodana sekcija Kontakt / povijest s normaliziranim brojem
+- Android PWA ograničenje: app ne čita pravi Android call log, nego vodi vlastiti log klikova
+
+- BUILD051: dodano polje Messenger / Facebook link u posao
+- dodan Messenger shortcut na karticama poslova i u detalju posla
+- Messenger klik se sprema u Kontakt / povijest
+- podržani oblici: m.me/ime, @ime, username, facebook.com link, messenger.com link
+- bez Meta API-ja i bez komplicirane integracije; app samo otvara spremljeni link
+
+- BUILD051: dodan PC / desktop responsive mode u istoj PWA aplikaciji
+- na širokom ekranu bottom nav prelazi u lijevi sidebar
+- Home i Search dobivaju split prikaz: lista poslova lijevo, brzi detalj desno
+- klik na posao na PC-u više ne baca odmah na mobile detail screen nego puni desni panel
+- dodan Full detalj gumb za otvaranje klasičnog detalja
+- desktop mode zadržava Maps, Ruta, WhatsApp, Messenger, kontakt log i cloud sync
+- Android/mobile izgled ostaje isti
+
+- BUILD051: dodan Kalendar tab za Android i PC
+- kalendar čita datume iz poslova: Izmjera, Montaža i Rok kupca
+- dodana polja vrijeme izmjere i vrijeme montaže
+- Home dashboard dobio blok Danas na rasporedu
+- kalendar ima filtere: Danas, Sutra, Ovaj tjedan, Sve
+- PC layout kalendara: termini lijevo, detalj termina desno
+- kalendar kartice imaju brze akcije: Nazovi, WhatsApp, Messenger, Maps, Ruta, Detalj
+- Android i PC layout ažurirani zajedno
+
+- BUILD051: u Bazu brodova dodana slika modela broda
+- slika se automatski smanji i sprema uz model kao lokalni data URL
+- prikaz slike dodan na kartice modela brodova
+- edit modela broda dobio preview slike i gumb Makni sliku
+- Brodovi sync više ne izbacuje ružan PGRST205 alert kad croteak_boats tablica ne postoji
+- ako croteak_boats tablica ne postoji, modeli brodova rade lokalno i app pokaže mekši hint
+- dodana SUPABASE_BOATS_SQL_BUILD051.txt datoteka za ručno kreiranje cloud tablice brodova
+
+- BUILD051: slike dodane u posao sada se stvarno prikazuju kao thumbnail i galerija
+- slike posla se automatski smanje i spremaju u files_manifest kao data URL
+- slike posla ulaze u normalan job cloud sync jer su dio job data JSON-a
+- klik na sliku otvara veliki lightbox prikaz
+- glavna slika posla sada se vidi kao cover/preview
+- stare slike dodane ranije kao samo naziv neće imati preview dok se ponovno ne dodaju
+- slike modela brodova više se ne režu; prikaz koristi contain umjesto cover
+- klik na sliku modela broda otvara je u većem prikazu
+
+- BUILD051: kad Brodovi sync uspije, automatski se briše žuto upozorenje za croteak_boats tablicu
+- dodan gumb Sakrij na žuto upozorenje baze brodova
+- ispravljen naziv SQL datoteke na SUPABASE_BOATS_SQL_BUILD051.txt
+- automatski Cloud sync više ne baca veliki toast "Cloud sync OK" svaki put
+- Cloud OK ostaje vidljiv samo kao mali status badge; toast ostaje za ručni refresh i greške
+
+- BUILD051: Baza brodova sada podržava više slika po modelu broda
+- dodana galerija slika u edit modela broda
+- jedna slika može biti označena kao MAIN
+- main slika se prikazuje na kartici broda
+- dodani tagovi slika: Kokpit, Krma, Prova, Boja, Detalj, Prije, Poslije, Main
+- dodan opis/naziv slike
+- slike se mogu pomicati gore/dolje
+- slike se mogu rotirati lijevo/desno
+- slike se mogu obrisati iz galerije
+- klik na sliku otvara veliki prikaz
+- stare single slike modela automatski se migriraju u novu galeriju
+
+- BUILD051 HITNI FIX: klik na posao ponovno otvara cijeli detalj posla kao prije
+- BUILD051 HITNI FIX: vraćena/fiksana resizeImageFile funkcija koju galerija brodova treba za dodavanje slika
+- dodavanje slika u galeriju brodova više ne završava s "Dodano 0 slika" bez jasne poruke
+- dodan fallback za slike: ako browser ne može komprimirati sliku, app je ipak pokuša spremiti kao data URL
+- slike za brodove se smanjuju agresivnije za lakši sync
+- background cloud greška više ne iskače kao veliki toast dok uređuješ slike; ostaje samo status badge
+- ručni sync i dalje prikazuje OK/grešku kad korisnik sam klikne
+
+- BUILD051: kompletan modern design pass kroz cijelu app
+- logo CroTeak dodan u header aplikacije
+- boje su usklađene s logom: tamni teal / morska zelena / zlatno-teak tonovi
+- modernizirani header, search, kartice, status badgeovi, bottom nav, forme i dashboard
+- PC sidebar i desktop layout vizualno usklađeni s novim stilom
+- funkcije nisu mijenjane: slike, sync, kalendar, brodovi i poslovi ostaju iz BUILD048
+
+- BUILD051 HITNI FIX: klik na karticu aktivnog posla ponovno otvara cijeli posao
+- dodan robustan openJobCard handler
+- dodan capture fallback za klik na .jobcard[data-uid]
+- pseudo elementi dizajna više ne mogu blokirati klik
+- quick action gumbi i dalje rade odvojeno
+
+- BUILD051 DUBLJI FIX: otvaranje posla sada radi preko click + touchend + pointerup handlera
+- dodan double-tap guard da se detalj ne otvara duplo
+- kartica posla je role=button i dostupna preko Enter/Space
+- dodan mali gumb Otvori u svaku karticu kao sigurna alternativa
+- quick action gumbi Nazovi/WA/MSG/Maps/Ruta ostaju odvojeni i ne otvaraju detalj
+- dizajnerski pseudo-elementi i overlayi ne mogu blokirati tap na karticu
