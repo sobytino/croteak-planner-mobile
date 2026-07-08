@@ -1,9 +1,9 @@
-// CroTeak Planner MOBILE BUILD058 PWA service worker
-const CACHE_NAME = 'croteak-mobile-build058-v1';
+// CroTeak Planner MOBILE BUILD059 PWA service worker
+const CACHE_NAME = 'croteak-mobile-build059-v1';
 const APP_SHELL = [
   './',
   './index.html',
-  './CroTeak_Planner_MOBILE_BUILD058.html',
+  './CroTeak_Planner_MOBILE_BUILD059.html',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
