@@ -1,0 +1,42 @@
+-- CroTeak Planner BUILD076
+-- Optional: create Supabase table for Boat Model cloud sync.
+-- Run in Supabase SQL editor if Brodovi sync says croteak_boats table is missing.
+
+create table if not exists public.croteak_boats (
+  boat_uuid text primary key,
+  model text,
+  manufacturer text,
+  updated_at timestamptz,
+  version integer default 1,
+  deleted boolean default false,
+  data jsonb
+);
+
+alter table public.croteak_boats enable row level security;
+
+drop policy if exists "croteak_boats_select_own" on public.croteak_boats;
+drop policy if exists "croteak_boats_insert_own" on public.croteak_boats;
+drop policy if exists "croteak_boats_update_own" on public.croteak_boats;
+drop policy if exists "croteak_boats_delete_own" on public.croteak_boats;
+
+-- Simple authenticated policies for this private CroTeak app.
+create policy "croteak_boats_select_own"
+on public.croteak_boats for select
+to authenticated
+using (true);
+
+create policy "croteak_boats_insert_own"
+on public.croteak_boats for insert
+to authenticated
+with check (true);
+
+create policy "croteak_boats_update_own"
+on public.croteak_boats for update
+to authenticated
+using (true)
+with check (true);
+
+create policy "croteak_boats_delete_own"
+on public.croteak_boats for delete
+to authenticated
+using (true);
